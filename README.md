@@ -1,5 +1,7 @@
 # Canvas APIs client library for PHP
 
+Don't trust anything here. We're going to delete the git history before realeasing version 0.1
+
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]

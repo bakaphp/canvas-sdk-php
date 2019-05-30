@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Canvas;
 
-class Client
+class Canvas
 {
     /**
-     * Create a new Client instance
+     * Create a new Canvas instance
      */
     public function __construct()
     {
