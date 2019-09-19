@@ -466,6 +466,10 @@ class ApiRequestor
     private function httpClient()
     {
         if (!self::$httpClient) {
+
+            /**
+             * @todo Replce CurlClient with new Guzzle client
+             */
             self::$httpClient = HttpClient\CurlClient::instance();
         }
         return self::$httpClient;

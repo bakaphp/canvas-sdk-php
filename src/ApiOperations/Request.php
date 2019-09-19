@@ -17,11 +17,12 @@ trait Request
     protected static function _validateParams($params = null)
     {
         if ($params && !is_array($params)) {
-            $message = "You must pass an array as the first argument to Stripe API "
-               . "method calls.";
+            $message = 'You must pass an array as the first argument to Stripe API '
+               . 'method calls.';
             throw new \Canvas\Exception\Api($message);
         }
     }
+
     /**
      * @param string $method HTTP method ('get', 'post', etc.)
      * @param string $url URL for the request
@@ -37,6 +38,7 @@ trait Request
         $this->setLastResponse($resp);
         return [$resp->json, $options];
     }
+
     /**
      * @param string $method HTTP method ('get', 'post', etc.)
      * @param string $url URL for the request
@@ -54,5 +56,4 @@ trait Request
         $requestOptions->discardNonPersistentHeaders();
         return [$response, $requestOptions];
     }
-
 }
