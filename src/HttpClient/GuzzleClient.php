@@ -2,7 +2,7 @@
 
 namespace Canvas\HttpClient;
 
-
+use GuzzleHttp\Client;
 use Canvas\Canvas;
 use Canvas\Exception;
 use Canvas\Util;
@@ -24,6 +24,7 @@ class GuzzleClient implements ClientInterface
      */
     public function request($method, $absoluteUrl, $headers, $params, $hasFile)
     {
-
+        $client = new Client();
+        $res = $client->request(strtoupper($method), $absoluteUrl, $headers, $params);
     }
 }
