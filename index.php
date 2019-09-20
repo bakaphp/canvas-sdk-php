@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 
 use Canvas\Canvas;
 use Canvas\Resources\Users;
+use Canvas\Resources\Companies;
 use Canvas\Resources\Auth;
 
 
