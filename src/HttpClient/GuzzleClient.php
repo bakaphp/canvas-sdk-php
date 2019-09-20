@@ -9,6 +9,17 @@ use Canvas\Util;
 
 class GuzzleClient implements ClientInterface
 {
+
+    private static $instance;
+
+    public static function instance()
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
     /**
      * @param string $method The HTTP method being used
      * @param string $absoluteUrl The URL being requested, including domain and protocol
@@ -24,7 +35,9 @@ class GuzzleClient implements ClientInterface
      */
     public function request($method, $absoluteUrl, $headers, $params, $hasFile)
     {
-        $client = new Client();
-        $res = $client->request(strtoupper($method), $absoluteUrl, $headers, $params);
+        $client = new Client(['headers'=> $headers]);
+        $res = $client->request(strtoupper($method), $absoluteUrl, $params);
+
+        return $res;
     }
 }
