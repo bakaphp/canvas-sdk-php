@@ -1,0 +1,3 @@
+tests/unit/library/Providers/ConfigCest.php:checkRegistration
+tests/unit/cli/ClearCacheCest.php:checkClearCache
+tests/unit/library/Providers/MailCest.php:checkRegistration
