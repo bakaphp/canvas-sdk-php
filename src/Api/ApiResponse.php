@@ -1,5 +1,5 @@
 <?php
-namespace Canvas;
+namespace Canvas\Api;
 
 /**
  * Class ApiResponse

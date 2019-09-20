@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\ApiOperations;
+namespace Canvas\Api\ApiOperations;
 
 use Canvas\Canvas;
 

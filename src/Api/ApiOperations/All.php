@@ -1,5 +1,5 @@
 <?php
-namespace Canvas\ApiOperations;
+namespace Canvas\Api\ApiOperations;
 /**
  * Trait for listable resources. Adds a `all()` static method to the class.
  *

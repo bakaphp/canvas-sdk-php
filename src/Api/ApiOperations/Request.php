@@ -1,6 +1,9 @@
 <?php
 
-namespace Canvas\ApiOperations;
+namespace Canvas\Api\ApiOperations;
+
+use Canvas\Api\ApiRequestor;
+use Canvas\Util\RequestOptions;
 
 /**
  * Trait for resources that need to make API requests.
@@ -49,9 +52,9 @@ trait Request
      */
     protected static function _staticRequest($method, $url, $params, $options)
     {
-        $requestOptions = \Canvas\Util\RequestOptions::parse($options);
+        $requestOptions = RequestOptions::parse($options);
         $baseUrl = isset($requestOptions->apiBase) ? $requestOptions->requestOptions : static::baseUrl();
-        $requestor = new \Canvas\ApiRequestor($requestOptions->apiKey, $baseUrl);
+        $requestor = new ApiRequestor($requestOptions->apiKey, $baseUrl);
         list($response, $requestOptions->apiKey) = $requestor->request($method, $url, $params, $requestOptions->headers);
         $requestOptions->discardNonPersistentHeaders();
         return [$response, $requestOptions];

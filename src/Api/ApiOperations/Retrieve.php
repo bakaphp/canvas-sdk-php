@@ -1,5 +1,5 @@
 <?php
-namespace Canvas\ApiOperations;
+namespace Canvas\Api\ApiOperations;
 /**
  * Trait for deletable resources. Adds a `delete()` method to the class.
  *
@@ -19,7 +19,7 @@ trait Retrieve
     {
         self::_validateParams($params);
         $url = self::instanceUrl($id);
-        list($response, $opts) = static::_staticRequest('get', $url, $params, $options);
+        list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
         return $response->json;
         // $obj = \Stripe\Util\Util::convertToStripeObject($response->json, $opts);
         // $obj->setLastResponse($response);

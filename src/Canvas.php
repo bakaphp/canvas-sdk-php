@@ -129,24 +129,6 @@ class Canvas
     }
 
     /**
-     * @return string | null The Stripe account ID for connected account
-     *   requests.
-     */
-    public static function getAccountId()
-    {
-        return self::$accountId;
-    }
-
-    /**
-     * @param string $accountId The Stripe account ID to set for connected
-     *   account requests.
-     */
-    public static function setAccountId($accountId)
-    {
-        self::$accountId = $accountId;
-    }
-
-    /**
      * @return array | null The application's information
      */
     public static function getAppInfo()

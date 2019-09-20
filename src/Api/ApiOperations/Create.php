@@ -1,25 +1,25 @@
 <?php
-namespace Canvas\ApiOperations;
+namespace Canvas\Api\ApiOperations;
 /**
- * Trait for deletable resources. Adds a `delete()` method to the class.
+ * Trait for creatable resources. Adds a `create()` static method to the class.
  *
  * This trait should only be applied to classes that derive from StripeObject.
  */
-trait Update
+trait Create
 {
     /**
      * @param array|null $params
-     * @param array|string|null $opts
+     * @param array|string|null $options
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return static The deleted resource.
+     * @return static The created resource.
      */
-    public function update($id, $params = null, $opts = null)
+    public static function create($params = null, $options = null)
     {
         self::_validateParams($params);
-        $url = self::instanceUrl($id);
-        list($response, $opts) = static::_staticRequest('put', $url, $params, $options);
+        $url = static::classUrl();
+        list($response, $opts) = static::_staticRequest('post', $url, $params, $options);
         return $response->json;
         // $obj = \Stripe\Util\Util::convertToStripeObject($response->json, $opts);
         // $obj->setLastResponse($response);

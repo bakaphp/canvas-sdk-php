@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Canvas\Resources;
 
-use Canvas\ApiOperations\Auth as AuthTrait;
-use Canvas\ApiResource;
+use Canvas\Api\ApiOperations\Auth as AuthTrait;
+use Canvas\Api\ApiResource;
 
 class Auth extends ApiResource
 {

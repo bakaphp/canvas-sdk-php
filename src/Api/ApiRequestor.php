@@ -1,8 +1,10 @@
 <?php
 
-namespace Canvas;
+namespace Canvas\Api;
 
 use Canvas\Exception;
+use Canvas\Canvas;
+use Canvas\HttpClient\GuzzleClient;
 
 /**
  * Class ApiRequestor.
@@ -142,29 +144,6 @@ class ApiRequestor
     /**
      * @static
      *
-     * @param null|array $appInfo
-     *
-     * @return null|string
-     */
-    private static function _formatAppInfo($appInfo)
-    {
-        if ($appInfo !== null) {
-            $string = $appInfo['name'];
-            if ($appInfo['version'] !== null) {
-                $string .= '/' . $appInfo['version'];
-            }
-            if ($appInfo['url'] !== null) {
-                $string .= ' (' . $appInfo['url'] . ')';
-            }
-            return $string;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @static
-     *
      * @param string $apiKey
      * @param null   $clientInfo
      *
@@ -236,36 +215,6 @@ class ApiRequestor
     }
 
     /**
-     * @param resource $resource
-     * @param bool     $hasCurlFile
-     *
-     * @return \CURLFile|string
-     * @throws Exception\Api
-     */
-    private function _processResourceParam($resource, $hasCurlFile)
-    {
-        if (get_resource_type($resource) !== 'stream') {
-            throw new Exception\Api(
-                'Attempted to upload a resource that is not a stream'
-            );
-        }
-
-        $metaData = stream_get_meta_data($resource);
-        if ($metaData['wrapper_type'] !== 'plainfile') {
-            throw new Exception\Api(
-                'Only plainfile resource streams are supported'
-            );
-        }
-
-        if ($hasCurlFile) {
-            // We don't have the filename or mimetype, but the API doesn't care
-            return new \CURLFile($metaData['uri']);
-        } else {
-            return '@' . $metaData['uri'];
-        }
-    }
-
-    /**
      * @param string $rbody
      * @param int    $rcode
      * @param array  $rheaders
@@ -312,16 +261,6 @@ class ApiRequestor
     }
 
     /**
-     * @static
-     *
-     * Resets any stateful telemetry data
-     */
-    public static function resetTelemetry()
-    {
-        self::$requestTelemetry = null;
-    }
-
-    /**
      * @return HttpClient\ClientInterface
      */
     private function httpClient()
@@ -330,7 +269,7 @@ class ApiRequestor
             /**
              * @todo Replce CurlClient with new Guzzle client
              */
-            self::$httpClient = HttpClient\GuzzleClient::instance();
+            self::$httpClient = GuzzleClient::instance();
         }
         return self::$httpClient;
     }

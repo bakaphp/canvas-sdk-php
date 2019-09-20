@@ -1,6 +1,11 @@
 <?php
 
-namespace Canvas;
+namespace Canvas\Api;
+
+use Canvas\Canvas;
+use Canvas\CanvasObject;
+use Canvas\Api\ApiRequestor;
+use Canvas\Util\Util;
 
 /**
  * Class ApiResource
@@ -102,7 +107,7 @@ abstract class ApiResource extends CanvasObject
                . "$class instance has invalid ID: $id";
             throw new Exception\UnexpectedValueException($message);
         }
-        $id = Util\Util::utf8($id);
+        $id = Util::utf8($id);
         $base = static::classUrl();
         $extn = urlencode($id);
         return "$base/$extn";

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Canvas\Resources;
 
-use Canvas\ApiOperations\All;
-use Canvas\ApiOperations\Create;
-use Canvas\ApiOperations\Delete;
-use Canvas\ApiOperations\Update;
-use Canvas\ApiOperations\Retrieve;
-use Canvas\ApiResource;
+use Canvas\Api\ApiOperations\All;
+use Canvas\Api\ApiOperations\Create;
+use Canvas\Api\ApiOperations\Delete;
+use Canvas\Api\ApiOperations\Update;
+use Canvas\Api\ApiOperations\Retrieve;
+use Canvas\Api\ApiResource;
 
 class Users extends ApiResource
 {
