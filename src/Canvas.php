@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 namespace Canvas;
+
 /**
- * Canvas class
+ * Canvas class.
 */
 class Canvas
 {
@@ -27,6 +28,8 @@ class Canvas
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
+    public static $authToken;
+
     /**
      * @return string The API key used for requests.
      */
@@ -34,6 +37,7 @@ class Canvas
     {
         return self::$apiKey;
     }
+
     /**
      * @return string The client_id used for Connect requests.
      */
@@ -41,6 +45,7 @@ class Canvas
     {
         return self::$clientId;
     }
+
     /**
      * @return Util\LoggerInterface The logger to which the library will
      *   produce messages.
@@ -52,6 +57,7 @@ class Canvas
         }
         return self::$logger;
     }
+
     /**
      * @param Util\LoggerInterface $logger The logger to which the library
      *   will produce messages.
@@ -60,6 +66,7 @@ class Canvas
     {
         self::$logger = $logger;
     }
+
     /**
      * Sets the API key to be used for requests.
      *
@@ -69,6 +76,7 @@ class Canvas
     {
         self::$apiKey = $apiKey;
     }
+
     /**
      * Sets the client_id to be used for Connect requests.
      *
@@ -78,6 +86,7 @@ class Canvas
     {
         self::$clientId = $clientId;
     }
+
     /**
      * @return string The API version used for requests. null if we're using the
      *    latest version.
@@ -86,6 +95,7 @@ class Canvas
     {
         return self::$apiVersion;
     }
+
     /**
      * @param string $apiVersion The API version to use for requests.
      */
@@ -101,6 +111,7 @@ class Canvas
     {
         self::$caBundlePath = $caBundlePath;
     }
+
     /**
      * @return boolean
      */
@@ -108,6 +119,7 @@ class Canvas
     {
         return self::$verifySslCerts;
     }
+
     /**
      * @param boolean $verify
      */
@@ -115,6 +127,7 @@ class Canvas
     {
         self::$verifySslCerts = $verify;
     }
+
     /**
      * @return string | null The Stripe account ID for connected account
      *   requests.
@@ -123,6 +136,7 @@ class Canvas
     {
         return self::$accountId;
     }
+
     /**
      * @param string $accountId The Stripe account ID to set for connected
      *   account requests.
@@ -131,12 +145,31 @@ class Canvas
     {
         self::$accountId = $accountId;
     }
+
     /**
      * @return array | null The application's information
      */
     public static function getAppInfo()
     {
         return self::$appInfo;
+    }
+
+    /**
+     * Set authToken.
+     * @param string $token
+     */
+    public static function setAuthToken($token)
+    {
+        self::$authToken = $token;
+    }
+
+    /**
+     * Get authToken.
+     * @return string
+     */
+    public static function getAuthToken()
+    {
+        return self::$authToken;
     }
 
     /**

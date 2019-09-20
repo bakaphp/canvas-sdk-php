@@ -173,7 +173,7 @@ class ApiRequestor
     private static function _defaultHeaders($apiKey, $clientInfo = null)
     {
         $defaultHeaders = [
-            'Authorization' => $apiKey,
+            'Authorization' => Canvas::getAuthToken(),
             'Key'=> $apiKey,
             'Content-Type'=> 'application/x-www-form-urlencoded'
         ];
@@ -203,6 +203,12 @@ class ApiRequestor
             $msg = 'No API key provided.  (HINT: set your API key using '
               . '"Canvas::setApiKey(<API-KEY>)".  You can generate API keys from '
               . 'the Canvas web interface.';
+            throw new Exception\Authentication($msg);
+        }
+
+
+        if (!Canvas::getAuthToken() && !strpos($url, 'auth')) {
+            $msg = 'No Auth Token set.  (HINT: set your Auth Token using the auth call';
             throw new Exception\Authentication($msg);
         }
 
