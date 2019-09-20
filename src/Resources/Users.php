@@ -8,6 +8,7 @@ use Canvas\ApiOperations\All;
 use Canvas\ApiOperations\Create;
 use Canvas\ApiOperations\Delete;
 use Canvas\ApiOperations\Update;
+use Canvas\ApiOperations\Retrieve;
 use Canvas\ApiResource;
 
 class Users extends ApiResource
@@ -18,5 +19,7 @@ class Users extends ApiResource
     use Create;
     use Delete;
     use Update;
+    use Retrieve;
+
 
 }
