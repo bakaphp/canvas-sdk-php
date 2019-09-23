@@ -22,8 +22,6 @@ class CompaniesCest
      */
     public $random;
 
-    public $companiesId;
-
     /**
      * Constructor
      *

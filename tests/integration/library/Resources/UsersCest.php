@@ -17,10 +17,25 @@ class UsersCest
      */
     public $random;
 
+    /**
+     * Users's id
+     *
+     * @var integer
+     */
     public $userId;
 
+    /**
+     * User's email
+     *
+     * @var string
+     */
     public $userEmail;
 
+    /**
+     * User's password
+     *
+     * @var string
+     */
     public $userPassword;
 
     /**
