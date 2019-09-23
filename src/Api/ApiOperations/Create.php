@@ -1,5 +1,8 @@
 <?php
+
 namespace Canvas\Api\ApiOperations;
+
+use Canvas\Util\Util;
 /**
  * Trait for creatable resources. Adds a `create()` static method to the class.
  *
@@ -15,14 +18,12 @@ trait Create
      *
      * @return static The created resource.
      */
-    public static function create($params = null, $options = null)
+    public static function create($params = null, $opts = null)
     {
         self::_validateParams($params);
         $url = static::classUrl();
-        list($response, $opts) = static::_staticRequest('post', $url, $params, $options);
-        return $response->json;
-        // $obj = \Stripe\Util\Util::convertToStripeObject($response->json, $opts);
-        // $obj->setLastResponse($response);
-        // return $obj;
+        list($response, $opts) = static::_staticRequest('post', $url, $params, $opts);
+        $obj = Util::convertToSimpleObject($response->json);
+        return $obj;
     }
 }

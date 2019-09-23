@@ -1,5 +1,8 @@
 <?php
+
 namespace Canvas\Api\ApiOperations;
+
+use Canvas\Util\Util;
 /**
  * Trait for listable resources. Adds a `all()` static method to the class.
  *
@@ -21,20 +24,7 @@ trait All
         $url = static::classUrl();
 
         list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
-        // $obj = \Canvas\Util\Util::convertToStripeObject($response->json, $opts);
-
-        return $response->json;
-
-        // /**
-        //  * @todo Need to set Canvas Collection
-        //  */
-        // if (!($obj instanceof \Canvas\Collection)) {
-        //     throw new \Stripe\Exception\UnexpectedValueException(
-        //         'Expected type ' . \Stripe\Collection::class . ', got "' . get_class($obj) . '" instead.'
-        //     );
-        // }
-        // $obj->setLastResponse($response);
-        // $obj->setFilters($params);
-        // return $obj;
+        $obj = Util::convertToSimpleObject($response->json);
+        return $obj;
     }
 }

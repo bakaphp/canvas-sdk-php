@@ -3,43 +3,21 @@
 namespace Canvas\Util;
 
 use Canvas\Util\CanvasObject;
+use StdClass;
 
 abstract class Util
 {
     private static $isMbstringAvailable = null;
 
     /**
-     * Converts a response from the Canvas API to the corresponding PHP object.
+     * Converts a response from the Canvas API to a simple PHP object.
      *
      * @param array $response The response from the Canvas API.
-     * @param array $options
-     * @return CanvasObject|array
+     * @return object
      */
-    public static function convertToCanvasObject($response, $options)
+    public static function convertToSimpleObject(array $response)
     {
-        $types = [
-            //Common data structures
-
-            //Business objects
-
-        ];
-
-        if(self::isList($response)) {
-            $mapped = [];
-            foreach($response as $object) {
-                $mapped[] = self::convertToCanvasObject($object, $options);
-            }
-            return $mapped;
-        } elseif(is_array($response)){
-            if (isset($response['object']) && is_string($response['object']) && isset($types[$response['object']])) {
-                $class = $types[$response['object']];
-            } else {
-                $class = CanvasObject::class;
-            }
-            return $class::constructFrom($response, $options);
-        } else {
-            return $response;
-        }
+        return json_decode(json_encode($response));
     }
 
     /**

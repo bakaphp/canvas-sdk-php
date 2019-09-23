@@ -3,6 +3,7 @@
 namespace Canvas\Api\ApiOperations;
 
 use Canvas\Canvas;
+use Canvas\Util\Util;
 
 /**
  * Trait for creatable resources. Adds a `create()` static method to the class.
@@ -25,9 +26,7 @@ trait Auth
         $url = static::classUrl();
         list($response, $opts) = static::_staticRequest('post', $url, $params, $options);
         Canvas::setAuthToken($response->json['token']);
-        return $response->json;
-        // $obj = \Stripe\Util\Util::convertToStripeObject($response->json, $opts);
-        // $obj->setLastResponse($response);
-        // return $obj;
+        $obj = Util::convertToSimpleObject($response->json);
+        return $obj;
     }
 }
