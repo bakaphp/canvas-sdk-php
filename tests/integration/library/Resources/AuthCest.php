@@ -63,6 +63,6 @@ class AuthCest
     {
         Canvas::setApiKey($this->random->base58());
         $auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
-        $I->assertTrue($auth['id'] == self::DEFAULT_CANVAS_USER_ID);
+        $I->assertTrue($auth->id == self::DEFAULT_CANVAS_USER_ID);
     }
 }
