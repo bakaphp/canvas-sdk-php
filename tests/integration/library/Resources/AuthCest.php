@@ -19,6 +19,13 @@ class AuthCest
     private $random;
 
     /**
+     * Auth variable
+     *
+     * @var [type]
+     */
+    private $auth;
+
+    /**
      * Constructor
      *
      * @return void
@@ -27,7 +34,7 @@ class AuthCest
     {
         $this->random =  new Random();
         Canvas::setApiKey($this->random->base58());
-        Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
+        $this->auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
         $this->userEmail = 'example-'. $this->random->base58() .'@gmail.com';
         $this->userPassword = $this->random->base58();
 
@@ -53,8 +60,6 @@ class AuthCest
      */
     public function setupAuthToken(IntegrationTester $I)
     {
-        Canvas::setApiKey($this->random->base58());
-        $auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
         $I->assertTrue(gettype(Canvas::getAuthToken()) == 'string');
     }
 
@@ -66,9 +71,7 @@ class AuthCest
      */
     public function auth(IntegrationTester $I)
     {
-        Canvas::setApiKey($this->random->base58());
-        $auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
-        $I->assertTrue($auth->id == self::DEFAULT_CANVAS_USER_ID);
+        $I->assertTrue($this->auth->id == self::DEFAULT_CANVAS_USER_ID);
     }
 
     /**
