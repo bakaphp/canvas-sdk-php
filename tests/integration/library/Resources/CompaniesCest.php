@@ -35,18 +35,18 @@ class CompaniesCest
     }
 
     /**
-     * Get all users
+     * Get all companies
      *
      * @param IntegrationTester $I
      * @return void
      */
-    public function getAllUsers(IntegrationTester $I): void
+    public function getAllCompanies(IntegrationTester $I): void
     {
         $I->assertTrue(gettype(Companies::all()) == 'array');
     }
 
     /**
-     * Update a user
+     * Update a Company
      *
      * @param IntegrationTester $I
      * @return void
@@ -58,12 +58,12 @@ class CompaniesCest
     }
 
     /**
-     * Get a user
+     * Get a Company
      *
      * @param IntegrationTester $I
      * @return void
      */
-    public function getUser(IntegrationTester $I): void
+    public function getCompany(IntegrationTester $I): void
     {
         $users = Companies::retrieve(self::DEFAULT_COMPANIES_ID);
         $I->assertTrue(gettype($users) == 'object');
