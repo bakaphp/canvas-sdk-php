@@ -77,11 +77,6 @@ class ApiRequestor
      *
      * @return array An array whose first element is an API response and second
      *    element is the API key used to make the request.
-     * @throws Exception\Api
-     * @throws Exception\Authentication
-     * @throws Exception\InvalidRequest
-     * @throws Exception\Permission
-     * @throws Exception\ApiConnection
      */
     public function request($method, $url, $params = null, $headers = null)
     {
@@ -99,26 +94,6 @@ class ApiRequestor
      * @param array $rheaders
      * @param array $resp
      *
-     * @throws Exception\InvalidRequest if the error is caused by the user.
-     * @throws Exception\Authentication if the error is caused by a lack of
-     *    permissions.
-     * @throws Exception\Permission if the error is caused by insufficient
-     *    permissions.
-     * @throws Exception\Card if the error is the error code is 402 (payment
-     *    required)
-     * @throws Exception\InvalidRequest if the error is caused by the user.
-     * @throws Exception\Idempotency if the error is caused by an idempotency key.
-     * @throws Exception\OAuth\InvalidClient
-     * @throws Exception\OAuth\InvalidGrant
-     * @throws Exception\OAuth\InvalidRequest
-     * @throws Exception\OAuth\InvalidScope
-     * @throws Exception\OAuth\UnsupportedGrantType
-     * @throws Exception\OAuth\UnsupportedResponseType
-     * @throws Exception\Permission if the error is caused by insufficient
-     *    permissions.
-     * @throws Exception\RateLimit if the error is caused by too many requests
-     *    hitting the API.
-     * @throws Exception\Api otherwise.
      */
     public function handleErrorResponse($rbody, $rcode, $rheaders, $resp)
     {
@@ -153,8 +128,8 @@ class ApiRequestor
     {
         $defaultHeaders = [
             'Authorization' => Canvas::getAuthToken(),
-            'Key'=> $apiKey,
-            'Content-Type'=> 'application/x-www-form-urlencoded'
+            'Key' => $apiKey,
+            'Content-Type' => 'application/x-www-form-urlencoded'
         ];
 
         return $defaultHeaders;
@@ -167,9 +142,6 @@ class ApiRequestor
      * @param array  $headers
      *
      * @return array
-     * @throws Exception\Api
-     * @throws Exception\ApiConnection
-     * @throws Exception\Authentication
      */
     private function _requestRaw($method, $url, $params, $headers)
     {
@@ -185,7 +157,6 @@ class ApiRequestor
             throw new Exception\Authentication($msg);
         }
 
-
         if (!Canvas::getAuthToken() && !strpos($url, 'auth')) {
             $msg = 'No Auth Token set.  (HINT: set your Auth Token using the auth call';
             throw new Exception\Authentication($msg);
@@ -193,7 +164,7 @@ class ApiRequestor
 
         $absoluteUrl = $this->apiBase . $url;
 
-        $body = ['form_params'=> $params];
+        $body = ['form_params' => $params];
 
         $defaultHeaders = $this->_defaultHeaders($apiKey);
 
@@ -209,9 +180,9 @@ class ApiRequestor
 
         $rbody = $response->getBody();
         $rcode = $response->getStatusCode();
-        $rheaders= $response->getHeader('content-type');
+        $rheaders = $response->getHeader('content-type');
 
-        return [$rbody,$rcode, $rheaders, $apiKey];
+        return [$rbody, $rcode, $rheaders, $apiKey];
     }
 
     /**
@@ -220,19 +191,6 @@ class ApiRequestor
      * @param array  $rheaders
      *
      * @return mixed
-     * @throws Exception\Api
-     * @throws Exception\Authentication
-     * @throws Exception\Card
-     * @throws Exception\InvalidRequest
-     * @throws Exception\OAuth\InvalidClient
-     * @throws Exception\OAuth\InvalidGrant
-     * @throws Exception\OAuth\InvalidRequest
-     * @throws Exception\OAuth\InvalidScope
-     * @throws Exception\OAuth\UnsupportedGrantType
-     * @throws Exception\OAuth\UnsupportedResponseType
-     * @throws Exception\Permission
-     * @throws Exception\RateLimit
-     * @throws Exception\Idempotency
      */
     private function _interpretResponse($rbody, $rcode, $rheaders)
     {

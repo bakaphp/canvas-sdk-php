@@ -25,7 +25,7 @@ trait Auth
         $url = static::classUrl();
         list($response, $opts) = static::_staticRequest('post', $url, $params, $options);
         Canvas::setAuthToken($response->json['token']);
-        return Canvas::getAuthToken();
+        return $response->json;
         // $obj = \Stripe\Util\Util::convertToStripeObject($response->json, $opts);
         // $obj->setLastResponse($response);
         // return $obj;

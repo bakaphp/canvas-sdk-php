@@ -42,17 +42,9 @@ modules:
     Phalcon:
       cleanup: false
       savepoints: false
-    DB:
-      dsn: 'mysql:host=%DATA_API_MYSQL_HOST%;dbname=%DATA_API_MYSQL_NAME%'
-      user: '%DATA_API_MYSQL_USER%'
-      password: '%DATA_API_MYSQL_PASS%'
-      dump: 'tests/_data/dump.sql'
-      populate: false
-      cleanup: false
-      reconnect: true
 
 # Get params from .env file
-params:
-  - .env
+# params:
+#   - .env
 
 error_level: "E_ALL"
