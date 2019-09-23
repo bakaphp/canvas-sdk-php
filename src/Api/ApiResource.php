@@ -6,6 +6,7 @@ use Canvas\Canvas;
 use Canvas\CanvasObject;
 use Canvas\Api\ApiRequestor;
 use Canvas\Util\Util;
+use Canvas\Exception\UnexpectedValueException;
 
 /**
  * Class ApiResource
@@ -105,7 +106,7 @@ abstract class ApiResource extends CanvasObject
             $class = get_called_class();
             $message = "Could not determine which URL to request: "
                . "$class instance has invalid ID: $id";
-            throw new Exception\UnexpectedValueException($message);
+            throw new UnexpectedValueException($message);
         }
         $id = Util::utf8($id);
         $base = static::classUrl();
