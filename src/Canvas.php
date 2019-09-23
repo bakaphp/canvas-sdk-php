@@ -14,7 +14,7 @@ class Canvas
     // @var string The Stripe client_id to be used for Connect requests.
     public static $clientId;
     // @var string The base URL for the Stripe API.
-    public static $apiBase = 'http://api-phalcon.net';
+    public static $apiBase = 'https://apicanvas.gewaer.io';
     // @var string The base URL for the OAuth API.
     public static $connectBase = 'https://connect.stripe.com';
     // @var string The base URL for the Stripe API uploads endpoint.
