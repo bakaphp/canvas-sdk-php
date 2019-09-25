@@ -89,6 +89,8 @@ class ApiRequestor
     }
 
     /**
+     * Handles errors in response
+     *
      * @param string $rbody A JSON string.
      * @param int $rcode
      * @param array $rheaders
@@ -117,6 +119,7 @@ class ApiRequestor
     }
 
     /**
+     * Sets default headers to be used in requests
      * @static
      *
      * @param string $apiKey
@@ -124,7 +127,7 @@ class ApiRequestor
      *
      * @return array
      */
-    private static function _defaultHeaders($apiKey, $clientInfo = null)
+    private static function _defaultHeaders($apiKey, $clientInfo = null): array
     {
         $defaultHeaders = [
             'Authorization' => Canvas::getAuthToken(),
@@ -136,6 +139,8 @@ class ApiRequestor
     }
 
     /**
+     * Makes the actual request to an external API
+     *
      * @param string $method
      * @param string $url
      * @param array  $params
@@ -143,7 +148,7 @@ class ApiRequestor
      *
      * @return array
      */
-    private function _requestRaw($method, $url, $params, $headers)
+    private function _requestRaw($method, $url, $params, $headers): array
     {
         $apiKey = $this->apiKey;
         if (!$apiKey) {
@@ -186,6 +191,8 @@ class ApiRequestor
     }
 
     /**
+     * Interpret every section of a response making sure is a valid response
+     *
      * @param string $rbody
      * @param int    $rcode
      * @param array  $rheaders
@@ -209,6 +216,7 @@ class ApiRequestor
     }
 
     /**
+     * Set a HttpClient
      * @static
      *
      * @param HttpClient\ClientInterface $client
@@ -219,6 +227,8 @@ class ApiRequestor
     }
 
     /**
+     * Returns an instance of the HttpClient
+     *
      * @return HttpClient\ClientInterface
      */
     private function httpClient()

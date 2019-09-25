@@ -20,7 +20,7 @@ $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
 //     'displayname'=> 'sdktester',
 //     'password'=> 'nosenose',
 //     'default_company'=> 'example sdk',
-//     'email'=> 'examplesdk@gmail.com',
+//     'email'=> 'examplesd5k@gmail.com',
 //     'verify_password'=> 'nosenose'
 //     ]);
 
@@ -28,7 +28,7 @@ $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
 /**
  * Update user info by its id
  */
-// $users = Users::update('87',[
+// $users = Users::update('84',[
 //     'firstname'=>'testSDK',
 //     'lastname'=> 'testSDK',
 //     ]);
@@ -38,14 +38,13 @@ $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
 /**
  * Delete user by its id
  */
-// $users = Users::delete('88');
+// $users = Users::delete('99');
 
 
 /**
  * Retrieve a user by its id
  */
 $users = Users::retrieve('2');
-
 
 /**
  * Retrieve all users
