@@ -3,20 +3,19 @@
 namespace Canvas\Api\ApiOperations;
 
 use Canvas\Util\Util;
+
 /**
- * Trait for listable resources. Adds a `all()` static method to the class.
- *
- * This trait should only be applied to classes that derive from StripeObject.
+ * Trait for listable resources.
  */
 trait All
 {
     /**
+     * Get all the records of a resource.
+     *
      * @param array|null $params
      * @param array|string|null $opts
      *
-     * @throws \Stripe\Exception\ApiErrorException if the request fails
-     *
-     * @return \Stripe\Collection of ApiResources
+     * @return array
      */
     public static function all($params = null, $opts = null)
     {

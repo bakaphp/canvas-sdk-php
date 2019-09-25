@@ -4,21 +4,20 @@ namespace Canvas\Api\ApiOperations;
 
 use Canvas\Util\Util;
 /**
- * Trait for deletable resources. Adds a `delete()` method to the class.
- *
- * This trait should only be applied to classes that derive from StripeObject.
+ * Trait for listing an specific record of the resources.
  */
 trait Retrieve
 {
     /**
+     * Retrieve a record of a resource by its id
+     *
+     * @param string $id
      * @param array|null $params
      * @param array|string|null $opts
      *
-     * @throws \Stripe\Exception\ApiErrorException if the request fails
-     *
-     * @return static The deleted resource.
+     * @return object stdClass
      */
-    public function retrieve($id, $params = null, $opts = null)
+    public function retrieve( string $id, $params = null, $opts = null)
     {
         self::_validateParams($params);
         $url = self::instanceUrl($id);

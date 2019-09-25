@@ -6,19 +6,17 @@ use Canvas\Canvas;
 use Canvas\Util\Util;
 
 /**
- * Trait for creatable resources. Adds a `create()` static method to the class.
- *
- * This trait should only be applied to classes that derive from StripeObject.
+ * Trait for authentication resource.
  */
 trait Auth
 {
     /**
+     * Auth and Login
+     *
      * @param array|null $params
      * @param array|string|null $options
      *
-     * @throws \Stripe\Exception\ApiErrorException if the request fails
-     *
-     * @return static The created resource.
+     * @return object stdClass
      */
     public static function auth($params = null, $options = null)
     {
