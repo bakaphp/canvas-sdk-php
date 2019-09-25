@@ -17,7 +17,7 @@ trait All
      *
      * @return array
      */
-    public static function all($params = null, $opts = null)
+    public static function all($params = null, $opts = null): array
     {
         self::_validateParams($params);
         $url = static::classUrl();

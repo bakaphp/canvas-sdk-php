@@ -18,7 +18,7 @@ trait Auth
      *
      * @return object stdClass
      */
-    public static function auth($params = null, $options = null)
+    public static function auth($params = null, $options = null): object
     {
         self::_validateParams($params);
         $url = static::classUrl();

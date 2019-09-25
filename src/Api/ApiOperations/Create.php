@@ -16,7 +16,7 @@ trait Create
      *
      * @return object stdClass
      */
-    public static function create($params = null, $opts = null)
+    public static function create($params = null, $opts = null): object
     {
         self::_validateParams($params);
         $url = static::classUrl();
