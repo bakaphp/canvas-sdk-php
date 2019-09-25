@@ -20,7 +20,7 @@ trait Update
         self::_validateParams($params);
         $url = self::instanceUrl($id);
         list($response, $opts) = static::_staticRequest('put', $url, $params, $opts);
-        $obj = Util::convertToSimpleObject($response->json);
+        $obj = Util::convertToSimpleObject($response->data);
         return $obj;
     }
 }

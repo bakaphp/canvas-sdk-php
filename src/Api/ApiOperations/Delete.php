@@ -22,6 +22,6 @@ trait Delete
         self::_validateParams($params);
         $url = self::instanceUrl($id);
         list($response, $opts) = static::_staticRequest('delete', $url, $params, $opts);
-        return $response->json;
+        return $response->data;
     }
 }

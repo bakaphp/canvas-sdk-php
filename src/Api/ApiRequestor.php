@@ -83,8 +83,8 @@ class ApiRequestor
         $params = $params ?: [];
         $headers = $headers ?: [];
         list($responseBody, $responseCode, $responseHeaders, $apiKeyUsed) = $this->_requestRaw($method, $url, $params, $headers);
-        $json = $this->_interpretResponse($responseBody, $responseCode, $responseHeaders);
-        $resp = new ApiResponse($responseBody, $responseCode, $responseHeaders, $json);
+        $data = $this->_interpretResponse($responseBody, $responseCode, $responseHeaders);
+        $resp = new ApiResponse($responseBody, $responseCode, $responseHeaders, $data);
         return [$resp, $apiKeyUsed];
     }
 
