@@ -18,11 +18,12 @@ class RequestOptions
 
     public $apiBase;
 
-    public function __construct($key = null, $headers = [], $base = null)
+    public function __construct($key = null, $headers = [], $base = null, $query = null)
     {
         $this->apiKey = $key;
         $this->headers = $headers;
         $this->apiBase = $base;
+        $this->query = $query;
     }
 
     /**
@@ -79,6 +80,7 @@ class RequestOptions
             $headers = [];
             $key = null;
             $base = null;
+            $query = "?";
             if (array_key_exists('api_key', $options)) {
                 $key = $options['api_key'];
             }
@@ -86,7 +88,28 @@ class RequestOptions
             if (array_key_exists('api_base', $options)) {
                 $base = $options['api_base'];
             }
-            return new RequestOptions($key, $headers, $base);
+
+            if (array_key_exists('conditions', $options)) {
+
+            }
+
+            if (array_key_exists('relationships', $options)) {
+                $query .= 'relationships=';
+                foreach ($options['relationships'] as $relationship) {
+
+                    $query .= $relationship == end($options['relationships'])? $relationship : $relationship . ',';
+                }
+                $query .= '&';
+            }
+
+            if (array_key_exists('custom_conditions', $options)) {
+
+            }
+
+            if (array_key_exists('relationships_conditions', $options)) {
+
+            }
+            return new RequestOptions($key, $headers, $base, $query);
         }
 
         $message = 'The second argument to Canvas API method calls is an '

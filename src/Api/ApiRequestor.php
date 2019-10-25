@@ -78,18 +78,18 @@ class ApiRequestor
      * @return array An array whose first element is an API response and second
      *    element is the API key used to make the request.
      */
-    public function request($method, $url, $params = null, $headers = null)
+    public function request($method, $url, $params = null, $headers = null, $query = '')
     {
         $params = $params ?: [];
         $headers = $headers ?: [];
-        list($responseBody, $responseCode, $responseHeaders, $apiKeyUsed) = $this->_requestRaw($method, $url, $params, $headers);
+        list($responseBody, $responseCode, $responseHeaders, $apiKeyUsed) = $this->_requestRaw($method, $url, $params, $headers, $query);
         $data = $this->_interpretResponse($responseBody, $responseCode, $responseHeaders);
         $resp = new ApiResponse($responseBody, $responseCode, $responseHeaders, $data);
         return [$resp, $apiKeyUsed];
     }
 
     /**
-     * Handles errors in response
+     * Handles errors in response.
      *
      * @param string $rbody A JSON string.
      * @param int $rcode
@@ -119,7 +119,7 @@ class ApiRequestor
     }
 
     /**
-     * Sets default headers to be used in requests
+     * Sets default headers to be used in requests.
      * @static
      *
      * @param string $apiKey
@@ -139,7 +139,7 @@ class ApiRequestor
     }
 
     /**
-     * Makes the actual request to an external API
+     * Makes the actual request to an external API.
      *
      * @param string $method
      * @param string $url
@@ -148,7 +148,7 @@ class ApiRequestor
      *
      * @return array
      */
-    private function _requestRaw($method, $url, $params, $headers): array
+    private function _requestRaw($method, $url, $params, $headers, $query): array
     {
         $apiKey = $this->apiKey;
         if (!$apiKey) {
@@ -167,7 +167,7 @@ class ApiRequestor
             throw new Exception\Authentication($msg);
         }
 
-        $absoluteUrl = $this->apiBase . $url;
+        $absoluteUrl = $this->apiBase . $url . $query;
 
         $body = ['form_params' => $params];
 
@@ -191,7 +191,7 @@ class ApiRequestor
     }
 
     /**
-     * Interpret every section of a response making sure is a valid response
+     * Interpret every section of a response making sure is a valid response.
      *
      * @param string $rbody
      * @param int    $rcode
@@ -216,7 +216,7 @@ class ApiRequestor
     }
 
     /**
-     * Set a HttpClient
+     * Set a HttpClient.
      * @static
      *
      * @param HttpClient\ClientInterface $client
@@ -227,7 +227,7 @@ class ApiRequestor
     }
 
     /**
-     * Returns an instance of the HttpClient
+     * Returns an instance of the HttpClient.
      *
      * @return HttpClient\ClientInterface
      */

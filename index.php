@@ -44,12 +44,12 @@ $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
 /**
  * Retrieve a user by its id
  */
-$users = Users::retrieve('2');
+$users = Users::retrieve('2', [], ['relationships'=>['roles']]);
 
 /**
  * Retrieve all users
  */
-// $users = Users::all();
+// $users = Users::all([], ['relationships'=>['roles']]);
 
 print_r($users);
 die();

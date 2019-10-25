@@ -60,7 +60,7 @@ trait Request
         $requestOptions = RequestOptions::parse($options);
         $baseUrl = isset($requestOptions->apiBase) ? $requestOptions->requestOptions : static::baseUrl();
         $requestor = new ApiRequestor($requestOptions->apiKey, $baseUrl);
-        list($response, $requestOptions->apiKey) = $requestor->request($method, $url, $params, $requestOptions->headers);
+        list($response, $requestOptions->apiKey) = $requestor->request($method, $url, $params, $requestOptions->headers, $requestOptions->query);
         $requestOptions->discardNonPersistentHeaders();
         return [$response, $requestOptions];
     }
