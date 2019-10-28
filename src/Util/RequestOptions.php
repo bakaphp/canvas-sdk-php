@@ -4,7 +4,6 @@ namespace Canvas\Util;
 
 use Canvas\Exception;
 
-
 class RequestOptions
 {
     /**
@@ -63,7 +62,7 @@ class RequestOptions
     }
 
     /**
-     * Unpacks an options array into an RequestOptions object
+     * Unpacks an options array into an RequestOptions object.
      * @param array|string|null $options a key => value array
      *
      * @return RequestOptions
@@ -80,7 +79,7 @@ class RequestOptions
             $headers = [];
             $key = null;
             $base = null;
-            $query = "?";
+            $query = '?';
             if (array_key_exists('api_key', $options)) {
                 $key = $options['api_key'];
             }
@@ -90,24 +89,23 @@ class RequestOptions
             }
 
             if (array_key_exists('conditions', $options)) {
-
+                $query .= self::parseConditions($options['conditions']);
             }
 
             if (array_key_exists('relationships', $options)) {
-                $query .= 'relationships=';
-                foreach ($options['relationships'] as $relationship) {
-
-                    $query .= $relationship == end($options['relationships'])? $relationship : $relationship . ',';
-                }
-                $query .= '&';
+                $query .= self::parseRelationships($options['relationships']);
             }
 
             if (array_key_exists('custom_conditions', $options)) {
-
+                $query .= self::parseCustomConditions($options['custom_conditions']);
             }
 
             if (array_key_exists('relationships_conditions', $options)) {
-
+                $query .= 'rq=';
+                foreach ($options['relationships_conditions'] as $condition) {
+                    $query .= $condition == end($options['relationships_conditions']) ? $condition : $condition . ',';
+                }
+                $query .= '&';
             }
             return new RequestOptions($key, $headers, $base, $query);
         }
@@ -116,5 +114,56 @@ class RequestOptions
            . 'optional per-request apiKey, which must be a string, or '
            . 'per-request options, which must be an array.';
         throw new Exception\Api($message);
+    }
+
+    /**
+     * Parse relationships Params
+     * @param array $relationships
+     * @return string
+     */
+    private function parseRelationships(array $relationships): string
+    {
+        $query = '';
+        $query .= 'relationships=';
+        foreach ($relationships as $relationship) {
+            $query .= $relationship == end($relationships) ? $relationship : $relationship . ',';
+        }
+        $query .= '&';
+
+        return $query;
+    }
+
+    /**
+     * Parse conditions Params
+     * @param array $relationships
+     * @return string
+     */
+    private function parseConditions(array $conditions): string
+    {
+        $query = '';
+        $query .= 'q=(';
+        foreach ($conditions as $condition) {
+            $query .= $condition == end($conditions) ? $condition : $condition . ',';
+        }
+        $query .= ')&';
+
+        return $query;
+    }
+
+    /**
+     * Parse custom conditions Params
+     * @param array $relationships
+     * @return string
+     */
+    private function parseCustomConditions(array $conditions): string
+    {
+        $query = '';
+        $query .= 'cq=(';
+        foreach ($conditions as $condition) {
+            $query .= $condition == end($conditions) ? $condition : $condition . ',';
+        }
+        $query .= ')&';
+
+        return $query;
     }
 }
