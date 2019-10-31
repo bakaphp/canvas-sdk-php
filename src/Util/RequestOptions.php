@@ -101,11 +101,7 @@ class RequestOptions
             }
 
             if (array_key_exists('relationships_conditions', $options)) {
-                $query .= 'rq=';
-                foreach ($options['relationships_conditions'] as $condition) {
-                    $query .= $condition == end($options['relationships_conditions']) ? $condition : $condition . ',';
-                }
-                $query .= '&';
+                $query .= self::parseRelationshipsCustomConditions($options['relationships_conditions']);
             }
 
             if (array_key_exists('sort', $options)) {
@@ -170,5 +166,19 @@ class RequestOptions
         $query .= ')&';
 
         return $query;
+    }
+
+    /**
+     * Parse custom conditions Params.
+     * @param array $relationships
+     * @return string
+     * @todo Maybe we can improve this better later.
+     */
+    private function parseRelationshipsCustomConditions(array $conditions): string
+    {
+        foreach ($conditions as $key => $value) {
+
+            return $query = 'rq=[' . $key . ']=(' . $value . ')&';
+        }
     }
 }
