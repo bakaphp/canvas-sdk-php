@@ -107,6 +107,11 @@ class RequestOptions
                 }
                 $query .= '&';
             }
+
+            if (array_key_exists('sort', $options)) {
+                $sortQuery = 'sort=' . $options['sort'] . '&';
+                $query .= $sortQuery;
+            }
             return new RequestOptions($key, $headers, $base, $query);
         }
 
@@ -117,7 +122,7 @@ class RequestOptions
     }
 
     /**
-     * Parse relationships Params
+     * Parse relationships Params.
      * @param array $relationships
      * @return string
      */
@@ -134,7 +139,7 @@ class RequestOptions
     }
 
     /**
-     * Parse conditions Params
+     * Parse conditions Params.
      * @param array $relationships
      * @return string
      */
@@ -151,7 +156,7 @@ class RequestOptions
     }
 
     /**
-     * Parse custom conditions Params
+     * Parse custom conditions Params.
      * @param array $relationships
      * @return string
      */

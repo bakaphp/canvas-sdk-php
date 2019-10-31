@@ -51,7 +51,8 @@ $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
  */
 $users = Users::all([], [
     'relationships'=>['roles'],
-    'conditions'=> ['firstname:%Max%','is_deleted:0']
+    // 'conditions'=> ['firstname:%Max%','is_deleted:0'],
+    'sort'=>'firstname|desc'
     ]);
 
 print_r($users);
