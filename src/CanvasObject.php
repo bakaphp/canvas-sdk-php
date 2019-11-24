@@ -12,6 +12,12 @@ class CanvasObject
     protected $_retrieveOptions;
     protected $_lastResponse;
 
+    /**
+     * Consstructor
+     *
+     * @param string|mixed $id
+     * @param mixed $opts
+     */
     public function __construct($id = null, $opts = null)
     {
         list($id, $this->_retrieveOptions) = Util\Util::normalizeId($id);
@@ -24,5 +30,4 @@ class CanvasObject
             $this->_values['id'] = $id;
         }
     }
-
 }

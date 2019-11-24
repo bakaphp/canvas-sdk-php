@@ -9,7 +9,6 @@ use Canvas\Util;
 
 class GuzzleClient implements ClientInterface
 {
-
     private static $instance;
 
     public static function instance()
@@ -35,7 +34,7 @@ class GuzzleClient implements ClientInterface
      */
     public function request($method, $absoluteUrl, $headers, $params, $hasFile)
     {
-        $client = new Client(['headers'=> $headers]);
+        $client = new Client(['headers' => $headers]);
         $res = $client->request(strtoupper($method), $absoluteUrl, $params);
 
         return $res;

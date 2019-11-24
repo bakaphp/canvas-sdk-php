@@ -26,16 +26,43 @@ abstract class Util
      * @return string|mixed The UTF8-encoded string, or the object passed in if
      *    it wasn't a string.
      */
-    public static function utf8($value)
+    public static function utf8(string $value): ?string
     {
         if (self::$isMbstringAvailable === null) {
             self::$isMbstringAvailable = function_exists('mb_detect_encoding');
         }
-        if (is_string($value) && self::$isMbstringAvailable && mb_detect_encoding($value, "UTF-8", true) != "UTF-8") {
+        if (is_string($value) && self::$isMbstringAvailable && mb_detect_encoding($value, 'UTF-8', true) != 'UTF-8') {
             return utf8_encode($value);
         } else {
             return $value;
         }
     }
 
+    /**
+     * Given a ID return its as a array?
+     *
+     * @param mixed $id
+     * @return array
+     */
+    public static function normalizeId($id): array
+    {
+        if (is_array($id)) {
+            $params = $id;
+            $id = $params['id'];
+            unset($params['id']);
+        } else {
+            $params = [];
+        }
+        return [$id, $params];
+    }
+
+    /**
+     * Returns UNIX timestamp in milliseconds
+     *
+     * @return integer current time in millis
+     */
+    public static function currentTimeMillis(): int
+    {
+        return (int) round(microtime(true) * 1000);
+    }
 }

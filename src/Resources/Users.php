@@ -13,13 +13,11 @@ use Canvas\Api\ApiResource;
 
 class Users extends ApiResource
 {
-    const OBJECT_NAME = "users";
+    const OBJECT_NAME = 'users';
 
     use All;
     use Create;
     use Delete;
     use Update;
     use Retrieve;
-
-
 }

@@ -13,13 +13,11 @@ use Canvas\Api\ApiResource;
 
 class Companies extends ApiResource
 {
-    const OBJECT_NAME = "companies";
+    const OBJECT_NAME = 'companies';
 
     use All;
     use Create;
     use Delete;
     use Update;
     use Retrieve;
-
-
 }

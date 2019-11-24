@@ -9,7 +9,7 @@ use Canvas\Api\ApiResource;
 
 class Auth extends ApiResource
 {
-    const OBJECT_NAME = "auth";
+    const OBJECT_NAME = 'auth';
 
     use AuthTrait;
 }
