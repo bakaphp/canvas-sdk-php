@@ -30,6 +30,13 @@ class Canvas
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
+    /**
+     * Logger library
+     *
+     * @var DefaultLogger
+     */
+    public static $logger = null;
+
     public static $authToken;
 
     const VERSION = '0.1.0';

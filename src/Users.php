@@ -10,6 +10,7 @@ use Canvas\Api\Operations\Delete;
 use Canvas\Api\Operations\Update;
 use Canvas\Api\Operations\Retrieve;
 use Canvas\Api\Resource;
+use Canvas\Util\Util;
 
 class Users extends Resource
 {
@@ -20,4 +21,23 @@ class Users extends Resource
     use Delete;
     use Update;
     use Retrieve;
+
+    /**
+     * Overwrite the user create function to return a usr object like we expect
+     *
+     * @param array|null $params
+     * @param array|string|null $options
+     *
+     * @return object stdClass
+     */
+    public static function create($params = null, $opts = null): object
+    {
+        self::_validateParams($params);
+        $url = static::classUrl();
+        list($response, $opts) = static::_staticRequest('post', $url, $params, $opts);
+
+        $user = $response->data['user'];
+        $user['session'] = $response->data['session'];
+        return Util::convertToSimpleObject($user, $opts, self::OBJECT_NAME);
+    }
 }

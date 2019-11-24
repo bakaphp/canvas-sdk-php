@@ -92,7 +92,7 @@ class AuthCest
             'verify_password'=> $this->userPassword
         ]);
 
-        $I->assertTrue(gettype($users) == 'object');
-        $this->userId = $users->user->id;
+        $I->assertTrue($users instanceof Users);
+        $this->userId = $users->id;
     }
 }
