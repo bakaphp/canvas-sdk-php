@@ -118,6 +118,7 @@ class UsersCest
     public function delete(IntegrationTester $I): void
     {
         $users = Users::delete($this->userId);
-        $I->assertTrue($users instanceof Users);
+        $I->assertTrue(gettype($users[0]) == 'string');
+        $I->assertTrue($users[0] == 'Delete Successfully');
     }
 }
