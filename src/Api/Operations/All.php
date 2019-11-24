@@ -23,6 +23,6 @@ trait All
         $url = static::classUrl();
 
         list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
-        return Util::convertToSimpleObject($response->data);
+        return Util::convertToSimpleObject($response->data, $opts);
     }
 }

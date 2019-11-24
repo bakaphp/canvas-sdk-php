@@ -2,7 +2,7 @@
 
 namespace Canvas\Util;
 
-use Canvas\Util\CanvasObject;
+use Canvas\CanvasObject;
 use StdClass;
 
 abstract class Util
@@ -10,26 +10,57 @@ abstract class Util
     private static $isMbstringAvailable = null;
 
     /**
+     * Whether the provided array (or other) is a list rather than a dictionary.
+     * A list is defined as an array for which all the keys are consecutive
+     * integers starting at 0. Empty arrays are considered to be lists.
+     *
+     * @param array|mixed $array
+     * @return boolean true if the given object is a list.
+     */
+    public static function isList($array)
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+        if ($array === []) {
+            return true;
+        }
+        if (array_keys($array) !== range(0, count($array) - 1)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Converts a response from the Canvas API to a simple PHP object.
      *
      * @param array $response The response from the Canvas API.
      * @return object|object[]
      */
-    public static function convertToSimpleObject(array $response)
+    public static function convertToSimpleObject(array $response, $opts)
     {
-        /**
-         * if we get the key 0, it means we have a list response ,
-         * so we overwrite the array properties as object
-         */
-        if (isset($response[0])) {
-            foreach ($response as $key => $item) {
-                $response[$key] = (object) $item;
-            }
+        $types = [
+            \Canvas\Users::OBJECT_NAME => \Canvas\Users::class,
+            \Canvas\Companies::OBJECT_NAME => \Canvas\Companies::class,
+        ];
 
-            return $response;
+        if (self::isList($response)) {
+            $mapped = [];
+            foreach ($response as $i) {
+                array_push($mapped, self::convertToSimpleObject($i, $opts));
+            }
+            return $mapped;
+        } elseif (is_array($response)) {
+            if (isset($response['object']) && is_string($response['object']) && isset($types[$response['object']])) {
+                $class = $types[$response['object']];
+            } else {
+                $class = CanvasObject::class;
+            }
+            return $class::constructFrom($response, $opts);
+        } else {
+            return (object) $response;
         }
 
-        return (object) $response;
         //return json_decode(json_encode($response));
     }
 
