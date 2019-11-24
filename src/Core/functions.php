@@ -98,15 +98,3 @@ if (!function_exists('Canvas\Core\isJson')) {
         return (bool ) (json_last_error() == JSON_ERROR_NONE);
     }
 }
-
-if (!function_exists('Canvas\Core\isSwooleServer')) {
-    /**
-     * Are we running a Swoole Server for this app?
-     *
-     * @return boolean
-     */
-    function isSwooleServer(): bool
-    {
-        return defined('ENGINE') && ENGINE === 'SWOOLE' ? true : false;
-    }
-}

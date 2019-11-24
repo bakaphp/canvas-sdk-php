@@ -13,11 +13,24 @@ abstract class Util
      * Converts a response from the Canvas API to a simple PHP object.
      *
      * @param array $response The response from the Canvas API.
-     * @return object
+     * @return object|object[]
      */
     public static function convertToSimpleObject(array $response)
     {
-        return json_decode(json_encode($response));
+        /**
+         * if we get the key 0, it means we have a list response ,
+         * so we overwrite the array properties as object
+         */
+        if (isset($response[0])) {
+            foreach ($response as $key => $item) {
+                $response[$key] = (object) $item;
+            }
+
+            return $response;
+        }
+
+        return (object) $response;
+        //return json_decode(json_encode($response));
     }
 
     /**
@@ -57,7 +70,7 @@ abstract class Util
     }
 
     /**
-     * Returns UNIX timestamp in milliseconds
+     * Returns UNIX timestamp in milliseconds.
      *
      * @return integer current time in millis
      */

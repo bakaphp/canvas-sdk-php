@@ -157,8 +157,8 @@ class Requestor
 
         if (!$apiKey) {
             $msg = 'No API key provided.  (HINT: set your API key using '
-              . '"Canvas::setApiKey(<API-KEY>)".  You can generate API keys from '
-              . 'the Canvas web interface.';
+              . '"Kanvas::setApiKey(<API-KEY>)".  You can generate API keys from '
+              . 'the Kanvas web interface.';
             throw new Exception\Authentication($msg);
         }
 

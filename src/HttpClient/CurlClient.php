@@ -28,7 +28,12 @@ class CurlClient implements ClientInterface
 {
     private static $instance;
 
-    public static function instance()
+    /**
+     * Singleton
+     *
+     * @return ClientInterface
+     */
+    public static function instance(): ClientInterface
     {
         if (!self::$instance) {
             self::$instance = new self();

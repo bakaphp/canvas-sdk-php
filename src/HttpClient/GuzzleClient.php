@@ -3,15 +3,17 @@
 namespace Canvas\HttpClient;
 
 use GuzzleHttp\Client;
-use Canvas\Canvas;
-use Canvas\Exception;
-use Canvas\Util;
 
 class GuzzleClient implements ClientInterface
 {
     private static $instance;
 
-    public static function instance()
+    /**
+     * Singleton
+     *
+     * @return void
+     */
+    public static function instance(): ClientInterface
     {
         if (!self::$instance) {
             self::$instance = new self();

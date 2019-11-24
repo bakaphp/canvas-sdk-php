@@ -17,13 +17,12 @@ trait All
      *
      * @return object
      */
-    public static function all($params = null, $opts = null): object
+    public static function all($params = null, $opts = null): array
     {
         self::_validateParams($params);
         $url = static::classUrl();
 
         list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
-        $obj = Util::convertToSimpleObject($response->data);
-        return $obj;
+        return Util::convertToSimpleObject($response->data);
     }
 }

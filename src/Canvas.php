@@ -16,11 +16,11 @@ class Canvas
     // @var string The kanvas client_id to be used for Connect requests.
     public static $clientId;
     // @var string The base URL for the kanvas API.
-    public static $apiBase = 'https://apicanvas.gewaer.io';
+    public static $apiBase = 'https://apidev.kanvas.dev';
     // @var string The base URL for the OAuth API.
-    public static $connectBase = 'https://apicanvas.gewaer.io';
+    public static $connectBase = 'https://apidev.kanvas.dev';
     // @var string The base URL for the kanvas API uploads endpoint.
-    public static $apiUploadBase = 'https://apicanvas.gewaer.io';
+    public static $apiUploadBase = 'https://apidev.kanvas.dev';
     // @var string|null The version of the kanvas API to use for requests.
     public static $apiVersion = null;
     // @var string|null The account ID for connected accounts requests.
@@ -160,7 +160,7 @@ class Canvas
      * Get authToken.
      * @return string
      */
-    public static function getAuthToken(): string
+    public static function getAuthToken(): ?string
     {
         return self::$authToken;
     }
