@@ -33,6 +33,16 @@ Auth::auth([
 //Call Kanvas Functions
 ```
 
+Set the token on your DI
+``` php
+use Canvas\Auth;
+use Canvas\Canvas;
+Canvas::setApiKey($appApiKey);
+Canvas::setAuthToken($request['token']);
+
+//Call Kanvas Functions
+```
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
