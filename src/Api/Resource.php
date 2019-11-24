@@ -7,6 +7,7 @@ use Canvas\CanvasObject;
 use Canvas\Api\Requestor;
 use Canvas\Util\Util;
 use Canvas\Exception\UnexpectedValueException;
+use Canvas\Util\Set;
 
 /**
  * Class Resource
@@ -17,21 +18,6 @@ abstract class Resource extends CanvasObject
 {
     use Operations\Request;
 
-     /**
-     * @return \Canvas\Util\Set A list of fields that can be their own type of
-     * API resource (say a nested card under an account for example), and if
-     * that resource is set, it should be transmitted to the API on a create or
-     * update. Doing so is not the default behavior because API resources
-     * should normally be persisted on their own RESTful endpoints.
-     */
-    public static function getSavedNestedResources()
-    {
-        static $savedNestedResources = null;
-        if ($savedNestedResources === null) {
-            $savedNestedResources = new Util\Set();
-        }
-        return $savedNestedResources;
-    }
     /**
      * @var boolean A flag that can be set a behavior that will cause this
      * resource to be encoded and sent up along with an update of its parent
@@ -40,6 +26,22 @@ abstract class Resource extends CanvasObject
      * replacing a customer's source for example, where this is allowed.
      */
     public $saveWithParent = false;
+
+    /**
+     * @return \Canvas\Util\Set A list of fields that can be their own type of
+     * API resource (say a nested card under an account for example), and if
+     * that resource is set, it should be transmitted to the API on a create or
+     * update. Doing so is not the default behavior because API resources
+     * should normally be persisted on their own RESTful endpoints.
+     */
+    public static function getSavedNestedResources(): Set
+    {
+        static $savedNestedResources = null;
+        if ($savedNestedResources === null) {
+            $savedNestedResources = new Util\Set();
+        }
+        return $savedNestedResources;
+    }
 
     /**
      * Setter
@@ -63,7 +65,7 @@ abstract class Resource extends CanvasObject
      *
      * @throws Exception\ApiErrorException
      */
-    public function refresh()
+    public function refresh(): Resource
     {
         $requestor = new Requestor($this->_opts->apiKey, static::baseUrl());
         $url = $this->instanceUrl();
@@ -81,7 +83,7 @@ abstract class Resource extends CanvasObject
     /**
      * @return string The base URL for the given class.
      */
-    public static function baseUrl()
+    public static function baseUrl(): string
     {
         return Canvas::$apiBase;
     }
@@ -89,7 +91,7 @@ abstract class Resource extends CanvasObject
     /**
      * @return string The endpoint URL for the given class.
      */
-    public static function classUrl()
+    public static function classUrl(): string
     {
         // Replace dots with slashes for namespaced resources, e.g. if the object's name is
         // "foo.bar", then its URL will be "/v1/foo/bars".
@@ -100,7 +102,7 @@ abstract class Resource extends CanvasObject
     /**
      * @return string The instance endpoint URL for the given class.
      */
-    public static function resourceUrl($id)
+    public static function resourceUrl($id): string
     {
         if ($id === null) {
             $class = get_called_class();
@@ -117,7 +119,7 @@ abstract class Resource extends CanvasObject
     /**
      * @return string The full API URL for this API resource with specific identifier.
      */
-    public function instanceUrl($id)
+    public function instanceUrl($id): string
     {
         return static::resourceUrl($id);
     }

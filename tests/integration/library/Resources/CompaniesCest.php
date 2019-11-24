@@ -68,4 +68,16 @@ class CompaniesCest
         $users = Companies::retrieve(self::DEFAULT_COMPANIES_ID);
         $I->assertTrue(gettype($users) == 'object');
     }
+
+        /**
+     * Get a Company
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function getCompanyById(IntegrationTester $I): void
+    {
+        $users = Companies::getById(self::DEFAULT_COMPANIES_ID);
+        $I->assertTrue(gettype($users) == 'object');
+    }
 }
