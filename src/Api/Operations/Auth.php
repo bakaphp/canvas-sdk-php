@@ -23,8 +23,8 @@ trait Auth
         self::_validateParams($params);
         $url = static::classUrl();
         list($response, $opts) = static::_staticRequest('post', $url, $params, $options);
+
         Canvas::setAuthToken($response->data['token']);
-        $obj = Util::convertToSimpleObject($response->data, $opts);
-        return $obj;
+        return Util::convertToSimpleObject($response->data, $opts, self::OBJECT_NAME);
     }
 }

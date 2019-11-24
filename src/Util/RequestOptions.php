@@ -32,7 +32,7 @@ class RequestOptions
      *
      * @return RequestOptions
      */
-    public function merge($options)
+    public function merge($options): RequestOptions
     {
         $other_options = self::parse($options);
 
@@ -51,8 +51,9 @@ class RequestOptions
 
     /**
      * Discards all headers that we don't want to persist across requests.
+     * @return void
      */
-    public function discardNonPersistentHeaders()
+    public function discardNonPersistentHeaders(): void
     {
         foreach ($this->headers as $headerName => $headerValue) {
             if (!in_array($headerName, self::$HEADERS_TO_PERSIST)) {
@@ -67,7 +68,7 @@ class RequestOptions
      *
      * @return RequestOptions
      */
-    public static function parse($options)
+    public static function parse($options): RequestOptions
     {
         if ($options instanceof self) {
             return $options;
@@ -108,6 +109,12 @@ class RequestOptions
                 $sortQuery = 'sort=' . $options['sort'] . '&';
                 $query .= $sortQuery;
             }
+
+            if (array_key_exists('limit', $options)) {
+                $sortQuery = 'limit=' . $options['sort'] . '&';
+                $query .= $sortQuery;
+            }
+
             return new RequestOptions($key, $headers, $base, $query);
         }
 

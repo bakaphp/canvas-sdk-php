@@ -35,9 +35,11 @@ abstract class Util
      * Converts a response from the Canvas API to a simple PHP object.
      *
      * @param array $response The response from the Canvas API.
+     * @param RequestOptions $opts
+     * @param string $object
      * @return object|object[]
      */
-    public static function convertToSimpleObject(array $response, $opts)
+    public static function convertToSimpleObject(array $response, RequestOptions $opts, string $object = null)
     {
         $types = [
             \Canvas\Users::OBJECT_NAME => \Canvas\Users::class,
@@ -47,12 +49,12 @@ abstract class Util
         if (self::isList($response)) {
             $mapped = [];
             foreach ($response as $i) {
-                array_push($mapped, self::convertToSimpleObject($i, $opts));
+                array_push($mapped, self::convertToSimpleObject($i, $opts, $object));
             }
             return $mapped;
         } elseif (is_array($response)) {
-            if (isset($response['object']) && is_string($response['object']) && isset($types[$response['object']])) {
-                $class = $types[$response['object']];
+            if (!is_null($object) && isset($types[$object])) {
+                $class = $types[$object];
             } else {
                 $class = CanvasObject::class;
             }

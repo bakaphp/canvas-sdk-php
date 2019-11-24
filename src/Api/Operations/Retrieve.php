@@ -22,8 +22,8 @@ trait Retrieve
         self::_validateParams($params);
         $url = self::instanceUrl($id);
         list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
-        $obj = Util::convertToSimpleObject($response->data, $opts);
-        return $obj;
+
+        return Util::convertToSimpleObject($response->data, $opts, self::OBJECT_NAME);
     }
 
     /**
