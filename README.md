@@ -22,7 +22,15 @@ $ composer require bakaphp/canvas-sdk-php
 ## Usage
 
 ``` php
-$client = new Canvas\Client();
+use Canvas\Auth;
+use Canvas\Canvas;
+Canvas::setApiKey($appApiKey);
+Auth::auth([
+        'email' => 'max@mctekk.com', 
+        'password' => 'nosenose'
+]);
+
+//Call Kanvas Functions
 ```
 
 ## Change log
