@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Api\ApiOperations;
+namespace Canvas\Api\Operations;
 
 use Canvas\Util\Util;
 /**

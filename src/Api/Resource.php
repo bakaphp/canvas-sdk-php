@@ -4,18 +4,18 @@ namespace Canvas\Api;
 
 use Canvas\Canvas;
 use Canvas\CanvasObject;
-use Canvas\Api\ApiRequestor;
+use Canvas\Api\Requestor;
 use Canvas\Util\Util;
 use Canvas\Exception\UnexpectedValueException;
 
 /**
- * Class ApiResource
+ * Class Resource
  *
  * @package Canvas
  */
-abstract class ApiResource extends CanvasObject
+abstract class Resource extends CanvasObject
 {
-    use ApiOperations\Request;
+    use Operations\Request;
 
      /**
      * @return \Canvas\Util\Set A list of fields that can be their own type of
@@ -52,20 +52,20 @@ abstract class ApiResource extends CanvasObject
         parent::__set($k, $v);
         $v = $this->$k;
         if ((static::getSavedNestedResources()->includes($k)) &&
-            ($v instanceof ApiResource)) {
+            ($v instanceof Resource)) {
             $v->saveWithParent = true;
         }
         return $v;
     }
 
     /**
-     * @return ApiResource The refreshed resource.
+     * @return Resource The refreshed resource.
      *
      * @throws Exception\ApiErrorException
      */
     public function refresh()
     {
-        $requestor = new ApiRequestor($this->_opts->apiKey, static::baseUrl());
+        $requestor = new Requestor($this->_opts->apiKey, static::baseUrl());
         $url = $this->instanceUrl();
         list($response, $this->_opts->apiKey) = $requestor->request(
             'get',

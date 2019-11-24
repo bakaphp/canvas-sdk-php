@@ -2,11 +2,11 @@
 namespace Canvas\Api;
 
 /**
- * Class ApiResponse
+ * Class Response
  *
  * @package Stripe
  */
-class ApiResponse
+class Response
 {
     public $headers;
     public $body;

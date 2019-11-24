@@ -3,8 +3,8 @@
 namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
-use Canvas\Resources\Users;
-use Canvas\Resources\Auth;
+use Canvas\Users;
+use Canvas\Auth;
 use Canvas\Canvas;
 use Phalcon\Security\Random;
 

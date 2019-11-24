@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Api\ApiOperations;
+namespace Canvas\Api\Operations;
 
 use Canvas\Util\Util;
 
@@ -15,9 +15,9 @@ trait All
      * @param array|null $params
      * @param array|string|null $opts
      *
-     * @return array
+     * @return object
      */
-    public static function all($params = null, $opts = null): array
+    public static function all($params = null, $opts = null): object
     {
         self::_validateParams($params);
         $url = static::classUrl();
