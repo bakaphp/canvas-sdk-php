@@ -26,8 +26,8 @@ use Canvas\Auth;
 use Canvas\Canvas;
 Canvas::setApiKey($appApiKey);
 Auth::auth([
-        'email' => 'max@mctekk.com', 
-        'password' => 'nosenose'
+        'email' => 'kanvas@mctekk.com', 
+        'password' => 'somethingpassword'
 ]);
 
 //Call Kanvas Functions
