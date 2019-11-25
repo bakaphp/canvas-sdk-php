@@ -3,8 +3,8 @@
 namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
-use Canvas\Resources\Users;
-use Canvas\Resources\Auth;
+use Canvas\Users;
+use Canvas\Auth;
 use Canvas\Canvas;
 use Phalcon\Security\Random;
 
@@ -81,8 +81,8 @@ class UsersCest
             'verify_password'=> $this->userPassword
         ]);
 
-        $I->assertTrue(gettype($users) == 'object');
-        $this->userId = $users->user->id;
+        $I->assertTrue($users instanceof Users);
+        $this->userId = $users->id;
     }
 
     /**
@@ -94,7 +94,7 @@ class UsersCest
     public function update(IntegrationTester $I): void
     {
         $users = Users::update($this->userId, ['firstname'=>'testSDKUpdate','lastname'=> 'testSDKUpdate']);
-        $I->assertTrue(gettype($users) == 'object');
+        $I->assertTrue($users instanceof Users);
     }
 
     /**
@@ -105,8 +105,8 @@ class UsersCest
      */
     public function getUser(IntegrationTester $I): void
     {
-        $users = Users::retrieve($this->userId);
-        $I->assertTrue(gettype($users) == 'object');
+        $users = Users::getById($this->userId);
+        $I->assertTrue($users instanceof Users);
     }
 
     /**
@@ -119,5 +119,6 @@ class UsersCest
     {
         $users = Users::delete($this->userId);
         $I->assertTrue(gettype($users[0]) == 'string');
+        $I->assertTrue($users[0] == 'Delete Successfully');
     }
 }

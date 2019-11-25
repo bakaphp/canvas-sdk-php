@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Api\ApiOperations;
+namespace Canvas\Api\Operations;
 
 use Canvas\Util\Util;
 /**
@@ -17,12 +17,23 @@ trait Retrieve
      *
      * @return object stdClass
      */
-    public function retrieve( string $id, $params = null, $opts = null)
+    public static function retrieve( string $id, $params = null, $opts = null): object
     {
         self::_validateParams($params);
         $url = self::instanceUrl($id);
         list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
-        $obj = Util::convertToSimpleObject($response->data);
-        return $obj;
+
+        return Util::convertToSimpleObject($response->data, $opts, self::OBJECT_NAME);
+    }
+
+    /**
+     * Get the element by its id
+     *
+     * @param string $id
+     * @return object
+     */
+    public function getById(string $id): object
+    {
+        return self::retrieve($id);
     }
 }

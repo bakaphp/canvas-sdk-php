@@ -7,11 +7,11 @@ use Canvas\Canvas;
 use Canvas\HttpClient\GuzzleClient;
 
 /**
- * Class ApiRequestor.
+ * Class Requestor.
  *
  * @package Canvas
  */
-class ApiRequestor
+class Requestor
 {
     /**
      * @var string|null
@@ -29,7 +29,7 @@ class ApiRequestor
     private static $httpClient;
 
     /**
-     * ApiRequestor constructor.
+     * Requestor constructor.
      *
      * @param string|null $apiKey
      * @param string|null $apiBase
@@ -46,13 +46,13 @@ class ApiRequestor
     /**
      * @static
      *
-     * @param ApiResource|bool|array|mixed $d
+     * @param Resource|bool|array|mixed $d
      *
-     * @return ApiResource|array|string|mixed
+     * @return Resource|array|string|mixed
      */
     private static function _encodeObjects($decoded)
     {
-        if ($decoded instanceof ApiResource) {
+        if ($decoded instanceof Resource) {
             return Util\Util::utf8($decoded->id);
         } elseif ($decoded === true) {
             return 'true';
@@ -84,7 +84,7 @@ class ApiRequestor
         $headers = $headers ?: [];
         list($responseBody, $responseCode, $responseHeaders, $apiKeyUsed) = $this->_requestRaw($method, $url, $params, $headers, $query);
         $data = $this->_interpretResponse($responseBody, $responseCode, $responseHeaders);
-        $resp = new ApiResponse($responseBody, $responseCode, $responseHeaders, $data);
+        $resp = new Response($responseBody, $responseCode, $responseHeaders, $data);
         return [$resp, $apiKeyUsed];
     }
 
@@ -157,8 +157,8 @@ class ApiRequestor
 
         if (!$apiKey) {
             $msg = 'No API key provided.  (HINT: set your API key using '
-              . '"Canvas::setApiKey(<API-KEY>)".  You can generate API keys from '
-              . 'the Canvas web interface.';
+              . '"Kanvas::setApiKey(<API-KEY>)".  You can generate API keys from '
+              . 'the Kanvas web interface.';
             throw new Exception\Authentication($msg);
         }
 

@@ -5,7 +5,7 @@ namespace Canvas;
 /**
  *
  */
-class Subscription extends ApiResource
+class Subscription extends Resource
 {
 
 }

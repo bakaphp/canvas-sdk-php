@@ -3,8 +3,8 @@
 namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
-use Canvas\Resources\Auth;
-use Canvas\Resources\Users;
+use Canvas\Auth;
+use Canvas\Users;
 use Canvas\Canvas;
 use Phalcon\Security\Random;
 
@@ -92,7 +92,7 @@ class AuthCest
             'verify_password'=> $this->userPassword
         ]);
 
-        $I->assertTrue(gettype($users) == 'object');
-        $this->userId = $users->user->id;
+        $I->assertTrue($users instanceof Users);
+        $this->userId = $users->id;
     }
 }

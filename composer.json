@@ -1,12 +1,12 @@
 {
     "name": "bakaphp/canvas-sdk-php",
     "type": "library",
-    "description": "A PHP client library for accessing Canvas APIs",
+    "description": "A PHP client library for accessing Kanvas APIs",
     "homepage": "https://github.com/bakaphp/canvas-sdk-php",
     "license": "MIT",
     "authors": [
         {
-          "name": "Canvas team and contributors",
+          "name": "Kanvas team and contributors",
           "homepage": "https://github.com/bakaphp/canvas-sdk-php/contributors"
         }
       ],
@@ -31,7 +31,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
+        "test": "codecept run",
         "check-style": "phpcs src tests",
         "fix-style": "phpcbf src tests"
     },

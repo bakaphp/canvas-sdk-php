@@ -21,11 +21,12 @@ if (!function_exists('Canvas\Core\appPath')) {
          * @todo look for a better solution , hate this
          */
         if (php_sapi_name() == 'cli') {
-            $currentDir = getcwd() . DIRECTORY_SEPARATOR. $path;
+            $currentDir = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
         return $currentDir;
     }
 }
+
 if (!function_exists('Canvas\Core\envValue')) {
     /**
      * Gets a variable from the environment, returns it properly formatted or the
@@ -51,6 +52,7 @@ if (!function_exists('Canvas\Core\envValue')) {
         return $return;
     }
 }
+
 if (!function_exists('Canvas\Core\appUrl')) {
     /**
      * Constructs a URL for links with resource and id.
@@ -70,6 +72,7 @@ if (!function_exists('Canvas\Core\appUrl')) {
         );
     }
 }
+
 if (!function_exists('Canvas\Core\paymentGatewayIsActive')) {
     /**
      * Do we have a payment metho actived on the app?
@@ -81,6 +84,7 @@ if (!function_exists('Canvas\Core\paymentGatewayIsActive')) {
         return !empty(getenv('STRIPE_SECRET')) ? true : false;
     }
 }
+
 if (!function_exists('Canvas\Core\isJson')) {
     /**
      * Given a string determine if its a json.
@@ -92,16 +96,5 @@ if (!function_exists('Canvas\Core\isJson')) {
     {
         json_decode($string);
         return (bool ) (json_last_error() == JSON_ERROR_NONE);
-    }
-}
-if (!function_exists('Canvas\Core\isSwooleServer')) {
-    /**
-     * Are we running a Swoole Server for this app?
-     *
-     * @return boolean
-     */
-    function isSwooleServer(): bool
-    {
-        return defined('ENGINE') && ENGINE === 'SWOOLE' ? true : false;
     }
 }

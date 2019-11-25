@@ -1,6 +1,6 @@
 # Canvas APIs client library for PHP
 
-Don't trust anything here. We're going to delete the git history before realeasing version 0.1
+The Kanvas PHP library provides convenient access to the Kanvas API from applications written in the PHP language. It includes a pre-defined set of classes for API resources that initialize themselves dynamically from API responses which makes it compatible with a wide range of versions of the Kanvas API. This SDK is based on Stripe SDK (thanks stripe)
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -22,7 +22,25 @@ $ composer require bakaphp/canvas-sdk-php
 ## Usage
 
 ``` php
-$client = new Canvas\Client();
+use Canvas\Auth;
+use Canvas\Canvas;
+Canvas::setApiKey($appApiKey);
+Auth::auth([
+        'email' => 'max@mctekk.com', 
+        'password' => 'nosenose'
+]);
+
+//Call Kanvas Functions
+```
+
+Set the token on your DI
+``` php
+use Canvas\Auth;
+use Canvas\Canvas;
+Canvas::setApiKey($appApiKey);
+Canvas::setAuthToken($request['token']);
+
+//Call Kanvas Functions
 ```
 
 ## Change log

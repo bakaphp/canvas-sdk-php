@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Api\ApiOperations;
+namespace Canvas\Api\Operations;
 
 use Canvas\Util\Util;
 /**
@@ -20,7 +20,7 @@ trait Update
         self::_validateParams($params);
         $url = self::instanceUrl($id);
         list($response, $opts) = static::_staticRequest('put', $url, $params, $opts);
-        $obj = Util::convertToSimpleObject($response->data);
-        return $obj;
+
+        return Util::convertToSimpleObject($response->data, $opts, self::OBJECT_NAME);
     }
 }

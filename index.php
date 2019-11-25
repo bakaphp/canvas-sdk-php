@@ -3,9 +3,9 @@
 require_once 'vendor/autoload.php';
 
 use Canvas\Canvas;
-use Canvas\Resources\Users;
-use Canvas\Resources\Companies;
-use Canvas\Resources\Auth;
+use Canvas\Users;
+use Canvas\Companies;
+use Canvas\Auth;
 
 
 Canvas::setApiKey('asdeaefaefaefae');

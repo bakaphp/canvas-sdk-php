@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Api\ApiOperations;
+namespace Canvas\Api\Operations;
 
 use Canvas\Util\Util;
 /**
@@ -17,7 +17,7 @@ trait Delete
      *
      * @return array
      */
-    public function delete(string $id, $params = null, $opts = null): array
+    public static function delete(string $id, $params = null, $opts = null): array
     {
         self::_validateParams($params);
         $url = self::instanceUrl($id);
