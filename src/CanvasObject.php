@@ -87,7 +87,7 @@ class CanvasObject
      *
      * @return array
      */
-    public function getValues()
+    public function getValues() : array
     {
         return $this->_values;
     }
