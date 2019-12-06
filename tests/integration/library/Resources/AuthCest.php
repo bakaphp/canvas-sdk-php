@@ -95,4 +95,15 @@ class AuthCest
         $I->assertTrue($users instanceof Users);
         $this->userId = $users->id;
     }
+
+    /**
+     * Get the values from the auth property
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function getValues(IntegrationTester $I): void
+    {
+        $I->assertArrayHasKey('token', $this->auth->getValues());
+    }
 }
