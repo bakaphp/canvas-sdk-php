@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Util;
+namespace Kanvas\Sdk\Util;
 
 /**
  * Describes a logger instance.

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
-use Canvas\Api\Operations\Auth as AuthTrait;
-use Canvas\Api\Resource;
+use Kanvas\Sdk\Api\Operations\Auth as AuthTrait;
+use Kanvas\Sdk\Api\Resource;
 
 class Auth extends Resource
 {

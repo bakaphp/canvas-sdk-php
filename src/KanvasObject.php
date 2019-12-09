@@ -1,10 +1,10 @@
 <?php
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
-use Canvas\Util\Set;
+use Kanvas\Sdk\Util\Set;
 
-class CanvasObject
+class KanvasObject
 {
     protected $_opts;
     protected $_originalValues;
@@ -77,7 +77,7 @@ class CanvasObject
             return $this->_values[$k];
         } else {
             $class = get_class($this);
-            Canvas::getLogger()->error("Kanvas Notice: Undefined property of $class instance: $k");
+            Kanvas::getLogger()->error("Kanvas Notice: Undefined property of $class instance: $k");
             return $nullval;
         }
     }

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
-use Canvas\Util\LoggerInterface;
+use Kanvas\Sdk\Util\LoggerInterface;
 
 /**
  * Canvas class
 */
-class Canvas
+class Kanvas
 {
     // @var string The kanvas API key to be used for requests.
     public static $apiKey;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Exception;
+namespace Kanvas\Sdk\Exception;
 
 if (interface_exists(\Throwable::class)) {
     /**

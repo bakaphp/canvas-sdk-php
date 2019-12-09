@@ -1,5 +1,5 @@
 <?php
 
-use Canvas\Bootstrap\Cli;
+use Kanvas\Sdk\Bootstrap\Cli;
 
 return (new Cli())->run();

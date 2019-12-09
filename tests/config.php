@@ -1,7 +1,7 @@
 <?php
 
-use function Canvas\Core\appPath;
-use function Canvas\Core\envValue;
+use function Kanvas\Sdk\Core\appPath;
+use function Kanvas\Sdk\Core\envValue;
 
 return [
     'application' => [ //@todo migration to app

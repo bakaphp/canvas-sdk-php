@@ -4,25 +4,25 @@
  * Enabled providers. Order does matter.
  */
 
-use Canvas\Providers\CacheDataProvider;
-use Canvas\Providers\ConfigProvider;
-use Canvas\Providers\DatabaseProvider;
-use Canvas\Providers\ErrorHandlerProvider;
-use Canvas\Providers\LoggerProvider;
-use Canvas\Providers\ModelsMetadataProvider;
-use Canvas\Providers\SessionProvider;
-use Canvas\Providers\QueueProvider;
-use Canvas\Providers\MailProvider;
-use Canvas\Providers\RedisProvider;
-use Canvas\Providers\RequestProvider;
-use Canvas\Providers\AclProvider;
-use Canvas\Providers\AppProvider;
-use Canvas\Providers\ResponseProvider;
-use Canvas\Providers\FileSystemProvider;
-use Canvas\Providers\EventsManagerProvider;
-use Canvas\Providers\MapperProvider;
-use Canvas\Providers\ElasticProvider;
-use Canvas\Providers\RegistryProvider;
+use Kanvas\Sdk\Providers\CacheDataProvider;
+use Kanvas\Sdk\Providers\ConfigProvider;
+use Kanvas\Sdk\Providers\DatabaseProvider;
+use Kanvas\Sdk\Providers\ErrorHandlerProvider;
+use Kanvas\Sdk\Providers\LoggerProvider;
+use Kanvas\Sdk\Providers\ModelsMetadataProvider;
+use Kanvas\Sdk\Providers\SessionProvider;
+use Kanvas\Sdk\Providers\QueueProvider;
+use Kanvas\Sdk\Providers\MailProvider;
+use Kanvas\Sdk\Providers\RedisProvider;
+use Kanvas\Sdk\Providers\RequestProvider;
+use Kanvas\Sdk\Providers\AclProvider;
+use Kanvas\Sdk\Providers\AppProvider;
+use Kanvas\Sdk\Providers\ResponseProvider;
+use Kanvas\Sdk\Providers\FileSystemProvider;
+use Kanvas\Sdk\Providers\EventsManagerProvider;
+use Kanvas\Sdk\Providers\MapperProvider;
+use Kanvas\Sdk\Providers\ElasticProvider;
+use Kanvas\Sdk\Providers\RegistryProvider;
 
 return [
     ConfigProvider::class,

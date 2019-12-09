@@ -3,9 +3,9 @@
 namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
-use Canvas\Auth;
-use Canvas\Companies;
-use Canvas\Canvas;
+use Kanvas\Sdk\Auth;
+use Kanvas\Sdk\Companies;
+use Kanvas\Sdk\Kanvas;
 use Phalcon\Security\Random;
 
 class CompaniesCest
@@ -30,7 +30,7 @@ class CompaniesCest
     public function onConstruct(): void
     {
         $this->random = new Random();
-        Canvas::setApiKey($this->random->base58());
+        Kanvas::setApiKey($this->random->base58());
         Auth::auth(['email' => 'max@mctekk.com', 'password' => 'nosenose']);
     }
 

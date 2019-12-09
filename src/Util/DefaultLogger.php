@@ -1,8 +1,8 @@
 <?php
 
-namespace Canvas\Util;
+namespace Kanvas\Sdk\Util;
 
-use Canvas\Exception\BadMethodCallException;
+use Kanvas\Sdk\Exception\BadMethodCallException;
 
 /**
  * A very basic implementation of LoggerInterface that has just enough
