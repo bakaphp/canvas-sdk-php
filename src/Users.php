@@ -40,4 +40,14 @@ class Users extends Resource
         $user['session'] = $response->data['session'];
         return Util::convertToSimpleObject($user, $opts, self::OBJECT_NAME);
     }
+
+    /**
+     * Get the current Users Session
+     *
+     * @return Users
+     */
+    public static function getSelf(): self
+    {
+        return self::retrieve(0);
+    }
 }

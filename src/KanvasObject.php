@@ -3,8 +3,9 @@
 namespace Kanvas\Sdk;
 
 use Kanvas\Sdk\Util\Set;
+use JsonSerializable;
 
-class KanvasObject
+class KanvasObject implements JsonSerializable
 {
     protected $_opts;
     protected $_originalValues;
@@ -93,6 +94,16 @@ class KanvasObject
     }
 
     /**
+     * Return the values as array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->_values;
+    }
+
+    /**
      *  Standard accessor magic methods.
      *
      * @param string $k
@@ -147,7 +158,7 @@ class KanvasObject
     }
 
     /**
-     * Remove elment
+     * Remove elment.
      *
      * @param [type] $k
      */
@@ -156,5 +167,15 @@ class KanvasObject
         unset($this->_values[$k]);
         $this->_transientValues->add($k);
         $this->_unsavedValues->discard($k);
+    }
+
+    /**
+     * Implementing JsonSerializable can customize their JSON representation when encoded with json_encode().
+     *
+     * @return void
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

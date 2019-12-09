@@ -11,5 +11,7 @@ class Auth extends Resource
 {
     const OBJECT_NAME = 'auth';
 
+    public $token;
+
     use AuthTrait;
 }
