@@ -15,7 +15,7 @@ class CanvasObject
     protected $_lastResponse;
 
     /**
-     * Consstructor.
+     * Constructor.
      *
      * @param string|mixed $id
      * @param mixed $opts
@@ -80,6 +80,16 @@ class CanvasObject
             Canvas::getLogger()->error("Kanvas Notice: Undefined property of $class instance: $k");
             return $nullval;
         }
+    }
+
+    /**
+     * Function to get the value in the property _values of this object.
+     *
+     * @return array
+     */
+    public function getValues() : array
+    {
+        return $this->_values;
     }
 
     /**
