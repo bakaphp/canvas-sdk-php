@@ -111,7 +111,7 @@ class RequestOptions
             }
 
             if (array_key_exists('limit', $options)) {
-                $sortQuery = 'limit=' . $options['sort'] . '&';
+                $sortQuery = 'limit=' . $options['limit'] . '&';
                 $query .= $sortQuery;
             }
 
