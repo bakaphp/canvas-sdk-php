@@ -45,6 +45,10 @@ class Users
             $searchBy['order'] = $params['order'];
         }
 
+        if ($params['limit']) {
+            $searchBy['limit'] = $params['limit'];
+        }
+
         return $searchBy;
 
         return UserResource::all([], [
