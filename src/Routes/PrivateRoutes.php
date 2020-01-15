@@ -6,6 +6,7 @@ use Baka\Router\Route;
 
 /**
  * Default Kanvas Private Routes Class
+ * ApiController is just a default name for a controller which uses a Passthrough Trait.
  */
 class PrivateRoutes
 {
@@ -50,7 +51,7 @@ class PrivateRoutes
     ];
 
     /**
-     * Get all Public Routes
+     * Get all Public Routes.
      *
      * @return array
      */

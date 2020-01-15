@@ -6,6 +6,7 @@ namespace Kanvas\Passthroughs;
 
 use Phalcon\Http\Response;
 use GuzzleHttp\Client;
+use Canvas\Canvas;
 
 /**
  * Trait ResponseTrait.
@@ -75,11 +76,12 @@ trait PhalconPassthrough
         // Get all router params
         $routeParams = $this->router->getParams();
 
-        $url = $this->router->getRewriteUri();
+        $uri = $this->router->getRewriteUri();
         $method = $this->request->getMethod();
 
+        $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Canvas::$apiBase;
         // Get real API URL
-        $apiUrl = getenv('EXT_API_URL') . $url;
+        $apiUrl = $baseUrl . $uri;
 
         // Execute the request, providing the URL, the request method and the data.
         $response = $this->makeRequest($apiUrl, $method, $this->getData());
@@ -187,9 +189,9 @@ trait PhalconPassthrough
         if ($this->request->hasFiles()) {
             foreach ($this->request->getUploadedFiles() as $file) {
                 $files[] = [
-                    'name'=> 'file',
-                    'contents'=>file_get_contents($file->getTempName()),
-                    'filename'=> $file->getName()
+                    'name' => 'file',
+                    'contents' => file_get_contents($file->getTempName()),
+                    'filename' => $file->getName()
                 ];
             }
         }
