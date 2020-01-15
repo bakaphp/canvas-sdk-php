@@ -1,9 +1,9 @@
 <?php
 
-namespace Canvas\Api\Operations;
+namespace Kanvas\Sdk\Api\Operations;
 
-use Canvas\Api\Requestor;
-use Canvas\Util\RequestOptions;
+use Kanvas\Sdk\Api\Requestor;
+use Kanvas\Sdk\Util\RequestOptions;
 
 /**
  * Trait for resources that need to make API requests.
@@ -15,7 +15,7 @@ trait Request
      *
      * @param array|null|mixed $params The list of parameters to validate
      *
-     * @throws \Canvas\Exception\Api if $params exists and is not an array
+     * @throws \Kanvas\Sdk\Exception\Api if $params exists and is not an array
      * @return void
      */
     protected static function _validateParams($params = null): void
@@ -23,7 +23,7 @@ trait Request
         if ($params && !is_array($params)) {
             $message = 'You must pass an array as the first argument to Stripe API '
                . 'method calls.';
-            throw new \Canvas\Exception\Api($message);
+            throw new \Kanvas\Sdk\Exception\Api($message);
         }
     }
 

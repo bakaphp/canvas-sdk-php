@@ -1,8 +1,8 @@
 <?php
 
-namespace Canvas\Util;
+namespace Kanvas\Sdk\Util;
 
-use Canvas\CanvasObject;
+use Kanvas\Sdk\KanvasObject;
 use StdClass;
 
 abstract class Util
@@ -42,8 +42,8 @@ abstract class Util
     public static function convertToSimpleObject(array $response, RequestOptions $opts, string $object = null)
     {
         $types = [
-            \Canvas\Users::OBJECT_NAME => \Canvas\Users::class,
-            \Canvas\Companies::OBJECT_NAME => \Canvas\Companies::class,
+            \Kanvas\Sdk\Users::OBJECT_NAME => \Kanvas\Sdk\Users::class,
+            \Kanvas\Sdk\Companies::OBJECT_NAME => \Kanvas\Sdk\Companies::class,
         ];
 
         if (self::isList($response)) {
@@ -56,7 +56,7 @@ abstract class Util
             if (!is_null($object) && isset($types[$object])) {
                 $class = $types[$object];
             } else {
-                $class = CanvasObject::class;
+                $class = KanvasObject::class;
             }
             return $class::constructFrom($response, $opts);
         } else {

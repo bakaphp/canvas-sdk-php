@@ -5,8 +5,8 @@ namespace Helper;
 use Codeception\Module;
 use Codeception\Exception\TestRuntimeException;
 use Codeception\TestInterface;
-use Canvas\Bootstrap\Api;
-use Canvas\Models\Users;
+use Kanvas\Sdk\Bootstrap\Api;
+use Kanvas\Sdk\Models\Users;
 use Niden\Models\Companies;
 use Niden\Models\CompaniesXProducts;
 use Niden\Models\Individuals;
@@ -16,8 +16,8 @@ use Niden\Models\ProductTypes;
 use Niden\Mvc\Model\AbstractModel;
 use Phalcon\DI\FactoryDefault as PhDI;
 use Phalcon\Config as PhConfig;
-use Canvas\Bootstrap\IntegrationTests;
-use function Canvas\Core\appPath;
+use Kanvas\Sdk\Bootstrap\IntegrationTests;
+use function Kanvas\Sdk\Core\appPath;
 
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I

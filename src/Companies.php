@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
-use Canvas\Api\Operations\All;
-use Canvas\Api\Operations\Create;
-use Canvas\Api\Operations\Delete;
-use Canvas\Api\Operations\Update;
-use Canvas\Api\Operations\Retrieve;
-use Canvas\Api\Resource;
+use Kanvas\Sdk\Api\Operations\All;
+use Kanvas\Sdk\Api\Operations\Create;
+use Kanvas\Sdk\Api\Operations\Delete;
+use Kanvas\Sdk\Api\Operations\Update;
+use Kanvas\Sdk\Api\Operations\Retrieve;
+use Kanvas\Sdk\Api\Resource;
 
 class Companies extends Resource
 {

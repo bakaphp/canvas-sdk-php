@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Canvas\\": "src/"
+            "Kanvas\\Sdk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Canvas\\Test\\": "tests"
+            "Kanvas\\Sdk\\Test\\": "tests"
         }
     },
     "scripts": {

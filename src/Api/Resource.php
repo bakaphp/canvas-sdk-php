@@ -1,20 +1,20 @@
 <?php
 
-namespace Canvas\Api;
+namespace Kanvas\Sdk\Api;
 
-use Canvas\Canvas;
-use Canvas\CanvasObject;
-use Canvas\Api\Requestor;
-use Canvas\Util\Util;
-use Canvas\Exception\UnexpectedValueException;
-use Canvas\Util\Set;
+use Kanvas\Sdk\Kanvas;
+use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\Api\Requestor;
+use Kanvas\Sdk\Util\Util;
+use Kanvas\Sdk\Exception\UnexpectedValueException;
+use Kanvas\Sdk\Util\Set;
 
 /**
  * Class Resource
  *
- * @package Canvas
+ * @package Kanvas
  */
-abstract class Resource extends CanvasObject
+abstract class Resource extends KanvasObject
 {
     use Operations\Request;
 
@@ -28,7 +28,7 @@ abstract class Resource extends CanvasObject
     public $saveWithParent = false;
 
     /**
-     * @return \Canvas\Util\Set A list of fields that can be their own type of
+     * @return \Kanvas\Sdk\Util\Set A list of fields that can be their own type of
      * API resource (say a nested card under an account for example), and if
      * that resource is set, it should be transmitted to the API on a create or
      * update. Doing so is not the default behavior because API resources
@@ -85,7 +85,7 @@ abstract class Resource extends CanvasObject
      */
     public static function baseUrl(): string
     {
-        return Canvas::$apiBase;
+        return Kanvas::$apiBase;
     }
 
     /**

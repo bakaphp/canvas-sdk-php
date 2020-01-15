@@ -3,14 +3,14 @@
 namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
-use Canvas\Auth;
-use Canvas\Users;
-use Canvas\Canvas;
+use Kanvas\Sdk\Auth;
+use Kanvas\Sdk\Users;
+use Kanvas\Sdk\Kanvas;
 use Phalcon\Security\Random;
 
 class AuthCest
 {
-    const DEFAULT_CANVAS_USER_ID = 1;
+    const DEFAULT_KANVAS_USER_ID = 1;
     /**
      * Random variable
      *
@@ -33,7 +33,7 @@ class AuthCest
     public function onConstruct(): void
     {
         $this->random =  new Random();
-        Canvas::setApiKey($this->random->base58());
+        Kanvas::setApiKey($this->random->base58());
         $this->auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
         $this->userEmail = 'example-'. $this->random->base58() .'@gmail.com';
         $this->userPassword = $this->random->base58();
@@ -48,8 +48,8 @@ class AuthCest
      */
     public function setupApiKey(IntegrationTester $I)
     {
-        Canvas::setApiKey($this->random->base58());
-        $I->assertTrue(gettype(Canvas::getApiKey()) == 'string');
+        Kanvas::setApiKey($this->random->base58());
+        $I->assertTrue(gettype(Kanvas::getApiKey()) == 'string');
     }
 
     /**
@@ -60,18 +60,18 @@ class AuthCest
      */
     public function setupAuthToken(IntegrationTester $I)
     {
-        $I->assertTrue(gettype(Canvas::getAuthToken()) == 'string');
+        $I->assertTrue(gettype(Kanvas::getAuthToken()) == 'string');
     }
 
     /**
-     * Autheticate a canvas user
+     * Autheticate a Kanvas user
      *
      * @param IntegrationTester $I
      * @return void
      */
     public function auth(IntegrationTester $I)
     {
-        $I->assertTrue($this->auth->id == self::DEFAULT_CANVAS_USER_ID);
+        $I->assertTrue($this->auth->id == self::DEFAULT_KANVAS_USER_ID);
     }
 
     /**

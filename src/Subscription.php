@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
 /**
  *
