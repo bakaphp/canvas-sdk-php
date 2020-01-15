@@ -22,9 +22,9 @@ $ composer require bakaphp/canvas-sdk-php
 ## Usage
 
 ``` php
-use Canvas\Auth;
-use Canvas\Canvas;
-Canvas::setApiKey($appApiKey);
+use Kanvas\Sdk\Auth;
+use Kanvas\Sdk\Kanvas;
+Kanvas::setApiKey($appApiKey);
 Auth::auth([
         'email' => 'kanvas@mctekk.com', 
         'password' => 'somethingpassword'
@@ -35,10 +35,10 @@ Auth::auth([
 
 Set the token on your DI
 ``` php
-use Canvas\Auth;
-use Canvas\Canvas;
-Canvas::setApiKey($appApiKey);
-Canvas::setAuthToken($request['token']);
+use Kanvas\Sdk\Auth;
+use Kanvas\Sdk\Kanvas;
+Kanvas::setApiKey($appApiKey);
+Kanvas::setAuthToken($request['token']);
 
 //Call Kanvas Functions
 ```

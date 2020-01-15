@@ -1,8 +1,8 @@
 <?php
 
-namespace Canvas\Api\Operations;
+namespace Kanvas\Sdk\Api\Operations;
 
-use Canvas\Util\Util;
+use Kanvas\Sdk\Util\Util;
 /**
  * Trait for deletable resources.
  */

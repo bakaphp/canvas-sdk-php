@@ -1,5 +1,5 @@
 <?php
-namespace Canvas\Api;
+namespace Kanvas\Sdk\Api;
 
 /**
  * Class Response

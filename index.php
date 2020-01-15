@@ -2,13 +2,13 @@
 
 require_once 'vendor/autoload.php';
 
-use Canvas\Canvas;
-use Canvas\Users;
-use Canvas\Companies;
-use Canvas\Auth;
+use Kanvas\Sdk\Kanvas;
+use Kanvas\Sdk\Users;
+use Kanvas\Sdk\Companies;
+use Kanvas\Sdk\Auth;
 
 
-Canvas::setApiKey('asdeaefaefaefae');
+Kanvas::setApiKey('asdeaefaefaefae');
 $auth = Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\HttpClient;
+namespace Kanvas\Sdk\HttpClient;
 
 use GuzzleHttp\Client;
 
@@ -29,8 +29,8 @@ class GuzzleClient implements ClientInterface
      * @param boolean $hasFile Whether or not $params references a file (via an @ prefix or
      *                         CurlFile)
      *
-     * @throws \Canvas\Exception\Api
-     * @throws \Canvas\Exception\ApiConnection
+     * @throws \Kanvas\Sdk\Exception\Api
+     * @throws \Kanvas\Sdk\Exception\ApiConnection
      * @return array An array whose first element is raw request body, second
      *    element is HTTP status code and third array of HTTP headers.
      */

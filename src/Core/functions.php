@@ -1,11 +1,11 @@
 <?php
 
-namespace Canvas\Core;
+namespace Kanvas\Sdk\Core;
 
 use function function_exists;
 use function getenv;
 
-if (!function_exists('Canvas\Core\appPath')) {
+if (!function_exists('Kanvas\Sdk\Core\appPath')) {
     /**
      * Get the application path.
      *
@@ -27,7 +27,7 @@ if (!function_exists('Canvas\Core\appPath')) {
     }
 }
 
-if (!function_exists('Canvas\Core\envValue')) {
+if (!function_exists('Kanvas\Sdk\Core\envValue')) {
     /**
      * Gets a variable from the environment, returns it properly formatted or the
      * default if it does not exist.
@@ -53,7 +53,7 @@ if (!function_exists('Canvas\Core\envValue')) {
     }
 }
 
-if (!function_exists('Canvas\Core\appUrl')) {
+if (!function_exists('Kanvas\Sdk\Core\appUrl')) {
     /**
      * Constructs a URL for links with resource and id.
      *
@@ -73,7 +73,7 @@ if (!function_exists('Canvas\Core\appUrl')) {
     }
 }
 
-if (!function_exists('Canvas\Core\paymentGatewayIsActive')) {
+if (!function_exists('Kanvas\Sdk\Core\paymentGatewayIsActive')) {
     /**
      * Do we have a payment metho actived on the app?
      *
@@ -85,7 +85,7 @@ if (!function_exists('Canvas\Core\paymentGatewayIsActive')) {
     }
 }
 
-if (!function_exists('Canvas\Core\isJson')) {
+if (!function_exists('Kanvas\Sdk\Core\isJson')) {
     /**
      * Given a string determine if its a json.
      *

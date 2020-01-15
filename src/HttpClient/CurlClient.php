@@ -1,10 +1,10 @@
 <?php
 
-namespace Canvas\HttpClient;
+namespace Kanvas\Sdk\HttpClient;
 
-use Canvas\Canvas;
-use Canvas\Exception;
-use Canvas\Util;
+use Kanvas\Sdk\Kanvas;
+use Kanvas\Sdk\Exception;
+use Kanvas\Sdk\Util;
 
 // cURL constants are not defined in PHP < 5.5
 // @codingStandardsIgnoreStart
@@ -179,7 +179,7 @@ class CurlClient implements ClientInterface
         }
         // It is only safe to retry network failures on POST requests if we
         // add an Idempotency-Key header
-        if (($method == 'post') && (Canvas::$maxNetworkRetries > 0)) {
+        if (($method == 'post') && (Kanvas::$maxNetworkRetries > 0)) {
             if (!$this->hasHeader($headers, "Idempotency-Key")) {
                 array_push($headers, 'Idempotency-Key: ' . $this->randomGenerator->uuid());
             }
@@ -215,8 +215,8 @@ class CurlClient implements ClientInterface
         $opts[CURLOPT_TIMEOUT] = $this->timeout;
         $opts[CURLOPT_HEADERFUNCTION] = $headerCallback;
         $opts[CURLOPT_HTTPHEADER] = $headers;
-        $opts[CURLOPT_CAINFO] = Canvas::getCABundlePath();
-        if (!Canvas::getVerifySslCerts()) {
+        $opts[CURLOPT_CAINFO] = Kanvas::getCABundlePath();
+        if (!Kanvas::getVerifySslCerts()) {
             $opts[CURLOPT_SSL_VERIFYPEER] = false;
         }
         if (!isset($opts[CURLOPT_HTTP_VERSION]) && $this->getEnableHttp2()) {
@@ -273,23 +273,23 @@ class CurlClient implements ClientInterface
             case CURLE_COULDNT_CONNECT:
             case CURLE_COULDNT_RESOLVE_HOST:
             case CURLE_OPERATION_TIMEOUTED:
-                $msg = "Could not connect to Canvas ($url).  Please check your "
+                $msg = "Could not connect to Kanvas ($url).  Please check your "
                  . "internet connection and try again.  If this problem persists, "
-                 . "you should check Canvas's service status at "
+                 . "you should check Kanvas's service status at "
                  . "https://twitter.com/stripestatus, or";
                 break;
             case CURLE_SSL_CACERT:
             case CURLE_SSL_PEER_CERTIFICATE:
-                $msg = "Could not verify Canvas's SSL certificate.  Please make sure "
+                $msg = "Could not verify Kanvas's SSL certificate.  Please make sure "
                  . "that your network is not intercepting certificates.  "
                  . "(Try going to $url in your browser.)  "
                  . "If this problem persists,";
                 break;
             default:
-                $msg = "Unexpected error communicating with Canvas.  "
+                $msg = "Unexpected error communicating with Kanvas.  "
                  . "If this problem persists,";
         }
-        $msg .= " let us know at support@Canvas.com.";
+        $msg .= " let us know at support@Kanvas.com.";
         $msg .= "\n\n(Network error [errno $errno]: $message)";
         if ($numRetries > 0) {
             $msg .= "\n\nRequest was retried $numRetries times.";
@@ -307,7 +307,7 @@ class CurlClient implements ClientInterface
      */
     private function shouldRetry($errno, $rcode, $numRetries)
     {
-        if ($numRetries >= Canvas::getMaxNetworkRetries()) {
+        if ($numRetries >= Kanvas::getMaxNetworkRetries()) {
             return false;
         }
         // Retry on timeout-related problems (either on open or read).
@@ -332,14 +332,14 @@ class CurlClient implements ClientInterface
         // number of $numRetries so far as inputs. Do not allow the number to exceed
         // $maxNetworkRetryDelay.
         $sleepSeconds = min(
-            Canvas::getInitialNetworkRetryDelay() * 1.0 * pow(2, $numRetries - 1),
-            Canvas::getMaxNetworkRetryDelay()
+            Kanvas::getInitialNetworkRetryDelay() * 1.0 * pow(2, $numRetries - 1),
+            Kanvas::getMaxNetworkRetryDelay()
         );
         // Apply some jitter by randomizing the value in the range of
         // ($sleepSeconds / 2) to ($sleepSeconds).
         $sleepSeconds *= 0.5 * (1 + $this->randomGenerator->randFloat());
         // But never sleep less than the base sleep seconds.
-        $sleepSeconds = max(Canvas::getInitialNetworkRetryDelay(), $sleepSeconds);
+        $sleepSeconds = max(Kanvas::getInitialNetworkRetryDelay(), $sleepSeconds);
         return $sleepSeconds;
     }
     /**
@@ -380,7 +380,7 @@ class CurlClient implements ClientInterface
     private function canSafelyUseHttp2()
     {
         // Versions of curl older than 7.60.0 don't respect GOAWAY frames
-        // (cf. https://github.com/curl/curl/issues/2416), which Canvas use.
+        // (cf. https://github.com/curl/curl/issues/2416), which Kanvas use.
         $curlVersion = curl_version()['version'];
         return (version_compare($curlVersion, '7.60.0') >= 0);
     }

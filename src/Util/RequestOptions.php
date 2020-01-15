@@ -1,8 +1,8 @@
 <?php
 
-namespace Canvas\Util;
+namespace Kanvas\Sdk\Util;
 
-use Canvas\Exception;
+use Kanvas\Sdk\Exception;
 
 class RequestOptions
 {

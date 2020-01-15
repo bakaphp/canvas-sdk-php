@@ -1,6 +1,6 @@
 <?php
 
-namespace Canvas\Util;
+namespace Kanvas\Sdk\Util;
 
 use IteratorAggregate;
 use ArrayIterator;

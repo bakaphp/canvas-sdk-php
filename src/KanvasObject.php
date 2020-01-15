@@ -1,10 +1,11 @@
 <?php
 
-namespace Canvas;
+namespace Kanvas\Sdk;
 
-use Canvas\Util\Set;
+use Kanvas\Sdk\Util\Set;
+use JsonSerializable;
 
-class CanvasObject
+class KanvasObject implements JsonSerializable
 {
     protected $_opts;
     protected $_originalValues;
@@ -77,7 +78,7 @@ class CanvasObject
             return $this->_values[$k];
         } else {
             $class = get_class($this);
-            Canvas::getLogger()->error("Kanvas Notice: Undefined property of $class instance: $k");
+            Kanvas::getLogger()->error("Kanvas Notice: Undefined property of $class instance: $k");
             return $nullval;
         }
     }
@@ -88,6 +89,16 @@ class CanvasObject
      * @return array
      */
     public function getValues() : array
+    {
+        return $this->_values;
+    }
+
+    /**
+     * Return the values as array.
+     *
+     * @return array
+     */
+    public function toArray(): array
     {
         return $this->_values;
     }
@@ -147,7 +158,7 @@ class CanvasObject
     }
 
     /**
-     * Remove elment
+     * Remove elment.
      *
      * @param [type] $k
      */
@@ -156,5 +167,15 @@ class CanvasObject
         unset($this->_values[$k]);
         $this->_transientValues->add($k);
         $this->_unsavedValues->discard($k);
+    }
+
+    /**
+     * Implementing JsonSerializable can customize their JSON representation when encoded with json_encode().
+     *
+     * @return void
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

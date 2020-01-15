@@ -1,10 +1,10 @@
 <?php
 
-namespace Canvas\Api;
+namespace Kanvas\Sdk\Api;
 
-use Canvas\Exception;
-use Canvas\Canvas;
-use Canvas\HttpClient\GuzzleClient;
+use Kanvas\Sdk\Exception;
+use Kanvas\Sdk\Kanvas;
+use Kanvas\Sdk\HttpClient\GuzzleClient;
 
 /**
  * Class Requestor.
@@ -38,7 +38,7 @@ class Requestor
     {
         $this->apiKey = $apiKey;
         if (!$apiBase) {
-            $apiBase = Canvas::$apiBase;
+            $apiBase = Kanvas::$apiBase;
         }
         $this->apiBase = $apiBase;
     }
@@ -130,7 +130,7 @@ class Requestor
     private static function _defaultHeaders($apiKey, $clientInfo = null): array
     {
         $defaultHeaders = [
-            'Authorization' => Canvas::getAuthToken(),
+            'Authorization' => Kanvas::getAuthToken(),
             'Key' => $apiKey,
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
@@ -152,7 +152,7 @@ class Requestor
     {
         $apiKey = $this->apiKey;
         if (!$apiKey) {
-            $apiKey = Canvas::$apiKey;
+            $apiKey = Kanvas::$apiKey;
         }
 
         if (!$apiKey) {
@@ -162,7 +162,7 @@ class Requestor
             throw new Exception\Authentication($msg);
         }
 
-        if (!Canvas::getAuthToken() && !strpos($url, 'auth')) {
+        if (!Kanvas::getAuthToken() && !strpos($url, 'auth')) {
             $msg = 'No Auth Token set.  (HINT: set your Auth Token using the auth call';
             throw new Exception\Authentication($msg);
         }
