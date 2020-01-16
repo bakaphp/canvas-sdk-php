@@ -20,6 +20,7 @@ install:
 - php --ri phalcon
 before_script:
 - cd $TRAVIS_BUILD_DIR
+- pwd
 - cp storage/ci/.env.example .env
 - composer install --no-interaction
 - composer update --no-interaction
