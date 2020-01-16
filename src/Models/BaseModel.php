@@ -13,14 +13,14 @@ use Kanvas\Sdk\Api\Resource;
 abstract class BaseModel
 {
     /**
-     * Resource
+     * Resource.
      *
      * @var object
      */
     public static $resource;
 
     /**
-     * Set Resource Variable
+     * Set Resource Variable.
      *
      * @return void
      */
@@ -39,21 +39,22 @@ abstract class BaseModel
      */
     public static function find($params = null, $opts = null)
     {
-        $searchBy = Util::convertParams($params);
-        return self::$resource::all([], $searchBy);
+        return self::$resource::all([], Util::convertParams($params));
     }
 
     /**
      * Overwrite the user create function to return a usr object like we expect.
      *
-     * @param array|null $params
+     * @param array|string|null $params
      * @param array|string|null $options
      *
      * @return object stdClass
      */
     public static function findFirst($params = null, $opts = null)
     {
-        Util::convertParams($params);
-        return self::$model::retrieve('2', [], ['relationships' => ['roles']]);
+        if (!is_array($params)) {
+            return self::$resource::retrieve(strval($params), [], []);
+        }
+        return current(self::$resource::all([], Util::convertParams($params)));
     }
 }
