@@ -1,27 +1,26 @@
 language: php
-
 php:
-  - 7.2
-  - 7.3
-
+- 7.2
+- 7.3
 sudo: false
-
+env:
+  global:
+  - secure: rQCEyI+Z0BmarKZCfgp0AqNy2FaFwXqxykN29PjKjEIgILgEnfIf2FFV3J8SLJA//A74uPUAlAHT7JmW2/AEeSux/N9oHmZIY3ZD1goHRqjovK8iImXtdqycXU+QA+WAUz/4T3AEdzqSNYI6lgqfMiQcvSKbTZgsEU6QOSt1g+23MdNpr14ISnkNUH1j8iJOsdSYHJypEWG+uAkRmh9HhHiaTjT6uFlIGGswYxlNnLIE+ghcUVmA0PEgD7znMd3z2FDLqC8kLYs/Rif5KzW0XVAzNqpLsU4rp2WbIAdvXZf2tZ+C929IyfCSPa7LUgvY6YXairsz6wN/pezzksyQ06F70pL8r/QBZnL8d1NU0/1iiinMqxmoIvjBwDvg4AsiZTzHYNnV5a43Qv3y257GN4qH47qROvxwwYprOHro5oX0sZZqydtZoTsVBFbsh1ZZQyjC9jbFuuDqZdOCgzQQMO/GECrXSjp+D2TetvrUg85BBVJ41k5j6rUdjgZMqNmGYOhXim4R09Civ+FJ0L+Q21CH+LmO4qN9YbLfsZh2CJK9DxcTty4UUetBPeTNAoWFvYVPs4MzdVG9tOrTXzjRo3ot3TNptJ49TPrGym5Iqhov4Zvqm2Vsx1Q8UE63UpU7rsAN/MDxiedrkwhC05AXb5U/qSR1ErPqTUk5RAYYC6s=
+  - secure: eKaXZXD+S6cNNpPQY1oFWMk/uRZrtvUGmh0RTkp/9wK47326bLiRd+Sjd5tmSW4Tcx1e6WZ1NIcCKomnDyKLnAMBkRpKREQeECB7m8IHRStUXn4kUijInNCCGvX2DPMErEVlSIWorgaQ1UcnMeXDTszkXUZo4wOvNbafl2Y2dSy2iR7r00DuDn9jRwihSKS0YAM8/bN1U37GAl0WVwKMYS9ukwx6BZda2E6VZKIH5FXInJvuiDqaUn5bixCfj7dhPj47JgFY3+hK4t5NREoZIy2MzLIRWWX1h/YvLXpzgmZhl6yiNSLJdyuamXhqzbyxpVt3lvIELOXJib5cl6DrAn6Tmr3bSSFYaHHv3nX2VAm8JDDp97lqRM/zvKz43M1BYMDDlA+liNTz0aYMo8YtV0MrvX+MVbQeJ6NbGxifmzO9413IgTLyagV8Pa/F5+7Q7bwxaZxD53V5tXyZk9Mnu2RndnOx2xMKGZNla0MyH8P6QtBpMFVrZjPl6FvnMoSKt4ZtB73rcaYk+O9scpVE/UGxL+4pdJi+UQ86C/MLOlQjsmMNDQ1VhBVm8LOfoITtyWGJv9DJhz6mLxz1nivgXtxlnF1pORmeZD+GexG5mxSLH6R8GTt0oQ7z8D7ILjwbyCxDrCPI9J6/0zF8FPCM0C6G8KsbVTmc6wnr1oo3HyM=
 cache:
   directories:
-    - vendor
-    - $HOME/.composer/cache
-    - ~/cphalcon
-
+  - vendor
+  - "$HOME/.composer/cache"
+  - "~/cphalcon"
 install:
-  - composer self-update
-  - cd ~/ && rm -rf cphalcon && git clone -b 3.4.x -q --depth=1 https://github.com/phalcon/cphalcon.git && cd cphalcon/build && ./install
-  - echo 'extension = "phalcon.so"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - php --ri phalcon
-
+- composer self-update
+- cd ~/ && rm -rf cphalcon && git clone -b 3.4.x -q --depth=1 https://github.com/phalcon/cphalcon.git
+  && cd cphalcon/build && ./install
+- echo 'extension = "phalcon.so"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+- php --ri phalcon
 before_script:
-  - cd $TRAVIS_BUILD_DIR
-  - composer install --no-interaction
-  - composer update --no-interaction
-
+- cd $TRAVIS_BUILD_DIR
+- composer install --no-interaction
+- composer update --no-interaction
 script:
-  - ./vendor/bin/codecept run integration
+- "./vendor/bin/codecept run integration"

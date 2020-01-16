@@ -53,7 +53,7 @@ class UsersCest
     {
         $this->random =  new Random();
         Kanvas::setApiKey($this->random->base58());
-        Auth::auth(['email'=> 'max@mctekk.com','password'=>'nosenose']);
+        Auth::auth(['email'=> getenv('TEST_USER_EMAIL'),'password'=>getenv('TEST_USER_PASS')]);
         $this->userEmail = 'example-'. $this->random->base58() .'@gmail.com';
         $this->userPassword = $this->random->base58();
     }
