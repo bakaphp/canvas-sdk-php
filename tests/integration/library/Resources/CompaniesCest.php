@@ -5,6 +5,7 @@ namespace Gewaer\Tests\Integration\library\Resources;
 use IntegrationTester;
 use Kanvas\Sdk\Auth;
 use Kanvas\Sdk\Companies;
+use Kanvas\Sdk\Models\Companies as CompaniesModel;
 use Kanvas\Sdk\Kanvas;
 use Phalcon\Security\Random;
 
@@ -78,6 +79,30 @@ class CompaniesCest
     public function getCompanyById(IntegrationTester $I): void
     {
         $company = Companies::getById(self::DEFAULT_COMPANIES_ID);
+        $I->assertTrue($company instanceof Companies);
+    }
+
+    /**
+     * Find test for companies
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function find(IntegrationTester $I): void
+    {
+        $company = CompaniesModel::find();
+        $I->assertTrue($company instanceof Companies);
+    }
+
+    /**
+     * Find test for companies
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function findFirst(IntegrationTester $I): void
+    {
+        $company = CompaniesModel::findFirst(self::DEFAULT_COMPANIES_ID);
         $I->assertTrue($company instanceof Companies);
     }
 }

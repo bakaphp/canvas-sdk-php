@@ -39,7 +39,7 @@ abstract class BaseModel
      */
     public static function find($params = null, $opts = null)
     {
-        return self::$resource::all([], Util::convertParams($params));
+        return self::$resource::all([], is_null($params) ? [] : Util::convertParams($params));
     }
 
     /**

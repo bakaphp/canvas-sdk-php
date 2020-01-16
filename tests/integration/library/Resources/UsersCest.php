@@ -4,6 +4,7 @@ namespace Gewaer\Tests\Integration\library\Resources;
 
 use IntegrationTester;
 use Kanvas\Sdk\Users;
+use Kanvas\Sdk\Models\Users as UserModel;
 use Kanvas\Sdk\Auth;
 use Kanvas\Sdk\Kanvas;
 use Phalcon\Security\Random;
@@ -120,5 +121,29 @@ class UsersCest
         $users = Users::delete($this->userId);
         $I->assertTrue(gettype($users[0]) == 'string');
         $I->assertTrue($users[0] == 'Delete Successfully');
+    }
+
+    /**
+     * Find test for companies
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function find(IntegrationTester $I): void
+    {
+        $company = UserModel::find();
+        $I->assertTrue($company instanceof Users);
+    }
+
+    /**
+     * Find test for companies
+     *
+     * @param IntegrationTester $I
+     * @return void
+     */
+    public function findFirst(IntegrationTester $I): void
+    {
+        $users = UserModel::findFirst($this->userId);
+        $I->assertTrue($users instanceof Users);
     }
 }
