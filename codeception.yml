@@ -44,7 +44,7 @@ modules:
       savepoints: false
 
 # Get params from .env file
-# params:
-#   - .env
+params:
+  - .env
 
 error_level: "E_ALL"
