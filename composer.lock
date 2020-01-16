@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f64c781b0dbfa6f0c5f5da250bd9fdda",
+    "content-hash": "72512743366ce04b84baeca3af77e39b",
     "packages": [
         {
             "name": "baka/database",
