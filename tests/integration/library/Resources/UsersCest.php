@@ -12,6 +12,11 @@ use Phalcon\Security\Random;
 class UsersCest
 {
     /**
+     * Default Users id.
+     */
+    const DEFAULT_USERS_ID = 1;
+
+    /**
      * Random variable
      *
      * @var string
@@ -143,7 +148,7 @@ class UsersCest
      */
     public function findFirst(IntegrationTester $I): void
     {
-        $users = UserModel::findFirst($this->userId);
+        $users = UserModel::findFirst(self::DEFAULT_USERS_ID);
         $I->assertTrue($users instanceof Users);
     }
 }
