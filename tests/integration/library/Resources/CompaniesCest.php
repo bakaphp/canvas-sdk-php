@@ -91,7 +91,7 @@ class CompaniesCest
     public function find(IntegrationTester $I): void
     {
         $company = CompaniesModel::find();
-        $I->assertTrue($company instanceof Companies);
+        $I->assertTrue(is_array($company));
     }
 
     /**

@@ -124,19 +124,19 @@ class UsersCest
     }
 
     /**
-     * Find test for companies
+     * Find test for users
      *
      * @param IntegrationTester $I
      * @return void
      */
     public function find(IntegrationTester $I): void
     {
-        $company = UserModel::find();
-        $I->assertTrue($company instanceof Users);
+        $users = UserModel::find();
+        $I->assertTrue(is_array($users));
     }
 
     /**
-     * Find test for companies
+     * Find first test for users
      *
      * @param IntegrationTester $I
      * @return void
