@@ -13,20 +13,13 @@ use Kanvas\Sdk\Api\Resource;
 abstract class BaseModel
 {
     /**
-     * Resource.
-     *
-     * @var object
-     */
-    public static $resource;
-
-    /**
      * Set Resource Variable.
      *
      * @return void
      */
-    protected static function setResource($resource)
+    protected static function getSource(): string
     {
-        self::$resource = $resource;
+        return Resource::class;
     }
 
     /**
@@ -39,7 +32,7 @@ abstract class BaseModel
      */
     public static function find($params = null, $opts = null)
     {
-        return self::$resource::all([], is_null($params) ? [] : Util::convertParams($params));
+        return static::getSource()::all([], is_null($params) ? [] : Util::convertParams($params));
     }
 
     /**
@@ -53,8 +46,8 @@ abstract class BaseModel
     public static function findFirst($params = null, $opts = null)
     {
         if (!is_array($params)) {
-            return self::$resource::retrieve(strval($params), [], []);
+            return static::getSource()::retrieve(strval($params), [], []);
         }
-        return current(self::$resource::all([], Util::convertParams($params)));
+        return current(static::getSource()::all([], Util::convertParams($params)));
     }
 }

@@ -12,32 +12,12 @@ use Kanvas\Sdk\Companies as CompaniesResource;
 class Companies extends BaseModel
 {
     /**
-     * Overwrite the user create function to return a usr object like we expect.
+     * Set Resource Variable.
      *
-     * @param array|null $params
-     * @param array|string|null $options
-     *
-     * @return object stdClass
+     * @return string
      */
-    public static function find($params = null, $opts = null)
+    protected static function getSource(): string
     {
-        self::setResource(CompaniesResource::class);
-        return parent::find($params);
+        return CompaniesResource::class;
     }
-
-    /**
-     * Overwrite the user create function to return a usr object like we expect.
-     *
-     * @param array|null $params
-     * @param array|string|null $options
-     *
-     * @return object stdClass
-     */
-    public static function findFirst($params = null, $opts = null)
-    {
-        self::setResource(CompaniesResource::class);
-        return parent::findFirst($params);
-    }
-
-
 }
