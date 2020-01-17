@@ -81,28 +81,4 @@ class CompaniesCest
         $company = Companies::getById(self::DEFAULT_COMPANIES_ID);
         $I->assertTrue($company instanceof Companies);
     }
-
-    /**
-     * Find test for companies
-     *
-     * @param IntegrationTester $I
-     * @return void
-     */
-    public function find(IntegrationTester $I): void
-    {
-        $company = CompaniesModel::find();
-        $I->assertTrue(is_array($company));
-    }
-
-    /**
-     * Find test for companies
-     *
-     * @param IntegrationTester $I
-     * @return void
-     */
-    public function findFirst(IntegrationTester $I): void
-    {
-        $company = CompaniesModel::findFirst(self::DEFAULT_COMPANIES_ID);
-        $I->assertTrue($company instanceof Companies);
-    }
 }
