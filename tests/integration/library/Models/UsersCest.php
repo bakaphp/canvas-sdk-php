@@ -1,6 +1,6 @@
 <?php
 
-namespace Gewaer\Tests\Integration\library\Resources;
+namespace Gewaer\Tests\Integration\library\Models;
 
 use IntegrationTester;
 use Kanvas\Sdk\Users;
@@ -9,6 +9,9 @@ use Kanvas\Sdk\Auth;
 use Kanvas\Sdk\Kanvas;
 use Phalcon\Security\Random;
 
+/**
+ *  Users Model Test Class
+ */
 class UsersCest
 {
     /**
@@ -59,17 +62,6 @@ class UsersCest
     }
 
     /**
-     * Get all users
-     *
-     * @param IntegrationTester $I
-     * @return void
-     */
-    public function getAllUsers(IntegrationTester $I): void
-    {
-        $I->assertTrue(gettype(Users::all()) == 'array');
-    }
-
-    /**
      * Create a new user
      *
      * @param IntegrationTester $I
@@ -92,39 +84,26 @@ class UsersCest
     }
 
     /**
-     * Update a user
+     * Find test for users
      *
      * @param IntegrationTester $I
      * @return void
      */
-    public function update(IntegrationTester $I): void
+    public function find(IntegrationTester $I): void
     {
-        $users = Users::update($this->userId, ['firstname'=>'testSDKUpdate','lastname'=> 'testSDKUpdate']);
-        $I->assertTrue($users instanceof Users);
+        $users = UserModel::find();
+        $I->assertTrue(is_array($users));
     }
 
     /**
-     * Get a user
+     * Find first test for users
      *
      * @param IntegrationTester $I
      * @return void
      */
-    public function getUser(IntegrationTester $I): void
+    public function findFirst(IntegrationTester $I): void
     {
-        $users = Users::getById($this->userId);
+        $users = UserModel::findFirst(self::DEFAULT_USERS_ID);
         $I->assertTrue($users instanceof Users);
-    }
-
-    /**
-     * Delete a user
-     *
-     * @param IntegrationTester $I
-     * @return void
-     */
-    public function delete(IntegrationTester $I): void
-    {
-        $users = Users::delete($this->userId);
-        $I->assertTrue(gettype($users[0]) == 'string');
-        $I->assertTrue($users[0] == 'Delete Successfully');
     }
 }
