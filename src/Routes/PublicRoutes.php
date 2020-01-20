@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanvas\Routes;
+namespace Kanvas\Sdk\Routes;
 
 use Baka\Router\Route;
 
