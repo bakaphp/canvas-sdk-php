@@ -1,9 +1,9 @@
 <?php
 
-namespace  Kanvas\Routes;
+namespace  Kanvas\Sdk\Routes;
 
-use Kanvas\Routes\PublicRoutes;
-use Kanvas\Routes\PrivateRoutes;
+use Kanvas\Sdk\Routes\PublicRoutes;
+use Kanvas\Sdk\Routes\PrivateRoutes;
 
 /**
  * Route Configurator Class

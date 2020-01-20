@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kanvas\Passthroughs;
+namespace Kanvas\Sdk\Passthroughs;
 
 use Phalcon\Http\Response;
 use GuzzleHttp\Client;
