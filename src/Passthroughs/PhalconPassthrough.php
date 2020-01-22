@@ -6,7 +6,7 @@ namespace Kanvas\Sdk\Passthroughs;
 
 use Phalcon\Http\Response;
 use GuzzleHttp\Client;
-use Canvas\Canvas;
+use Kanvas\Sdk\Kanvas;
 
 /**
  * Trait ResponseTrait.
@@ -79,7 +79,7 @@ trait PhalconPassthrough
         $uri = $this->router->getRewriteUri();
         $method = $this->request->getMethod();
 
-        $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Canvas::$apiBase;
+        $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Kanvas::$apiBase;
         // Get real API URL
         $apiUrl = $baseUrl . $uri;
 
