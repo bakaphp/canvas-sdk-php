@@ -23,7 +23,7 @@ class Users extends Resource
     use Retrieve;
 
     /**
-     * Overwrite the user create function to return a usr object like we expect
+     * Overwrite the user create function to return a usr object like we expect.
      *
      * @param array|null $params
      * @param array|string|null $options
@@ -42,12 +42,12 @@ class Users extends Resource
     }
 
     /**
-     * Get the current Users Session
+     * Get the current Users Session.
      *
      * @return Users
      */
     public static function getSelf(): self
     {
-        return self::retrieve(0);
+        return self::retrieve('0');
     }
 }
