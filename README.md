@@ -43,6 +43,96 @@ Kanvas::setAuthToken($request['token']);
 //Call Kanvas Functions
 ```
 
+## Phalcon Passthrough
+
+To use the Phalcon Passthrough it must first be called as trait in your project's controller. The controller itself could be named whatever you want but the default name given is `ApiController`. Furthermore, the controller should extend from the Baka Http `BaseController`.
+
+``` php
+
+use Baka\Http\Api\BaseController as BakaBaseController;
+use Kanvas\Sdk\Passthroughs\PhalconPassthrough;
+use Phalcon\Http\Response;
+
+class ApiController extends BakaBaseController
+{
+    use PhalconPassthrough;
+}
+
+```
+The trait itself has a function called `transporter` which is in charge of making a request to the Kanvas API. Two functions must be created; one to be called by private routes and the other by public routes. They could be as follows:
+
+``` php
+
+use PhalconPassthrough;
+
+public function publicTransporter(): Phalcon\Http\Response
+{
+    return $this->transporter();
+}
+public function privateTransporter(): Phalcon\Http\Response
+{
+    return $this->transporter();
+}
+```
+Both functions should return a Phalcon Response.
+
+
+### Setup of Passthrough Routes
+
+There are two options for setting up the passthrough routes. The first one implies calling both PublicRoutes.php(contains the default Kanvas public routes) and PrivateRoutes.php(contains the default Kanvas private routes) directly on your own routes setup.
+
+``` php
+
+use Kanvas\Sdk\Routes\PrivateRoutes;
+use Kanvas\Sdk\Routes\PublicRoutes;
+
+```
+
+The second one requires the creation of two files(one for public routes and one for private routes) that return the desired Kanvas routes as an array. These files should be as follows:
+
+``` php
+
+use Baka\Router\Route;
+
+return [
+    Route::crud('/users')->controller('ApiController')->action('privateTransporter')->notVia('post'),
+    Route::crud('/companies')->controller('ApiController')->action('privateTransporter'),
+    Route::crud('/roles')->controller('ApiController')->action('privateTransporter'),
+    Route::crud('/locales')->controller('ApiController')->action('privateTransporter'),
+    Route::crud('/currencies')->controller('ApiController')->action('privateTransporter'),
+    Route::crud('/apps')->controller('ApiController')->action('privateTransporter')
+    ]
+
+```
+
+The files must return array and every route should be a Baka Router Route.
+
+
+After that, whichever option you choose should use the RouteConfigurator which has two functions for merging your own routes with the Kanvas ones.
+
+``` php
+
+use Kanvas\Sdk\Routes\RouteConfigurator;
+
+$publicRoutes = RouteConfigurator::mergePublicRoutes($publicRoutes, appPath('api/routes/publicRoutes.php'));
+$privateRoutes = RouteConfigurator::mergePrivateRoutes($privateRoutes, appPath('api/routes/privateRoutes.php'));
+
+```
+
+`mergePublicRoutes` merges Kanvas public routes with your own public routes. It also takes the path to the custom public routes file defined by you.
+
+`mergePrivateRoutes` merges Kanvas private routes with your own private routes. It also takes the path to the custom private routes file defined by you.
+
+Both functions return a merged array.
+
+
+
+
+
+
+
+
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
