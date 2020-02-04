@@ -126,11 +126,35 @@ $privateRoutes = RouteConfigurator::mergePrivateRoutes($privateRoutes, appPath('
 Both functions return a merged array.
 
 
+## SDK Models
+
+This SDK also provides search by Kanvas Users and Companies. These two models will make a request to the Kanvas API and work just like a typical Phalcon model which has the `find` and `findFirst` functions.To use them do as follows:
+
+``` php
+
+use Kanvas\Sdk\Users;
+use Kanvas\Sdk\Companies;
+
+Users::find():
+
+Users::findFirst([
+    'conditions'=> 'email = ?0'
+    'bind'=>[example]
+]);
+
+Companies::find():
+
+Companies::findFirst([
+    'conditions'=> 'email = ?0'
+    'bind'=>[example]
+]);
+
+```
+
+As said before, both models work as a Phalcon model, they work with all the parameters that can be given to them.
 
 
-
-
-
+`Notice`: You must be authenticated to use this models and your API key must also be set.
 
 
 ## Change log
