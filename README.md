@@ -142,7 +142,7 @@ Users::findFirst([
     'bind'=>[example]
 ]);
 
-Companies::find():
+Companies::find();
 
 Companies::findFirst([
     'conditions'=> 'email = ?0'
