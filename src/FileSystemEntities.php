@@ -12,6 +12,7 @@ use Kanvas\Sdk\Api\Operations\Retrieve;
 use Kanvas\Sdk\Api\Resource;
 use Kanvas\Sdk\Filesystem;
 use Kanvas\Sdk\Util\Util;
+use Kanvas\Sdk\KanvasObject;
 
 /**
  * Filesystem Resource
@@ -40,13 +41,18 @@ class FileSystemEntities extends Resource
         // $companyId = Di::getDefault()->getUserData()->currentCompanyId();
 
         $app = 1;
-        $companyId = 2;
+        $companyId = 3;
 
         //Search system modules
         // $filesystem = current(Filesystem::all([], ['conditions'=> ["apps_id:{$app->id}","is_deleted:0"]]));
-        $filesystem = current(Filesystem::all([], ['conditions'=> ["apps_id:{$app}","is_deleted:0"]]));
+        // $filesystem = current(Filesystem::all([], ['conditions'=> ["apps_id:{$app}","is_deleted:0"]]));
+        return $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$app}","is_deleted:0"]]);
 
-        //Search filesystem entities
-        return current(self::all([],["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$companyId}","filesystem_id:{$filesystem}","is_deleted:0"]]));
+        foreach ($filesystem as $file) {
+            $filesystemEntity = current(self::all([],["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$companyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
+            if ($filesystemEntity instanceof KanvasObject) {
+                return $filesystemEntity;
+            }
+        }
     }
 }
