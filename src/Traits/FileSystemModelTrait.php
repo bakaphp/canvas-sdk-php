@@ -66,7 +66,8 @@ trait FileSystemModelTrait
      */
     public function attach(array $files): bool
     {
-        $systemModule = SystemModules::getSystemModuleByModelName(self::class, Di::getDefault()->getApp()->getId());
+        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
+        $systemModule = SystemModules::getSystemModuleByModelName(self::class, $appId);
 
         foreach ($files as $file) {
             //im looking for the file inside an array
@@ -81,7 +82,7 @@ trait FileSystemModelTrait
             $fileSystemEntities = null;
             //check if we are updating the attachment
             if ($id = (int) $file['id']) {
-                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, Di::getDefault()->getApp()->getId());
+                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, $appId);
             }
 
             //new attachment
@@ -94,18 +95,18 @@ trait FileSystemModelTrait
 
                 //If filesystem entity does not exist then create a new one
                 $users = FileSystemEntities::create([
-                    'system_modules_id'=> $systemModule->id,
-                    'companies_id'=> $file['file']->companies_id,
-                    'entity_id'=> $this->id,
-                    'created_at'=> $file['file']->created_at
+                    'system_modules_id' => $systemModule->id,
+                    'companies_id' => $file['file']->companies_id,
+                    'entity_id' => $this->id,
+                    'created_at' => $file['file']->created_at
                 ]);
             }
 
             //If filesystem entity does exist then update
             $users = FileSystemEntities::update($fileSystemEntities->id, [
-                    'filesystem_id'=> $file['file']->id,
-                    'field_name'=> $file['field_name'] ?? null,
-                    'is_deleted'=> 0
+                'filesystem_id' => $file['file']->id,
+                'field_name' => $file['field_name'] ?? null,
+                'is_deleted' => 0
             ]);
 
             // $fileSystemEntities->filesystem_id = $file['file']->getId();
