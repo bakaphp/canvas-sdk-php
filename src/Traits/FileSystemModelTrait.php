@@ -90,38 +90,26 @@ trait FileSystemModelTrait
                 $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, (int)$systemModule->id, (int)$appId, $currentCompanyId);
             }
 
-            //new attachment
             if (!is_object($fileSystemEntities)) {
-                // $fileSystemEntities = new FileSystemEntities();
-                // $fileSystemEntities->system_modules_id = $systemModule->getId();
-                // $fileSystemEntities->companies_id = $file['file']->companies_id;
-                // $fileSystemEntities->entity_id = $this->getId();
-                // $fileSystemEntities->created_at = $file['file']->created_at;
 
                 //If filesystem entity does not exist then create a new one
-                $users = FileSystemEntities::create([
+                FileSystemEntities::create([
+                    'filesystem_id' => $file['file']->id,
+                    'field_name' => $file['field_name'] ?? null,
                     'system_modules_id' => $systemModule->id,
                     'companies_id' => $file['file']->companies_id,
                     'entity_id' => $this->id,
-                    'created_at' => $file['file']->created_at
+                    'created_at' => $file['file']->created_at,
+                    'is_deleted' => 0
+                ]);
+            } else {
+                //If filesystem entity does exist then update
+                FileSystemEntities::update($fileSystemEntities->id, [
+                    'filesystem_id' => $file['file']->id,
+                    'field_name' => $file['field_name'] ?? null,
+                    'is_deleted' => 0
                 ]);
             }
-
-            //If filesystem entity does exist then update
-            $users = FileSystemEntities::update($fileSystemEntities->id, [
-                'filesystem_id' => $file['file']->id,
-                'field_name' => $file['field_name'] ?? null,
-                'is_deleted' => 0
-            ]);
-
-            // $fileSystemEntities->filesystem_id = $file['file']->getId();
-            // $fileSystemEntities->field_name = $file['field_name'] ?? null;
-            // $fileSystemEntities->is_deleted = 0;
-            // $fileSystemEntities->saveOrFail();
-
-            // if (!is_null($this->filesNewAttachedPath())) {
-            //     $file['file']->move($this->filesNewAttachedPath());
-            // }
         }
 
         return true;
