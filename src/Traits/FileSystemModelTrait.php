@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Traits;
 
+use Exception;
 use Kanvas\Sdk\SystemModules;
 use Kanvas\Sdk\FileSystem;
+use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\Users as KanvasUsers;
 use Kanvas\Sdk\FileSystemEntities;
 use Phalcon\Di;
 
@@ -68,6 +71,7 @@ trait FileSystemModelTrait
     {
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
         $systemModule = SystemModules::getSystemModuleByModelName(self::class, $appId);
+        $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
         foreach ($files as $file) {
             //im looking for the file inside an array
@@ -76,13 +80,13 @@ trait FileSystemModelTrait
             }
 
             if (!$file['file'] instanceof FileSystem) {
-                throw new RuntimeException('Cant attach a none Filesytem to this entity');
+                throw new Exception('Cant attach a none Filesytem to this entity');
             }
 
             $fileSystemEntities = null;
             //check if we are updating the attachment
             if ($id = (int) $file['id']) {
-                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, $appId);
+                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, $systemModule->id, $appId , $currentCompanyId);
             }
 
             //new attachment
@@ -131,5 +135,53 @@ trait FileSystemModelTrait
     protected function filesNewAttachedPath(): ?string
     {
         return null;
+    }
+
+    /**
+     * Over write, because of the phalcon events.
+     *
+     * @param array data
+     * @param array whiteList
+     * @return boolean
+     */
+    public function update($data = null, $whiteList = null): bool
+    {
+        //associate uploaded files
+        if (isset($data['files'])) {
+            if (!empty($data['files'])) {
+                /**
+                 * @todo for now lets delete them all and updated them
+                 * look for a better solution later, this can since we are not using transactions
+                 */
+                $this->deleteFiles();
+
+                $this->uploadedFiles = $data['files'];
+            } else {
+                $this->deleteFiles();
+            }
+        }
+
+        return parent::update($data, $whiteList);
+    }
+
+    /**
+     * Delete all the files from a module.
+     *
+     * @return bool
+     */
+    public function deleteFiles(): bool
+    {
+        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
+        $currentCompanyId = KanvasUsers::getSelf()->default_company;
+
+        if ($files = FileSystemEntities::getAllByEntityId($this->getId(), $appId, $currentCompanyId)) {
+            foreach ($files as $file) {
+                FileSystemEntities::update($file->id, [
+                    "is_deleted"=> 1
+                ]);
+            }
+        }
+
+        return true;
     }
 }

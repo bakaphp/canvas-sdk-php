@@ -13,6 +13,7 @@ use Kanvas\Sdk\Api\Resource;
 use Kanvas\Sdk\Filesystem;
 use Kanvas\Sdk\Util\Util;
 use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\Apps;
 
 /**
  * Filesystem Resource
@@ -35,24 +36,35 @@ class FileSystemEntities extends Resource
      * @param bool $isDeleted
      * @return FileSystemEntities
      */
-    public static function getByIdWithSystemModule(int $id, int $systemModulesId)
+    public static function getByIdWithSystemModule(int $id, int $systemModulesId, int $appId, int $currentCompanyId)
     {
-        // $app = Di::getDefault()->getApp();
-        // $companyId = Di::getDefault()->getUserData()->currentCompanyId();
-
-        $app = 1;
-        $companyId = 3;
-
-        //Search system modules
-        // $filesystem = current(Filesystem::all([], ['conditions'=> ["apps_id:{$app->id}","is_deleted:0"]]));
-        // $filesystem = current(Filesystem::all([], ['conditions'=> ["apps_id:{$app}","is_deleted:0"]]));
-        return $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$app}","is_deleted:0"]]);
+        $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
 
         foreach ($filesystem as $file) {
-            $filesystemEntity = current(self::all([],["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$companyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
+            $filesystemEntity = current(self::all([],["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
             if ($filesystemEntity instanceof KanvasObject) {
                 return $filesystemEntity;
             }
         }
+    }
+
+    /**
+     * Get all filesystem entities by entity_id
+     *
+     * @return array
+     */
+    public static function getAllByEntityId(int $id, int $appId, int $currentCompanyId)
+    {
+        $entitiesArray = [];
+        $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
+
+        foreach ($filesystem as $file) {
+            $filesystemEntity = current(self::all([],["conditions"=>["entity_id:{$id}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
+            if ($filesystemEntity instanceof KanvasObject) {
+                $entitiesArray[] = $filesystemEntity;
+            }
+        }
+
+        return $entitiesArray;
     }
 }
