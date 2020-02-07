@@ -11,6 +11,7 @@ use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\Users as KanvasUsers;
 use Kanvas\Sdk\FileSystemEntities;
 use Phalcon\Di;
+use Kanvas\Sdk\KanvasObject;
 
 /**
  * Trait ResponseTrait.
@@ -44,7 +45,7 @@ trait FileSystemModelTrait
                     continue;
                 }
 
-                if ($fileSystem = FileSystem::getById($file['filesystem_id'])) {
+                if ($fileSystem = FileSystem::getById((string)$file['filesystem_id'])) {
                     $this->attach([[
                         'id' => $file['id'] ?: 0,
                         'file' => $fileSystem,
@@ -70,7 +71,7 @@ trait FileSystemModelTrait
     public function attach(array $files): bool
     {
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
-        $systemModule = SystemModules::getSystemModuleByModelName(self::class, $appId);
+        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appId);
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
         foreach ($files as $file) {
@@ -79,14 +80,14 @@ trait FileSystemModelTrait
                 continue;
             }
 
-            if (!$file['file'] instanceof FileSystem) {
+            if (!$file['file'] instanceof KanvasObject) {
                 throw new Exception('Cant attach a none Filesytem to this entity');
             }
 
             $fileSystemEntities = null;
             //check if we are updating the attachment
             if ($id = (int) $file['id']) {
-                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, $systemModule->id, $appId , $currentCompanyId);
+                $fileSystemEntities = FileSystemEntities::getByIdWithSystemModule($id, (int)$systemModule->id, (int)$appId, $currentCompanyId);
             }
 
             //new attachment
@@ -118,9 +119,9 @@ trait FileSystemModelTrait
             // $fileSystemEntities->is_deleted = 0;
             // $fileSystemEntities->saveOrFail();
 
-            if (!is_null($this->filesNewAttachedPath())) {
-                $file['file']->move($this->filesNewAttachedPath());
-            }
+            // if (!is_null($this->filesNewAttachedPath())) {
+            //     $file['file']->move($this->filesNewAttachedPath());
+            // }
         }
 
         return true;
@@ -174,7 +175,7 @@ trait FileSystemModelTrait
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
-        if ($files = FileSystemEntities::getAllByEntityId($this->getId(), $appId, $currentCompanyId)) {
+        if ($files = FileSystemEntities::getAllByEntityId($this->getId(), (int)$appId, $currentCompanyId)) {
             foreach ($files as $file) {
                 FileSystemEntities::update($file->id, [
                     "is_deleted"=> 1
