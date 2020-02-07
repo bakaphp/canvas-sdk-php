@@ -43,6 +43,67 @@ Kanvas::setAuthToken($request['token']);
 //Call Kanvas Functions
 ```
 
+## Using Resources
+
+Every Kanvas SDK resource work in the same way. All of them have CRUD capabilites and some of them have custom functions that can be accessed as static functions. Furthermore, here is how a CRUD of a resource works:
+
+### Create
+
+``` php
+
+use Kanvas\Sdk\Users;
+
+Users::create([
+    'firstname'=>'testSDK',
+    'lastname'=> 'testSDK',
+    'displayname'=> 'sdktester',
+    'password'=> 'nosenose',
+    'default_company'=> 'example sdk',
+    'email'=> 'examplesd5k@gmail.com',
+    'verify_password'=> 'nosenose'
+    ]);
+
+```
+
+### Update
+
+``` php
+
+Users::update('id',[
+    'firstname'=>'testSDK',
+    'lastname'=> 'testSDK',
+    ]);
+
+```
+
+### Delete
+
+``` php
+Users::delete('id');
+```
+
+### List
+
+``` php
+Users::all([], []);
+```
+
+### Retrieve
+
+``` php
+Users::retrieve('id', [], ['relationships'=>['roles']]);
+```
+
+## Custom queries on CRUD operations
+
+In addition to the usual functionalities of every resource CRUD operation, other parameters can be used to make custom queries. An example of this can be seen on the retrieve operation example.
+
+Currently we only support Phalcon's type of querying database tables. We work with:
+
+- conditions
+- limit
+- order
+
 ## Phalcon Passthrough
 
 To use the Phalcon Passthrough it must first be called as trait in your project's controller. The controller itself could be named whatever you want but the default name given is `ApiController`. Furthermore, the controller should extend from the Baka Http `BaseController`.
