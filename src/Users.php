@@ -11,11 +11,15 @@ use Kanvas\Sdk\Api\Operations\Update;
 use Kanvas\Sdk\Api\Operations\Retrieve;
 use Kanvas\Sdk\Api\Resource;
 use Kanvas\Sdk\Util\Util;
+use Kanvas\Sdk\Roles;
+use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\Traits\PermissionsTrait;
 
 class Users extends Resource
 {
     const OBJECT_NAME = 'users';
 
+    use PermissionsTrait;
     use All;
     use Create;
     use Delete;
