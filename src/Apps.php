@@ -31,6 +31,6 @@ class Apps extends Resource
      */
     public static function getIdByKey(string $key)
     {
-        return current(self::all([], ['conditions'=> ["key:{$key}","is_deleted:0"]]));
+        return current(self::all([], ['conditions'=> ["key:{$key}","is_deleted:0"]]))->id;
     }
 }
