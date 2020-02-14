@@ -75,7 +75,7 @@ trait CustomFieldsTrait
      * @param int $customFieldsModuleId
      * @return Kanvas\Sdk\KanvasObject
      */
-    public function getAllCustomField()
+    public function getAllCustomFields()
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
