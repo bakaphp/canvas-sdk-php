@@ -6,6 +6,8 @@ namespace Kanvas\Sdk\Traits;
 
 use Kanvas\Sdk\CustomFields;
 use Kanvas\Sdk\CustomFieldsModules;
+use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\Users;
 
 /**
  * Trait FractalTrait.
@@ -15,15 +17,15 @@ use Kanvas\Sdk\CustomFieldsModules;
 trait CustomFieldsTrait
 {
     /**
-     * Create Custom Fields Modules
+     * Create Custom Fields Modules.
      *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function createCustomFieldsModule(string $name)
     {
         return CustomFieldsModules::create([
-            'name'=> $name,
-            'model_name'=> $this->model
+            'name' => $name,
+            'model_name' => get_class(new self())
         ]);
     }
 
@@ -37,9 +39,55 @@ trait CustomFieldsTrait
     public function createCustomField(string $name, int $fieldTypeId, int $customFieldsModuleId)
     {
         return CustomFields::create([
-            'name'=>$name,
-            'fields_type_id'=> $fieldTypeId,
-            'custom_fields_modules_id'=> $customFieldsModuleId
+            'name' => $name,
+            'fields_type_id' => $fieldTypeId,
+            'custom_fields_modules_id' => $customFieldsModuleId
         ]);
+    }
+
+    /**
+     * Create a new custom field.
+     * @param string $name
+     * @param int $fieldTypeId
+     * @param int $customFieldsModuleId
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function getCustomField(string $name, int $customFieldsModuleId)
+    {
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $usersId = Users::getSelf()->id;
+        $companiesId = Users::getSelf()->default_company;
+
+        return current(CustomFields::all([],["conditions"=>[
+            "name:{$name}",
+            "companies_id:{$companiesId}",
+            "users_id:{$usersId}",
+            "apps_id:{$appsId}",
+            "custom_fields_modules_id:{$customFieldsModuleId}",
+            "is_deleted:0"
+        ]]));
+    }
+
+    /**
+     * Create a new custom field.
+     * @param string $name
+     * @param int $fieldTypeId
+     * @param int $customFieldsModuleId
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function getAllCustomField(string $name, int $customFieldsModuleId)
+    {
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $usersId = Users::getSelf()->id;
+        $companiesId = Users::getSelf()->default_company;
+
+        return CustomFields::all([],["conditions"=>[
+            "name:{$name}",
+            "companies_id:{$companiesId}",
+            "users_id:{$usersId}",
+            "apps_id:{$appsId}",
+            "custom_fields_modules_id:{$customFieldsModuleId}",
+            "is_deleted:0"
+        ]]);
     }
 }
