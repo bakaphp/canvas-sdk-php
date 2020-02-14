@@ -75,18 +75,16 @@ trait CustomFieldsTrait
      * @param int $customFieldsModuleId
      * @return Kanvas\Sdk\KanvasObject
      */
-    public function getAllCustomField(string $name, int $customFieldsModuleId)
+    public function getAllCustomField()
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
         $companiesId = Users::getSelf()->default_company;
 
         return CustomFields::all([],["conditions"=>[
-            "name:{$name}",
             "companies_id:{$companiesId}",
             "users_id:{$usersId}",
             "apps_id:{$appsId}",
-            "custom_fields_modules_id:{$customFieldsModuleId}",
             "is_deleted:0"
         ]]);
     }
