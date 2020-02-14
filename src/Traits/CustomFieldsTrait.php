@@ -25,7 +25,7 @@ trait CustomFieldsTrait
     {
         return CustomFieldsModules::create([
             'name' => $name,
-            'model_name' => get_class(self::class)
+            'model_name' => get_class(new self())
         ]);
     }
 
