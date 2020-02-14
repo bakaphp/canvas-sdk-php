@@ -70,7 +70,7 @@ trait FileSystemModelTrait
      */
     public function attach(array $files): bool
     {
-        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
+        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appId);
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
@@ -160,7 +160,7 @@ trait FileSystemModelTrait
      */
     public function deleteFiles(): bool
     {
-        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'))->id;
+        $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
         if ($files = FileSystemEntities::getAllByEntityId($this->getId(), (int)$appId, $currentCompanyId)) {
