@@ -6,6 +6,8 @@ namespace Kanvas\Sdk\Traits;
 
 use Kanvas\Sdk\CustomFields;
 use Kanvas\Sdk\CustomFieldsModules;
+use Kanvas\Sdk\CustomFieldsValues;
+use Kanvas\Sdk\CustomFieldsTypes;
 use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\Users;
@@ -17,6 +19,25 @@ use Kanvas\Sdk\Users;
  */
 trait CustomFieldsTrait
 {
+
+    /**
+     * Verify if Custom Fields Module exists
+     * @return mixed
+     */
+    public function customFieldsModuleExists()
+    {
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        
+        $customFieldsModule = current(CustomFieldsModules::all([], ['conditions' => [
+            "apps_id:{$appsId}",
+            "name:" . get_class(new self()),
+            "model_name:". get_class(new self()),
+            'is_deleted:0'
+        ]]));
+
+        return $customFieldsModule instanceof KanvasObject ? $customFieldsModule : false;
+    }
+
     /**
      * Create Custom Fields Modules.
      *
@@ -47,7 +68,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Create a new custom field.
+     * Get a Custom Field by name and custom_fields_module_id
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
@@ -70,7 +91,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Create a new custom field.
+     * Get all Custom Fields
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
@@ -91,20 +112,47 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Verify if Custom Fields Module exists
-     * @return mixed
+     * Create a new custom field value
+     * @param int $customFieldId
+     * @param string $label
+     * @param mixed $value
+     * @return Kanvas\Sdk\KanvasObject
      */
-    public function customFieldsModuleExists()
+    public function createCustomFieldValue(int $customFieldId, string $label, $value)
     {
-        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        
-        $customFieldsModule = current(CustomFieldsModules::all([], ['conditions' => [
-            "apps_id:{$appsId}",
-            "name:" . get_class(new self()),
-            "model_name:". get_class(new self()),
+        return CustomFieldsValues::create([
+            'custom_fields_id' => $customFieldId,
+            'label' => $label,
+            'value' => $value,
+            'is_default' => 1,
+            'is_deleted' => 0,
+        ]);
+    }
+
+    /**
+     * Get Custom Field Type
+     * @param string $name
+     * @param int $fieldTypeId
+     * @param int $customFieldsModuleId
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function getCustomFieldTypeByName(string $name)
+    {
+        return current(CustomFieldsTypes::all([], ['conditions' => [
+            "name:{$name}",
             'is_deleted:0'
         ]]));
+    }
 
-        return $customFieldsModule instanceof KanvasObject ? $customFieldsModule : false;
+    /**
+     * Get all Custom Fields Types
+     * @param string $name
+     * @param int $fieldTypeId
+     * @param int $customFieldsModuleId
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function getAllCustomFieldsTypes()
+    {
+        return CustomFieldsTypes::all([], ['conditions' => ['is_deleted:0']]);
     }
 }
