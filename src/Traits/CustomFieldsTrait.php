@@ -7,6 +7,7 @@ namespace Kanvas\Sdk\Traits;
 use Kanvas\Sdk\CustomFields;
 use Kanvas\Sdk\CustomFieldsModules;
 use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\Users;
 
 /**
@@ -58,13 +59,13 @@ trait CustomFieldsTrait
         $usersId = Users::getSelf()->id;
         $companiesId = Users::getSelf()->default_company;
 
-        return current(CustomFields::all([],["conditions"=>[
+        return current(CustomFields::all([], ['conditions' => [
             "name:{$name}",
             "companies_id:{$companiesId}",
             "users_id:{$usersId}",
             "apps_id:{$appsId}",
             "custom_fields_modules_id:{$customFieldsModuleId}",
-            "is_deleted:0"
+            'is_deleted:0'
         ]]));
     }
 
@@ -81,11 +82,25 @@ trait CustomFieldsTrait
         $usersId = Users::getSelf()->id;
         $companiesId = Users::getSelf()->default_company;
 
-        return CustomFields::all([],["conditions"=>[
+        return CustomFields::all([], ['conditions' => [
             "companies_id:{$companiesId}",
             "users_id:{$usersId}",
             "apps_id:{$appsId}",
-            "is_deleted:0"
+            'is_deleted:0'
         ]]);
+    }
+
+    public function customFieldsModuleExists()
+    {
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        
+        $customFieldsModule = current(CustomFieldsModules::all([], ['conditions' => [
+            "apps_id:{$appsId}",
+            "name:" . get_class(new self()),
+            "model_name:". get_class(new self()),
+            'is_deleted:0'
+        ]]));
+        
+        return $customFieldsModule instanceof KanvasObject ? $customFieldsModule : false;
     }
 }
