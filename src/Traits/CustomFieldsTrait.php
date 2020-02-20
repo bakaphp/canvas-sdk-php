@@ -90,6 +90,10 @@ trait CustomFieldsTrait
         ]]);
     }
 
+    /**
+     * Verify if Custom Fields Module exists
+     * @return mixed
+     */
     public function customFieldsModuleExists()
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
@@ -100,7 +104,7 @@ trait CustomFieldsTrait
             "model_name:". get_class(new self()),
             'is_deleted:0'
         ]]));
-        
+
         return $customFieldsModule instanceof KanvasObject ? $customFieldsModule : false;
     }
 }
