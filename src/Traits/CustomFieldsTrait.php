@@ -80,14 +80,12 @@ trait CustomFieldsTrait
     /**
      * Update a new custom field.
      * @param int $id
-     * @param int $companiesId
+     * @param array $fieldsValues
      * @return Kanvas\Sdk\KanvasObject
      */
-    public function updateCustomField(int $id, int $companiesId)
+    public function updateCustomField(int $id, array $fieldsValues)
     {
-        return CustomFields::update($id,[
-            'companies_id' => $companiesId
-        ]);
+        return CustomFields::update($id, $fieldsValues);
     }
 
     /**
