@@ -19,19 +19,18 @@ use Kanvas\Sdk\Users;
  */
 trait CustomFieldsTrait
 {
-
     /**
-     * Verify if Custom Fields Module exists
+     * Verify if Custom Fields Module exists.
      * @return mixed
      */
     public function customFieldsModuleExists()
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        
+
         $customFieldsModule = current(CustomFieldsModules::all([], ['conditions' => [
             "apps_id:{$appsId}",
-            "name:" . get_class(new self()),
-            "model_name:". get_class(new self()),
+            'name:' . get_class(new self()),
+            'model_name:' . get_class(new self()),
             'is_deleted:0'
         ]]));
 
@@ -62,13 +61,14 @@ trait CustomFieldsTrait
     {
         return CustomFields::create([
             'name' => $name,
+            'label' => $name,
             'fields_type_id' => $fieldTypeId,
             'custom_fields_modules_id' => $customFieldsModuleId
         ]);
     }
 
     /**
-     * Get a Custom Field by name and custom_fields_module_id
+     * Get a Custom Field by name and custom_fields_module_id.
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
@@ -91,7 +91,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Get all Custom Fields
+     * Get all Custom Fields.
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
@@ -112,7 +112,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Create a new custom field value
+     * Create a new custom field value.
      * @param int $customFieldId
      * @param string $label
      * @param mixed $value
@@ -130,7 +130,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Get Custom Field Type
+     * Get Custom Field Type.
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
@@ -145,7 +145,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Get all Custom Fields Types
+     * Get all Custom Fields Types.
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
