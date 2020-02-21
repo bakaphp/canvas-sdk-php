@@ -179,7 +179,7 @@ trait CustomFieldsTrait
 
         foreach ($this->custom_fields as $key => $value) {
             if (!$customField = $this->getCustomField($key, (int)$customFieldModule->id)) {
-                $customField = $this->createCustomField($key, $this->getCustomFieldTypeByName(gettype($value))->id, (int)$customFieldModule->id);
+                $customField = $this->createCustomField($key, (int)$this->getCustomFieldTypeByName(gettype($value))->id, (int)$customFieldModule->id);
             }
 
             $this->createCustomFieldValue($customField->id, $customField->label, $value);
