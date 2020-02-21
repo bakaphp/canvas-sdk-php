@@ -20,6 +20,11 @@ use Kanvas\Sdk\Users;
 trait CustomFieldsTrait
 {
     /**
+     * Custom Fields.
+     */
+    public $custom_fields = [];
+
+    /**
      * Verify if Custom Fields Module exists.
      * @return mixed
      */
@@ -154,5 +159,25 @@ trait CustomFieldsTrait
     public function getAllCustomFieldsTypes()
     {
         return CustomFieldsTypes::all([], ['conditions' => ['is_deleted:0']]);
+    }
+
+    /**
+     * Process Custom Fields.
+     * @return void
+     */
+    public function processCustomFields()
+    {
+        $customFieldModule = $this->customFieldsModuleExists();
+        if (!$customFieldModule) {
+            $customFieldModule = $this->createCustomFieldsModule(get_class(new self()));
+        }
+
+        foreach ($this->custom_fields as $key => $value) {
+            if (!$customField = $this->getCustomField($key, $customFieldModule->id)) {
+                $customField = $this->createCustomField($key, $this->getCustomFieldTypeByName(gettype($value))->id, $customFieldModule->id);
+            }
+
+            $this->createCustomFieldValue($customField->id, $customField->label, $value);
+        }
     }
 }
