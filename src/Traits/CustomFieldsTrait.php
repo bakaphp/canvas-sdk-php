@@ -88,7 +88,7 @@ trait CustomFieldsTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
-        $companiesId = isset($this->record_id) ? $this->record_id : Users::getSelf()->default_company;
+        $companiesId = Users::getSelf()->default_company;
 
         return current(CustomFields::all([], ['conditions' => [
             "name:{$name}",
@@ -111,7 +111,7 @@ trait CustomFieldsTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
-        $companiesId = isset($this->record_id) ? $this->record_id : Users::getSelf()->default_company;
+        $companiesId = Users::getSelf()->default_company;
 
         return CustomFields::all([], ['conditions' => [
             "companies_id:{$companiesId}",
