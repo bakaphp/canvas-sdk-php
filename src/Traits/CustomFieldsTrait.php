@@ -78,6 +78,17 @@ trait CustomFieldsTrait
     }
 
     /**
+     * Update a new custom field.
+     * @param int $id
+     * @param array $fieldsValues
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function updateCustomField(int $id, array $fieldsValues)
+    {
+        return CustomFields::update($id, $fieldsValues);
+    }
+
+    /**
      * Get a Custom Field by name and custom_fields_module_id.
      * @param string $name
      * @param int $fieldTypeId
