@@ -88,7 +88,7 @@ trait CustomFieldsTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
-        $companiesId = isset($this->record_id) ? $this->record_id : Users::getSelf()->default_company;
+        $companiesId = Users::getSelf()->default_company;
 
         return current(CustomFields::all([], ['conditions' => [
             "name:{$name}",
@@ -111,7 +111,7 @@ trait CustomFieldsTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $usersId = Users::getSelf()->id;
-        $companiesId = isset($this->record_id) ? $this->record_id : Users::getSelf()->default_company;
+        $companiesId = Users::getSelf()->default_company;
 
         return CustomFields::all([], ['conditions' => [
             "companies_id:{$companiesId}",
@@ -179,7 +179,7 @@ trait CustomFieldsTrait
 
         foreach ($this->custom_fields as $key => $value) {
             if (!$customField = $this->getCustomField($key, (int)$customFieldModule->id)) {
-                $customField = $this->createCustomField($key, $this->getCustomFieldTypeByName(gettype($value))->id, (int)$customFieldModule->id);
+                $customField = $this->createCustomField($key, (int)$this->getCustomFieldTypeByName(gettype($value))->id, (int)$customFieldModule->id);
             }
 
             $this->createCustomFieldValue($customField->id, $customField->label, $value);
