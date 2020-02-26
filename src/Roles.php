@@ -72,10 +72,63 @@ class Roles extends Resource
             return $currentAppRole;
         }
 
-        // return current(self::all([], [
-        //     'conditions' => [
-        //         "companies_id:" . self::DEFAULT_ACL_COMPANY_ID, 
-        //         "apps_id:" . self::DEFAULT_ACL_APP_ID
-        // ]]));
+        return current(self::all([], [
+            'conditions' => [
+                "companies_id:" . self::DEFAULT_ACL_COMPANY_ID, 
+                "apps_id:" . self::DEFAULT_ACL_APP_ID
+        ]]));
+    }
+
+    /**
+     * Get the entity by its name.
+     *
+     * @param string $name
+     * @return Roles
+     */
+    public static function getByName(string $name, int $currentCompanyId, string $appKey)
+    {
+        $appsId = Apps::getIdByKey($appKey);
+
+        $role = current(self::all([], [
+            'conditions' => [
+                "name:{$name}", 
+                "apps_id:{$appsId}",
+                "companies_id:{$currentCompanyId}",
+                "companies_id:0"
+        ]]));
+
+        return $role;
+
+        if (!$role instanceof KanvasObject) {
+            return current(self::all([], [
+                'conditions' => [
+                    "name:{$name}", 
+                    "apps_id:{$appsId}",
+                    "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
+                    "companies_id:0"
+            ]]));
+        }
+
+        if (!$role instanceof KanvasObject) {
+            return current(self::all([], [
+                'conditions' => [
+                    "name:{$name}", 
+                    "apps_id:" . self::DEFAULT_ACL_APP_ID,
+                    "companies_id:{$currentCompanyId}",
+                    "companies_id:0"
+            ]]));
+        }
+
+        if (!$role instanceof KanvasObject) {
+            return current(self::all([], [
+                'conditions' => [
+                    "name:{$name}", 
+                    "apps_id:" . self::DEFAULT_ACL_APP_ID,
+                    "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
+                    "companies_id:0"
+            ]]));
+        }
+
+        return $role;
     }
 }
