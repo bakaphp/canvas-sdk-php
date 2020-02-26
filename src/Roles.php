@@ -94,10 +94,8 @@ class Roles extends Resource
                 "name:{$name}", 
                 "apps_id:{$appsId}",
                 "companies_id:{$currentCompanyId}",
-                "companies_id:0"
+                "is_deleted:0"
         ]]));
-
-        return $role;
 
         if (!$role instanceof KanvasObject) {
             return current(self::all([], [
@@ -105,7 +103,7 @@ class Roles extends Resource
                     "name:{$name}", 
                     "apps_id:{$appsId}",
                     "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
-                    "companies_id:0"
+                    "is_deleted:0"
             ]]));
         }
 
@@ -115,7 +113,7 @@ class Roles extends Resource
                     "name:{$name}", 
                     "apps_id:" . self::DEFAULT_ACL_APP_ID,
                     "companies_id:{$currentCompanyId}",
-                    "companies_id:0"
+                    "is_deleted:0"
             ]]));
         }
 
@@ -125,7 +123,7 @@ class Roles extends Resource
                     "name:{$name}", 
                     "apps_id:" . self::DEFAULT_ACL_APP_ID,
                     "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
-                    "companies_id:0"
+                    "is_deleted:0"
             ]]));
         }
 
