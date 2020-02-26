@@ -7,6 +7,8 @@ namespace Kanvas\Sdk\Traits;
 use Exception;
 use Kanvas\Sdk\Roles;
 use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\UserRoles;
 
 /**
  * Trait FractalTrait.
@@ -18,7 +20,7 @@ trait PermissionsTrait
     /**
      * Overwrite the permission relationship to force the user of company id.
      *
-     * @return UserRoles
+     * @return Roles
      */
     public function getPermission()
     {
@@ -53,5 +55,131 @@ trait PermissionsTrait
         }
 
         return $this->di->getAcl()->isAllowed($role->name, $resource, $action);
+    }
+
+    /**
+     * Assigne a user this role
+     * Example: App.Role.
+     *
+     * @param string $role
+     * @return boolean
+     */
+    public function assignRole(string $role): bool
+    {
+        /**
+         * check if we have a dot, that mes it legacy and sending the app name
+         * not needed any more so we remove it.
+         */
+        if (strpos($role, '.') !== false) {
+            $appRole = explode('.', $role);
+            $role = $appRole[1];
+        }
+
+        $role = Roles::getByName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+
+        $userRole = UserRoles::findFirst([
+            'conditions' => 'users_id = ?0 and roles_id = ?1 and apps_id = ?2 and companies_id = ?3',
+            'bind' => [
+                $this->getId(),
+                $role->getId(),
+                $role->apps_id,
+                $this->currentCompanyId()
+            ]
+        ]);
+
+        if (!is_object($userRole)) {
+            $userRole = new UserRoles();
+            $userRole->users_id = $this->getId();
+            $userRole->roles_id = $role->getId();
+            $userRole->apps_id = $role->apps_id;
+            $userRole->companies_id = $this->currentCompanyId();
+            $userRole->saveOrFail();
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove a role for the current user
+     * Example: App.Role.
+     *
+     * @param string $role
+     * @return boolean
+     */
+    public function removeRole(string $role): bool
+    {
+        $role = Roles::getByAppName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+
+        if (!is_object($role)) {
+            throw new Exception('Role not found in DB');
+        }
+
+        $userRole = current(UserRoles::all([], [
+            'conditions' => [
+                "users_id:{$this->id}", 
+                "roles_id:{$role->id}",
+                "apps_id:{$role->apps_id}",
+                "companies_id:{$this->getDefaultCompany()}",
+        ]]));
+
+
+
+        if (!$userRole instanceof KanvasObject) {
+
+            $userRole = current(UserRoles::all([], [
+                'conditions' => [
+                    "users_id:{$this->id}", 
+                    "roles_id:{$role->id}",
+                    "apps_id:{$this->di->getApp()->getId()}",
+                    "companies_id:{$this->getDefaultCompany()}",
+            ]]));
+        }
+
+        if (is_object($userRole)) {
+            return  UserRoles::delete($userRole->id, [], []);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the user has this role.
+     *
+     * @param string $role
+     * @return boolean
+     */
+    public function hasRole(string $role): bool
+    {
+        $role = Roles::getByAppName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+
+        if (!is_object($role)) {
+            throw new Exception('Role not found in DB');
+        }
+
+        $userRole = current(UserRoles::all([], [
+            'conditions' => [
+                "users_id:{$this->id}", 
+                "roles_id:{$role->id}",
+                "apps_id:{$role->apps_id}",
+                "companies_id:{$this->getDefaultCompany()}",
+        ]]));
+
+
+        if (!$userRole instanceof KanvasObject) {
+
+            $userRole = current(UserRoles::all([], [
+                'conditions' => [
+                    "users_id:{$this->id}", 
+                    "roles_id:{$role->id}",
+                    "apps_id:{$this->di->getApp()->getId()}",
+                    "companies_id:{$this->getDefaultCompany()}",
+            ]]));
+        }
+
+        if (is_object($userRole)) {
+            return true;
+        }
+
+        return false;
     }
 }
