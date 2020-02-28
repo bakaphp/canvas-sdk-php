@@ -48,7 +48,7 @@ class Roles extends Resource
      * @return object
      */
     public static function getByAppName(string $role, int $currentCompanyId, string $appKey)
-    {   
+    {
         if (strpos($role, '.') === false) {
             throw new Exception('ACL - We are expecting the app for this role');
         }
@@ -64,9 +64,9 @@ class Roles extends Resource
 
         $currentAppRole = current(self::all([], [
             'conditions' => [
-                "companies_id:{$currentCompanyId}", 
+                "companies_id:{$currentCompanyId}",
                 "apps_id:{$app->id}"
-        ]]));
+            ]]));
 
         if ($currentAppRole instanceof KanvasObject) {
             return $currentAppRole;
@@ -74,9 +74,9 @@ class Roles extends Resource
 
         return current(self::all([], [
             'conditions' => [
-                "companies_id:" . self::DEFAULT_ACL_COMPANY_ID, 
-                "apps_id:" . self::DEFAULT_ACL_APP_ID
-        ]]));
+                'companies_id:' . self::DEFAULT_ACL_COMPANY_ID,
+                'apps_id:' . self::DEFAULT_ACL_APP_ID
+            ]]));
     }
 
     /**
@@ -91,40 +91,40 @@ class Roles extends Resource
 
         $role = current(self::all([], [
             'conditions' => [
-                "name:{$name}", 
+                "name:{$name}",
                 "apps_id:{$appsId}",
                 "companies_id:{$currentCompanyId}",
-                "is_deleted:0"
-        ]]));
+                'is_deleted:0'
+            ]]));
 
         if (!$role instanceof KanvasObject) {
-            return current(self::all([], [
+            $role = current(self::all([], [
                 'conditions' => [
-                    "name:{$name}", 
+                    "name:{$name}",
                     "apps_id:{$appsId}",
-                    "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
-                    "is_deleted:0"
-            ]]));
+                    'companies_id:' . self::DEFAULT_ACL_COMPANY_ID,
+                    'is_deleted:0'
+                ]]));
         }
 
         if (!$role instanceof KanvasObject) {
-            return current(self::all([], [
+            $role = current(self::all([], [
                 'conditions' => [
-                    "name:{$name}", 
-                    "apps_id:" . self::DEFAULT_ACL_APP_ID,
+                    "name:{$name}",
+                    'apps_id:' . self::DEFAULT_ACL_APP_ID,
                     "companies_id:{$currentCompanyId}",
-                    "is_deleted:0"
-            ]]));
+                    'is_deleted:0'
+                ]]));
         }
 
         if (!$role instanceof KanvasObject) {
-            return current(self::all([], [
+            $role = current(self::all([], [
                 'conditions' => [
-                    "name:{$name}", 
-                    "apps_id:" . self::DEFAULT_ACL_APP_ID,
-                    "companies_id:" . self::DEFAULT_ACL_COMPANY_ID,
-                    "is_deleted:0"
-            ]]));
+                    "name:{$name}",
+                    'apps_id:' . self::DEFAULT_ACL_APP_ID,
+                    'companies_id:' . self::DEFAULT_ACL_COMPANY_ID,
+                    'is_deleted:0'
+                ]]));
         }
 
         return $role;
