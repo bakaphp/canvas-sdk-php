@@ -77,23 +77,21 @@ trait PermissionsTrait
 
         $role = Roles::getByName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
 
-        $userRole = UserRoles::findFirst([
-            'conditions' => 'users_id = ?0 and roles_id = ?1 and apps_id = ?2 and companies_id = ?3',
-            'bind' => [
-                $this->getId(),
-                $role->getId(),
-                $role->apps_id,
-                $this->currentCompanyId()
-            ]
-        ]);
+        $userRole = current(UserRoles::all([], [
+            'conditions' => [
+                "users_id:{$this->id}",
+                "roles_id:{$role->id}",
+                "apps_id:{$role->apps_id}",
+                "companies_id:{$this->getDefaultCompany()}",
+            ]]));
 
         if (!is_object($userRole)) {
-            $userRole = new UserRoles();
-            $userRole->users_id = $this->getId();
-            $userRole->roles_id = $role->getId();
-            $userRole->apps_id = $role->apps_id;
-            $userRole->companies_id = $this->currentCompanyId();
-            $userRole->saveOrFail();
+            $userRole = UserRoles::create([
+                'users_id' => $this->id,
+                'roles_id' => $role->id,
+                'apps_id' => $role->apps_id,
+                'companies_id' => $this->currentCompanyId()
+            ]);
         }
 
         return true;
@@ -116,23 +114,20 @@ trait PermissionsTrait
 
         $userRole = current(UserRoles::all([], [
             'conditions' => [
-                "users_id:{$this->id}", 
+                "users_id:{$this->id}",
                 "roles_id:{$role->id}",
                 "apps_id:{$role->apps_id}",
                 "companies_id:{$this->getDefaultCompany()}",
-        ]]));
-
-
+            ]]));
 
         if (!$userRole instanceof KanvasObject) {
-
             $userRole = current(UserRoles::all([], [
                 'conditions' => [
-                    "users_id:{$this->id}", 
+                    "users_id:{$this->id}",
                     "roles_id:{$role->id}",
                     "apps_id:{$this->di->getApp()->getId()}",
                     "companies_id:{$this->getDefaultCompany()}",
-            ]]));
+                ]]));
         }
 
         if (is_object($userRole)) {
@@ -158,22 +153,20 @@ trait PermissionsTrait
 
         $userRole = current(UserRoles::all([], [
             'conditions' => [
-                "users_id:{$this->id}", 
+                "users_id:{$this->id}",
                 "roles_id:{$role->id}",
                 "apps_id:{$role->apps_id}",
                 "companies_id:{$this->getDefaultCompany()}",
-        ]]));
-
+            ]]));
 
         if (!$userRole instanceof KanvasObject) {
-
             $userRole = current(UserRoles::all([], [
                 'conditions' => [
-                    "users_id:{$this->id}", 
+                    "users_id:{$this->id}",
                     "roles_id:{$role->id}",
                     "apps_id:{$this->di->getApp()->getId()}",
                     "companies_id:{$this->getDefaultCompany()}",
-            ]]));
+                ]]));
         }
 
         if (is_object($userRole)) {
