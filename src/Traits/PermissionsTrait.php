@@ -75,14 +75,14 @@ trait PermissionsTrait
             $role = $appRole[1];
         }
 
-        $role = Roles::getByName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+        $role = Roles::getByName($role, $this->default_company, getenv('GEWAER_APP_ID'));
 
         $userRole = current(UserRoles::all([], [
             'conditions' => [
                 "users_id:{$this->id}",
                 "roles_id:{$role->id}",
                 "apps_id:{$role->apps_id}",
-                "companies_id:{$this->getDefaultCompany()}",
+                "companies_id:{$this->default_company}",
             ]]));
 
         if (!is_object($userRole)) {
@@ -90,7 +90,7 @@ trait PermissionsTrait
                 'users_id' => $this->id,
                 'roles_id' => $role->id,
                 'apps_id' => $role->apps_id,
-                'companies_id' => $this->currentCompanyId()
+                'companies_id' => $this->default_company
             ]);
         }
 
@@ -106,7 +106,7 @@ trait PermissionsTrait
      */
     public function removeRole(string $role): bool
     {
-        $role = Roles::getByAppName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+        $role = Roles::getByAppName($role, $this->default_company, getenv('GEWAER_APP_ID'));
 
         if (!is_object($role)) {
             throw new Exception('Role not found in DB');
@@ -117,7 +117,7 @@ trait PermissionsTrait
                 "users_id:{$this->id}",
                 "roles_id:{$role->id}",
                 "apps_id:{$role->apps_id}",
-                "companies_id:{$this->getDefaultCompany()}",
+                "companies_id:{$this->default_company}",
             ]]));
 
         if (!$userRole instanceof KanvasObject) {
@@ -126,7 +126,7 @@ trait PermissionsTrait
                     "users_id:{$this->id}",
                     "roles_id:{$role->id}",
                     "apps_id:{$this->di->getApp()->getId()}",
-                    "companies_id:{$this->getDefaultCompany()}",
+                    "companies_id:{$this->default_company}",
                 ]]));
         }
 
@@ -145,7 +145,7 @@ trait PermissionsTrait
      */
     public function hasRole(string $role): bool
     {
-        $role = Roles::getByAppName($role, $this->getDefaultCompany(), getenv('GEWAER_APP_ID'));
+        $role = Roles::getByAppName($role, $this->default_company, getenv('GEWAER_APP_ID'));
 
         if (!is_object($role)) {
             throw new Exception('Role not found in DB');
@@ -156,7 +156,7 @@ trait PermissionsTrait
                 "users_id:{$this->id}",
                 "roles_id:{$role->id}",
                 "apps_id:{$role->apps_id}",
-                "companies_id:{$this->getDefaultCompany()}",
+                "companies_id:{$this->default_company}",
             ]]));
 
         if (!$userRole instanceof KanvasObject) {
@@ -165,7 +165,7 @@ trait PermissionsTrait
                     "users_id:{$this->id}",
                     "roles_id:{$role->id}",
                     "apps_id:{$this->di->getApp()->getId()}",
-                    "companies_id:{$this->getDefaultCompany()}",
+                    "companies_id:{$this->default_company}",
                 ]]));
         }
 
