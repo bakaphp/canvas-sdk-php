@@ -64,6 +64,7 @@ class Roles extends Resource
 
         $currentAppRole = current(self::all([], [
             'conditions' => [
+                "name:{$role}",
                 "companies_id:{$currentCompanyId}",
                 "apps_id:{$app->id}"
             ]]));
