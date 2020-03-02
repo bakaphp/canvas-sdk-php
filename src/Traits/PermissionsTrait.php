@@ -10,6 +10,7 @@ use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\UserRoles;
 use Phalcon\Di;
+use Canvas\Models\UserRoles as CanvasUserRoles;
 
 /**
  * Trait FractalTrait.
@@ -132,7 +133,26 @@ trait PermissionsTrait
         }
 
         if (is_object($userRole)) {
-            return  UserRoles::delete($userRole->id, [], []);
+            /**
+             * @todo Can't delete because Users Role is table with compound primary keys
+             */
+            // return  UserRoles::delete($userRole->id, [], []);
+
+            /**
+             * Have to resort to searching on Canvas User Roles to delete. Notice that both the skeleton project and sdk have to be connected to the same canvas database
+             * since Canvas User Role should be updated or deleted in one place.
+             */
+            $canvasUserRole = CanvasUserRoles::findFirst([
+                'conditions' => 'users_id = ?0 and roles_id = ?1 and apps_id = ?2 and companies_id = ?3',
+                'bind' => [
+                    $userRole->users_id,
+                    $userRole->roles_id,
+                    $userRole->apps_id,
+                    $userRole->companies_id
+                ]
+            ]);
+
+            return $canvasUserRole->delete();
         }
 
         return false;
