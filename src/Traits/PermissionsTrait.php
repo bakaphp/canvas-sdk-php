@@ -9,6 +9,7 @@ use Kanvas\Sdk\Roles;
 use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\UserRoles;
+use Phalcon\Di;
 
 /**
  * Trait FractalTrait.
@@ -125,7 +126,7 @@ trait PermissionsTrait
                 'conditions' => [
                     "users_id:{$this->id}",
                     "roles_id:{$role->id}",
-                    "apps_id:{$this->di->getApp()->getId()}",
+                    'apps_id:' . Di::getDefault()->getApp()->getId(),
                     "companies_id:{$this->default_company}",
                 ]]));
         }
@@ -164,7 +165,7 @@ trait PermissionsTrait
                 'conditions' => [
                     "users_id:{$this->id}",
                     "roles_id:{$role->id}",
-                    "apps_id:{$this->di->getApp()->getId()}",
+                    'apps_id:' . Di::getDefault()->getApp()->getId(),
                     "companies_id:{$this->default_company}",
                 ]]));
         }
