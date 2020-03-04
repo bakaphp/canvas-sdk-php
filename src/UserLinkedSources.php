@@ -15,9 +15,9 @@ use Kanvas\Sdk\Util\Util;
 /**
  * System Modules Resource
  */
-class UserRoles extends Resource
+class UserLinkedSources extends Resource
 {
-    const OBJECT_NAME = 'users-roles';
+    const OBJECT_NAME = 'users-linked-sources';
 
     use All;
     use Create;
