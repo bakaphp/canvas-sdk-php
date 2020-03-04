@@ -10,6 +10,7 @@ use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\UserRoles;
 use Phalcon\Di;
+use Canvas\Models\UserRoles as CanvasUserRoles;
 
 /**
  * Trait FractalTrait.
