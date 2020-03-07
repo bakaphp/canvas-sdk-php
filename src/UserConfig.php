@@ -15,9 +15,9 @@ use Kanvas\Sdk\Util\Util;
 /**
  * System Modules Resource
  */
-class UserRoles extends Resource
+class UserConfig extends Resource
 {
-    const OBJECT_NAME = 'users-roles';
+    const OBJECT_NAME = 'users-config';
 
     use All;
     use Create;
