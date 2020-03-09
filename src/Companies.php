@@ -18,11 +18,16 @@ use Kanvas\Sdk\UsersAssociatedCompanies;
 use Kanvas\Sdk\UsersAssociatedApps;
 use Kanvas\Sdk\UserCompanyApps;
 use Kanvas\Sdk\CompaniesAssociations;
+use Kanvas\Sdk\Subscription;
+use Kanvas\Sdk\UserWebhooks;
+use Kanvas\Sdk\FileSystemEntities;
+use Kanvas\Sdk\SystemModules;
 use Kanvas\Sdk\Users;
 
 class Companies extends Resource
 {
     const OBJECT_NAME = 'companies';
+    const CANVAS_PATH = 'Canvas\Models\Companies';
 
     use All;
     use Create;
@@ -130,8 +135,6 @@ class Companies extends Resource
         return UsersAssociatedApps::all([], ['conditions' => ["users_id:{$user->id}","apps_id:{$appsId}"]]);
     }
 
-    //////////////////////////////////////////////////////////
-
     /**
      * Get the company's branch.
      *
@@ -178,15 +181,28 @@ class Companies extends Resource
         return CompaniesAssociations::all([], ['conditions' => ["companies_id:{$user->default_company}"]]);
     }
 
+
+
+    ////////////////////////////////////////////////////////////////////////
+
     /**
      * Get the company's users.
      *
-     * @return KanvasObject
+     * @return array
      */
-    public function getUsers(): KanvasObject
+    public function getUsers(): array
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $usersArray = [];
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $userAssocApps = UsersAssociatedApps::all([], ['conditions' => ["companies_id:{$user->default_company}","apps_id:{$appsId}","is_deleted:0"]]);
+        
+        foreach ($userAssocApps as $userAssocApp) {
+            $userAssoc = current(Users::all([], ['conditions' => ["id:{$userAssocApp->users_id}"]]));
+            $usersArray[] = $userAssoc;
+        }
+        
+        return $usersArray;
     }
 
     /**
@@ -196,30 +212,44 @@ class Companies extends Resource
      */
     public function getSubscription(): KanvasObject
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        return current(Subscription::all([], [
+            'conditions' => [
+                "companies_id:{$user->default_company}",
+                "apps_id:{$appsId}",
+                "is_deleted:0"],
+            'sort' => 'id|desc'
+        ]));
     }
 
     /**
      * Get the company's subscriptions.
      *
-     * @return KanvasObject
+     * @return array
      */
-    public function getSubscriptions(): KanvasObject
+    public function getSubscriptions(): array
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        return Subscription::all([], [
+            'conditions' => [
+                "companies_id:{$user->default_company}",
+                "apps_id:{$appsId}",
+                "is_deleted:0"],
+            'sort' => 'id|desc'
+        ]);
     }
 
     /**
      * Get the company's user webhooks.
      *
-     * @return KanvasObject
+     * @return array
      */
-    public function getUserWebhooks(): KanvasObject
+    public function getUserWebhooks(): array
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $user = Users::getSelf();
+        return UserWebhooks::all([], ['conditions' => ["companies_id:{$user->default_company}"]]);
     }
 
     /**
@@ -229,8 +259,10 @@ class Companies extends Resource
      */
     public function getFiles(): KanvasObject
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
+        return current(FileSystemEntities::all([], ['conditions' => ["entity_id:{$user->default_company}", "system_modules_id:{$systemModule->id}"]]));
     }
 
     /**
@@ -240,7 +272,9 @@ class Companies extends Resource
      */
     public function getLogo(): KanvasObject
     {
-        $user = self::getSelf();
-        return current(Sessions::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
+        return current(FileSystemEntities::all([], ['conditions' => ["entity_id:{$user->default_company}", "system_modules_id:{$systemModule->id}"]]));
     }
 }
