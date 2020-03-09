@@ -181,10 +181,6 @@ class Companies extends Resource
         return CompaniesAssociations::all([], ['conditions' => ["companies_id:{$user->default_company}"]]);
     }
 
-
-
-    ////////////////////////////////////////////////////////////////////////
-
     /**
      * Get the company's users.
      *
