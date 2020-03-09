@@ -15,6 +15,7 @@ use Kanvas\Sdk\Util\Util;
 use Kanvas\Sdk\Roles;
 use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\Traits\PermissionsTrait;
+use Kanvas\Sdk\Traits\FileSystemModelTrait;
 use Kanvas\Sdk\Companies;
 use Kanvas\Sdk\UserWebhooks;
 use Kanvas\Sdk\FileSystemEntities;
@@ -25,7 +26,6 @@ use Kanvas\Sdk\UsersAssociatedApps;
 use Kanvas\Sdk\UserLinkedSources;
 use Kanvas\Sdk\UserConfig;
 use Kanvas\Sdk\Sessions;
-
 
 class Users extends Resource
 {
@@ -69,7 +69,7 @@ class Users extends Resource
     }
 
     /**
-     * Get the current User's sources
+     * Get the current User's sources.
      *
      * @return KanvasObject
      */
@@ -80,7 +80,7 @@ class Users extends Resource
     }
 
     /**
-     * Get the current User's sources
+     * Get the current User's sources.
      *
      * @return array
      */
@@ -91,7 +91,7 @@ class Users extends Resource
     }
 
     /**
-     * Get the current User's sources
+     * Get the current User's sources.
      *
      * @return array
      */
@@ -102,7 +102,7 @@ class Users extends Resource
     }
 
     /**
-     * Get the current User's sources
+     * Get the current User's sources.
      *
      * @return array
      */
@@ -213,7 +213,7 @@ class Users extends Resource
     }
 
     /**
-     * Get user's roles
+     * Get user's roles.
      * @return array
      */
     public function getRoles(): array
