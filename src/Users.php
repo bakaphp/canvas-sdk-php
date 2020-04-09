@@ -120,7 +120,7 @@ class Users extends Resource
     public function getDefaultCompany(): KanvasObject
     {
         $user = self::getSelf();
-        return current(Companies::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        return Companies::retrieve((string) $user->default_company);
     }
 
     /**
@@ -130,8 +130,7 @@ class Users extends Resource
      */
     public function getCurrentCompany(): KanvasObject
     {
-        $user = self::getSelf();
-        return current(Companies::all([], ['conditions' => ["users_id:{$user->id}"]]));
+        return $this->getDefaultCompany();
     }
 
     /**
