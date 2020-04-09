@@ -117,7 +117,7 @@ class Users extends Resource
      *
      * @return KanvasObject
      */
-    public function getDefaultCompany(): KanvasObject
+    public function getDefaultCompany(): Companies
     {
         $user = self::getSelf();
         return Companies::retrieve((string) $user->default_company);
@@ -128,7 +128,7 @@ class Users extends Resource
      *
      * @return KanvasObject
      */
-    public function getCurrentCompany(): KanvasObject
+    public function getCurrentCompany(): Companies
     {
         return $this->getDefaultCompany();
     }
