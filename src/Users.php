@@ -124,6 +124,16 @@ class Users extends Resource
     }
 
     /**
+     * Get the company Id
+     *
+     * @return void
+     */
+    public function getCompanyId(): int
+    {
+        return (int) self::getSelf()->default_company;
+    }
+
+    /**
      * Get the current company of the the current user.
      *
      * @return KanvasObject

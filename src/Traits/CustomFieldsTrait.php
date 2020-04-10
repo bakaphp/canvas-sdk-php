@@ -47,12 +47,13 @@ trait CustomFieldsTrait
             [
                 'params' => [
                     'conditions' => 'model_name = :model_name: AND companies_id = :companies_id:',
+                    'columns' => 'name, label, value',
                     'bind' => [
                         'model_name' => get_class($this),
-                        'companies_id' => Users::getSelf()->default_company
+                        'companies_id' => $this->companies_id,
                     ]
                 ],
-                'alias' => 'customFields'
+                'alias' => 'custom_fields'
             ]
         );
     }
@@ -335,7 +336,7 @@ trait CustomFieldsTrait
      * @param array $fields
      * @return void
      */
-    public function setCustomFields(array $fields): void
+    public function setCustomFields($fields): void
     {
         $this->customFields = $fields;
     }
