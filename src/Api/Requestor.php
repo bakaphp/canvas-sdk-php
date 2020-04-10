@@ -6,11 +6,11 @@ use Exception as GlobalException;
 use Kanvas\Sdk\Exception;
 use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\HttpClient\GuzzleClient;
-use Canvas\Http\Exception\InternalServerErrorException;
+/* use Canvas\Http\Exception\InternalServerErrorException;
 use Canvas\Http\Exception\AuthenticationException;
 use Canvas\Http\Exception\NotFoundException;
 use Canvas\Http\Exception\BadRequestException;
-use Canvas\Http\Exception\ForbiddenException;
+use Canvas\Http\Exception\ForbiddenException; */
 
 /**
  * Class Requestor.
@@ -135,16 +135,16 @@ class Requestor
         $declineCode = isset($errorData['decline_code']) ? $errorData['decline_code'] : null;
 
         switch ($rcode) {
-            case 400:
+          /*   case 400:
                 return new BadRequestException($msg);
             case 404:
                 return new NotFoundException($msg);
             case 401:
                 return new AuthenticationException($msg);
             case 403:
-                return new ForbiddenException($msg);
+                return new ForbiddenException($msg); */
             default:
-                return new InternalServerErrorException($msg);
+                return new GlobalException($msg);
         }
     }
 
