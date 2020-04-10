@@ -17,7 +17,7 @@ trait Retrieve
      *
      * @return object stdClass
      */
-    public static function retrieve( string $id, $params = null, $opts = null): object
+    public static function retrieve(string $id, $params = null, $opts = null): object
     {
         self::_validateParams($params);
         $url = self::instanceUrl($id);

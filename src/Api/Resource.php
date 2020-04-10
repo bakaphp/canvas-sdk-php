@@ -10,7 +10,7 @@ use Kanvas\Sdk\Exception\UnexpectedValueException;
 use Kanvas\Sdk\Util\Set;
 
 /**
- * Class Resource
+ * Class Resource.
  *
  * @package Kanvas
  */
@@ -44,7 +44,7 @@ abstract class Resource extends KanvasObject
     }
 
     /**
-     * Setter
+     * Setter.
      *
      * @param string $k
      * @param string $v
@@ -106,7 +106,7 @@ abstract class Resource extends KanvasObject
     {
         if ($id === null) {
             $class = get_called_class();
-            $message = "Could not determine which URL to request: "
+            $message = 'Could not determine which URL to request: '
                . "$class instance has invalid ID: $id";
             throw new UnexpectedValueException($message);
         }
@@ -124,5 +124,13 @@ abstract class Resource extends KanvasObject
         return static::resourceUrl($id);
     }
 
-
+    /**
+     * Get the primary key
+     *
+     * @return void
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

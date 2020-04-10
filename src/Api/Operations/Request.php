@@ -21,7 +21,7 @@ trait Request
     protected static function _validateParams($params = null): void
     {
         if ($params && !is_array($params)) {
-            $message = 'You must pass an array as the first argument to Stripe API '
+            $message = 'You must pass an array as the first argument to Kanvas API '
                . 'method calls.';
             throw new \Kanvas\Sdk\Exception\Api($message);
         }

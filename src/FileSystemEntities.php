@@ -38,10 +38,10 @@ class FileSystemEntities extends Resource
      */
     public static function getByIdWithSystemModule(int $id, int $systemModulesId, int $appId, int $currentCompanyId)
     {
-        $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
+        $filesystem = Filesystem::find(['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
 
         foreach ($filesystem as $file) {
-            $filesystemEntity = current(self::all([],["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
+            $filesystemEntity = current(self::find(["conditions"=>["id:{$id}","system_modules_id:{$systemModulesId}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
             if ($filesystemEntity instanceof KanvasObject) {
                 return $filesystemEntity;
             }
@@ -56,10 +56,10 @@ class FileSystemEntities extends Resource
     public static function getAllByEntityId(int $id, int $appId, int $currentCompanyId)
     {
         $entitiesArray = [];
-        $filesystem = Filesystem::all([], ['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
+        $filesystem = Filesystem::find(['conditions'=> ["apps_id:{$appId}","is_deleted:0"]]);
 
         foreach ($filesystem as $file) {
-            $filesystemEntity = current(self::all([],["conditions"=>["entity_id:{$id}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
+            $filesystemEntity = current(self::find(["conditions"=>["entity_id:{$id}","companies_id:{$currentCompanyId}","filesystem_id:{$file->id}","is_deleted:0"]]));
             if ($filesystemEntity instanceof KanvasObject) {
                 $entitiesArray[] = $filesystemEntity;
             }

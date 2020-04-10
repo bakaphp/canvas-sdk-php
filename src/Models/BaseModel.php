@@ -32,7 +32,7 @@ abstract class BaseModel
      */
     public static function find($params = null, $opts = null)
     {
-        return static::getSource()::all([], is_null($params) ? [] : Util::convertParams($params));
+        return static::getSource()::find(is_null($params) ? [] : Util::convertParams($params), []);
     }
 
     /**
@@ -48,6 +48,6 @@ abstract class BaseModel
         if (!is_array($params)) {
             return static::getSource()::retrieve(strval($params), [], []);
         }
-        return current(static::getSource()::all([], Util::convertParams($params)));
+        return current(static::getSource()::find(Util::convertParams($params)), []);
     }
 }
