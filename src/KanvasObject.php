@@ -84,6 +84,16 @@ class KanvasObject implements JsonSerializable
     }
 
     /**
+     * Get the primary id
+     *
+     * @return void
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Function to get the value in the property _values of this object.
      *
      * @return array

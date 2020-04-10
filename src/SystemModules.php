@@ -34,6 +34,6 @@ class SystemModules extends Resource
      */
     public static function getSystemModuleByModelName(string $modelName, int $appsId): object
     {
-        return current(self::all([], ['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
+        return current(self::find(['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
     }
 }

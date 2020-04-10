@@ -9,6 +9,7 @@ use Kanvas\Sdk\CustomFieldsModules;
 use Kanvas\Sdk\CustomFieldsValues;
 use Kanvas\Sdk\CustomFieldsTypes;
 use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\Users;
 
@@ -22,12 +23,12 @@ trait CustomFieldsTrait
     /**
      * Custom Fields.
      */
-    public $custom_fields = [];
+    public $customFields = [];
 
     /**
      * Record Id.
      */
-    public $record_id = NULL;
+    public $record_id = null;
 
     /**
      * Verify if Custom Fields Module exists.
@@ -35,9 +36,9 @@ trait CustomFieldsTrait
      */
     public function customFieldsModuleExists()
     {
-        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
 
-        $customFieldsModule = current(CustomFieldsModules::all([], ['conditions' => [
+        $customFieldsModule = current(CustomFieldsModules::find(['conditions' => [
             "apps_id:{$appsId}",
             'name:' . get_class(new self()),
             'model_name:' . get_class(new self()),
@@ -97,14 +98,12 @@ trait CustomFieldsTrait
      */
     public function getCustomField(string $name, int $customFieldsModuleId)
     {
-        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        $usersId = Users::getSelf()->id;
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
         $companiesId = Users::getSelf()->default_company;
 
-        return current(CustomFields::all([], ['conditions' => [
-            "name:{$name}",
+        return current(CustomFields::find(['conditions' => [
+            "label:{$name}",
             "companies_id:{$companiesId}",
-            "users_id:{$usersId}",
             "apps_id:{$appsId}",
             "custom_fields_modules_id:{$customFieldsModuleId}",
             'is_deleted:0'
@@ -120,13 +119,32 @@ trait CustomFieldsTrait
      */
     public function getAllCustomFields()
     {
-        $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
         $usersId = Users::getSelf()->id;
         $companiesId = Users::getSelf()->default_company;
 
-        return CustomFields::all([], ['conditions' => [
+        return CustomFields::find(['conditions' => [
             "companies_id:{$companiesId}",
-            "users_id:{$usersId}",
+            "apps_id:{$appsId}",
+            'is_deleted:0'
+        ]]);
+    }
+
+    /**
+     * Get all Custom Fields.
+     * @param string $name
+     * @param int $fieldTypeId
+     * @param int $customFieldsModuleId
+     * @return Kanvas\Sdk\KanvasObject
+     */
+    public function getAllCustomFieldsBySystemModule()
+    {
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $usersId = Users::getSelf()->id;
+        $companiesId = Users::getSelf()->default_company;
+
+        return CustomFields::find(['conditions' => [
+            "companies_id:{$companiesId}",
             "apps_id:{$appsId}",
             'is_deleted:0'
         ]]);
@@ -139,15 +157,21 @@ trait CustomFieldsTrait
      * @param mixed $value
      * @return Kanvas\Sdk\KanvasObject
      */
-    public function createCustomFieldValue(int $customFieldId, string $label, $value)
+    public function createCustomFieldValue(string $label, string $value)
     {
-        return CustomFieldsValues::create([
-            'custom_fields_id' => $customFieldId,
-            'label' => $label,
-            'value' => $value,
-            'is_default' => 1,
-            'is_deleted' => 0,
-        ]);
+        if ($customFieldModule = $this->getCustomFieldModuleBySelf()) {
+            if ($customField = $this->getCustomField($label, (int) $customFieldModule->getId())) {
+                return CustomFieldsValues::create([
+                    'custom_fields_id' => $customField->getId(),
+                    'label' => $label,
+                    'value' => $value,
+                    'is_default' => 1,
+                    'is_deleted' => 0,
+                ]);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -159,7 +183,7 @@ trait CustomFieldsTrait
      */
     public function getCustomFieldTypeByName(string $name)
     {
-        return current(CustomFieldsTypes::all([], ['conditions' => [
+        return current(CustomFieldsTypes::find(['conditions' => [
             "name:{$name}",
             'is_deleted:0'
         ]]));
@@ -174,7 +198,26 @@ trait CustomFieldsTrait
      */
     public function getAllCustomFieldsTypes()
     {
-        return CustomFieldsTypes::all([], ['conditions' => ['is_deleted:0']]);
+        return CustomFieldsTypes::find(['conditions' => ['is_deleted:0']]);
+    }
+
+    /**
+     * Get the custom field module by this model.
+     * @return mixed
+     */
+    public function getCustomFieldModuleBySelf()
+    {
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+
+        $customFieldsModule = current(CustomFieldsModules::find([
+            'conditions' => [
+                "apps_id:{$appsId}",
+                'model_name:' . get_class(new self()),
+                'is_deleted:0'
+            ]
+        ]));
+
+        return $customFieldsModule instanceof KanvasObject ? $customFieldsModule : false;
     }
 
     /**
@@ -183,17 +226,30 @@ trait CustomFieldsTrait
      */
     public function processCustomFields()
     {
-        $customFieldModule = $this->customFieldsModuleExists();
-        if (!$customFieldModule) {
-            $customFieldModule = $this->createCustomFieldsModule(get_class(new self()));
+        foreach ($this->customFields as $key => $value) {
+            $this->createCustomFieldValue($key, $value);
         }
+    }
 
-        foreach ($this->custom_fields as $key => $value) {
-            if (!$customField = $this->getCustomField($key, (int)$customFieldModule->id)) {
-                $customField = $this->createCustomField($key, (int)$this->getCustomFieldTypeByName(gettype($value))->id, (int)$customFieldModule->id);
-            }
+    /**
+     * Set the custom field to update a custom field module.
+     *
+     * @param array $fields
+     * @return void
+     */
+    public function setCustomFields(array $fields): void
+    {
+        $this->customFields = $fields;
+    }
 
-            $this->createCustomFieldValue($customField->id, $customField->label, $value);
-        }
+    /**
+     * After the module was created we need to add it custom fields.
+     *
+     * @return  void
+     */
+    public function afterCreate()
+    {
+        $this->processCustomFields();
+        unset($this->customFields);
     }
 }

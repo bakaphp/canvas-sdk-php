@@ -36,7 +36,7 @@ class Roles extends Resource
     public static function getUserRole(int $appId)
     {
         $currentCompanyId = Users::getSelf()->default_company;
-        return current(self::all([], ['conditions' => ["companies_id:{$currentCompanyId}", "apps_id:{$appId}", 'is_deleted:0']]));
+        return current(self::find(['conditions' => ["companies_id:{$currentCompanyId}", "apps_id:{$appId}", 'is_deleted:0']]));
     }
 
     /**
@@ -62,7 +62,7 @@ class Roles extends Resource
             throw new Exception('ACL - No app found for this role');
         }
 
-        $currentAppRole = current(self::all([], [
+        $currentAppRole = current(self::find([
             'conditions' => [
                 "name:{$role}",
                 "companies_id:{$currentCompanyId}",
@@ -73,7 +73,7 @@ class Roles extends Resource
             return $currentAppRole;
         }
 
-        return current(self::all([], [
+        return current(self::find([
             'conditions' => [
                 'companies_id:' . self::DEFAULT_ACL_COMPANY_ID,
                 'apps_id:' . self::DEFAULT_ACL_APP_ID
@@ -90,7 +90,7 @@ class Roles extends Resource
     {
         $appsId = Apps::getIdByKey($appKey);
 
-        $role = current(self::all([], [
+        $role = current(self::find([
             'conditions' => [
                 "name:{$name}",
                 "apps_id:{$appsId}",
@@ -99,7 +99,7 @@ class Roles extends Resource
             ]]));
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::all([], [
+            $role = current(self::find([
                 'conditions' => [
                     "name:{$name}",
                     "apps_id:{$appsId}",
@@ -109,7 +109,7 @@ class Roles extends Resource
         }
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::all([], [
+            $role = current(self::find([
                 'conditions' => [
                     "name:{$name}",
                     'apps_id:' . self::DEFAULT_ACL_APP_ID,
@@ -119,7 +119,7 @@ class Roles extends Resource
         }
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::all([], [
+            $role = current(self::find([
                 'conditions' => [
                     "name:{$name}",
                     'apps_id:' . self::DEFAULT_ACL_APP_ID,
