@@ -33,7 +33,7 @@ class AuthCest
     public function onConstruct(): void
     {
         $this->random =  new Random();
-        Kanvas::setApiKey($this->random->base58());
+        Kanvas::setApiKey(getenv('KANVAS_SDK_API_KEY'));
         $this->auth = Auth::auth(['email'=> 'nobody@baka.io','password'=>'bakatest123567']);
         $this->userEmail = 'example-'. $this->random->base58() .'@gmail.com';
         $this->userPassword = $this->random->base58();
@@ -48,7 +48,7 @@ class AuthCest
      */
     public function setupApiKey(IntegrationTester $I)
     {
-        Kanvas::setApiKey($this->random->base58());
+        Kanvas::setApiKey(getenv('KANVAS_SDK_API_KEY'));
         $I->assertTrue(gettype(Kanvas::getApiKey()) == 'string');
     }
 
