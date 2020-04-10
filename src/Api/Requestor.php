@@ -2,9 +2,15 @@
 
 namespace Kanvas\Sdk\Api;
 
+use Exception as GlobalException;
 use Kanvas\Sdk\Exception;
 use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\HttpClient\GuzzleClient;
+use Canvas\Http\Exception\InternalServerErrorException;
+use Canvas\Http\Exception\AuthenticationException;
+use Canvas\Http\Exception\NotFoundException;
+use Canvas\Http\Exception\BadRequestException;
+use Canvas\Http\Exception\ForbiddenException;
 
 /**
  * Class Requestor.
@@ -99,23 +105,47 @@ class Requestor
      */
     public function handleErrorResponse($rbody, $rcode, $rheaders, $resp)
     {
-        if (!is_array($resp) || !isset($resp['error'])) {
+        if (!is_array($resp) || !isset($resp['errors']['message'])) {
             $msg = "Invalid response object from API: $rbody "
               . "(HTTP response code was $rcode)";
             throw new Exception\Api($msg, $rcode, $rbody, $resp, $rheaders);
         }
 
-        $errorData = $resp['error'];
+        $errorData = $resp['errors']['message'] . ' - Kanvas SDK';
+        throw self::_specificAPIError($rbody, $rcode, $rheaders, $resp, $errorData);
+    }
 
-        $error = null;
-        if (is_string($errorData)) {
-            $error = self::_specificOAuthError($rbody, $rcode, $rheaders, $resp, $errorData);
-        }
-        if (!$error) {
-            $error = self::_specificAPIError($rbody, $rcode, $rheaders, $resp, $errorData);
-        }
+    /**
+     * @static
+     *
+     * @param string $rbody
+     * @param int    $rcode
+     * @param array  $rheaders
+     * @param array  $resp
+     * @param array  $errorData
+     *
+     * @return Exception\ApiErrorException
+     */
+    private static function _specificAPIError($rbody, $rcode, $rheaders, $resp, $errorData)
+    {
+        $msg = $errorData;
+        $param = isset($errorData['param']) ? $errorData['param'] : null;
+        $code = isset($errorData['code']) ? $errorData['code'] : null;
+        $type = isset($errorData['type']) ? $errorData['type'] : null;
+        $declineCode = isset($errorData['decline_code']) ? $errorData['decline_code'] : null;
 
-        throw $error;
+        switch ($rcode) {
+            case 400:
+                return new BadRequestException($msg);
+            case 404:
+                return new NotFoundException($msg);
+            case 401:
+                return new AuthenticationException($msg);
+            case 403:
+                return new ForbiddenException($msg);
+            default:
+                return new InternalServerErrorException($msg);
+        }
     }
 
     /**
@@ -131,6 +161,7 @@ class Requestor
     {
         $defaultHeaders = [
             'Authorization' => Kanvas::getAuthToken(),
+            'KanvasKey' => $apiKey,
             'Key' => $apiKey,
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
@@ -175,13 +206,17 @@ class Requestor
 
         $hasFile = false;
 
-        $response = $this->httpClient()->request(
-            $method,
-            $absoluteUrl,
-            $defaultHeaders,
-            $body,
-            $hasFile
-        );
+        try {
+            $response = $this->httpClient()->request(
+                $method,
+                $absoluteUrl,
+                $defaultHeaders,
+                $body,
+                $hasFile
+            );
+        } catch (GlobalException $e) {
+            $response = $e->getResponse();
+        }
 
         $rbody = $response->getBody();
         $rcode = $response->getStatusCode();
@@ -203,6 +238,7 @@ class Requestor
     {
         $resp = json_decode($rbody, true);
         $jsonError = json_last_error();
+
         if ($resp === null && $jsonError !== JSON_ERROR_NONE) {
             $msg = "Invalid response body from API: $rbody "
               . "(HTTP response code was $rcode, json_last_error() was $jsonError)";
