@@ -55,7 +55,7 @@ class UsersCest
     public function onConstruct(): void
     {
         $this->random =  new Random();
-        Kanvas::setApiKey($this->random->base58());
+        Kanvas::setApiKey(getenv('KANVAS_SDK_API_KEY'));
         Auth::auth(['email'=> getenv('TEST_USER_EMAIL'),'password'=>getenv('TEST_USER_PASS')]);
         $this->userEmail = 'example-'. $this->random->base58() .'@gmail.com';
         $this->userPassword = $this->random->base58();
