@@ -49,9 +49,9 @@ class Kanvas
      */
     public function setKanvasApiUrl(): void
     {
-        self::$apiBase = !empty(getenv('KANVAS_API_URL')) ? getenv('KANVAS_API_URL') : 'https://api.kanvas.dev';
-        self::$connectBase = !empty(getenv('KANVAS_API_URL')) ? getenv('KANVAS_API_URL') : 'https://api.kanvas.dev';
-        self::$apiUploadBase = !empty(getenv('KANVAS_API_URL')) ? getenv('KANVAS_API_URL') : 'https://api.kanvas.dev';
+        self::$apiBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
+        self::$connectBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
+        self::$apiUploadBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
     }
 
     /**
