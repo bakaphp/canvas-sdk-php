@@ -274,6 +274,10 @@ trait CustomFieldsTrait
         $customFieldsAvailable = $this->getCustomFields();
         $customFieldsKeys = [];
 
+        if (empty($customFieldsAvailable)) {
+            return ;
+        }
+
         foreach ($customFieldsAvailable as $key => $value) {
             $customFieldsKeys[$value->label] = $value->name;
         }
