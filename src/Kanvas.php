@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Kanvas\Sdk;
 
 use Kanvas\Sdk\Util\LoggerInterface;
+use function Kanvas\Sdk\Core\envValue;
 
 /**
- * Canvas class
+ * Canvas class.
 */
 class Kanvas
 {
@@ -16,11 +17,11 @@ class Kanvas
     // @var string The kanvas client_id to be used for Connect requests.
     public static $clientId;
     // @var string The base URL for the kanvas API.
-    public static $apiBase = 'https://apidev.kanvas.dev';
+    public static $apiBase = null;
     // @var string The base URL for the OAuth API.
-    public static $connectBase = 'https://apidev.kanvas.dev';
+    public static $connectBase = null;
     // @var string The base URL for the kanvas API uploads endpoint.
-    public static $apiUploadBase = 'https://apidev.kanvas.dev';
+    public static $apiUploadBase = null;
     // @var string|null The version of the kanvas API to use for requests.
     public static $apiVersion = null;
     // @var string|null The account ID for connected accounts requests.
@@ -31,7 +32,7 @@ class Kanvas
     public static $verifySslCerts = true;
 
     /**
-     * Logger library
+     * Logger library.
      *
      * @var DefaultLogger
      */
@@ -40,6 +41,18 @@ class Kanvas
     public static $authToken;
 
     const VERSION = '0.1.0';
+
+    /**
+     * Get Kanvas API URL.
+     *
+     * @return string
+     */
+    public function setKanvasApiUrl(): void
+    {
+        self::$apiBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
+        self::$connectBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
+        self::$apiUploadBase = envValue('KANVAS_API_URL', 'https://api.kanvas.dev');
+    }
 
     /**
      * @return string The API key used for requests.
@@ -87,6 +100,7 @@ class Kanvas
      */
     public static function setApiKey(string $apiKey): void
     {
+        self::setKanvasApiUrl();
         self::$apiKey = $apiKey;
     }
 
