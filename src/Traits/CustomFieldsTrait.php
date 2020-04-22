@@ -34,7 +34,7 @@ trait CustomFieldsTrait
     public $record_id = null;
 
     /**
-     * Set custom fields relationship
+     * Set custom fields relationship.
      *
      * @return void
      */
@@ -171,14 +171,16 @@ trait CustomFieldsTrait
     {
         $appsId = Apps::getIdByKey(Kanvas::getApiKey());
         $companiesId = Users::getSelf()->default_company;
-        $customFieldModule = $this->getCustomFieldByModel();
+        if ($customFieldModule = $this->getCustomFieldByModel()) {
+            return CustomFields::find(['conditions' => [
+                "companies_id:{$companiesId}",
+                "apps_id:{$appsId}",
+                "custom_fields_modules_id:{$customFieldModule->getId()}",
+                'is_deleted:0'
+            ]]);
+        }
 
-        return CustomFields::find(['conditions' => [
-            "companies_id:{$companiesId}",
-            "apps_id:{$appsId}",
-            "custom_fields_modules_id:{$customFieldModule->getId()}",
-            'is_deleted:0'
-        ]]);
+        return false;
     }
 
     /**
@@ -272,6 +274,11 @@ trait CustomFieldsTrait
     protected function saveCustomFields(): void
     {
         $customFieldsAvailable = $this->getCustomFields();
+
+        if (empty($customFieldsAvailable)) {
+            return;
+        }
+
         $customFieldsKeys = [];
 
         foreach ($customFieldsAvailable as $key => $value) {
@@ -310,7 +317,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Delete all custom field value from this entity
+     * Delete all custom field value from this entity.
      *
      * @return void
      */
@@ -353,7 +360,7 @@ trait CustomFieldsTrait
     }
 
     /**
-     * Before delete remove content
+     * Before delete remove content.
      *
      * @return void
      */
