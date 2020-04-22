@@ -18,7 +18,7 @@ use Canvas\Http\Exception\InternalServerErrorException;
  * @property \Phalcon\Di $di
  *
  */
-trait AuthTrait
+trait ApiKeyTrait
 {
     /**
      * Validate if KANVAS_SDK_API_KEY is set. If set then return the value.
