@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Traits;
 
-use Canvas\Http\Exception\InternalServerErrorException;
+use Exception;
 
 /**
  * Trait ResponseTrait.
@@ -24,10 +24,10 @@ trait ApiKeyTrait
      * Validate if KANVAS_SDK_API_KEY is set. If set then return the value.
      * @return string
      */
-    private function validateSdkKey(): string
+    protected function getSdkKey(): string
     {
         if (empty(getenv('KANVAS_SDK_API_KEY'))) {
-            throw new InternalServerErrorException('App needs to set KANVAS_SDK_API_KEY environmental variables to Run. Please review your enviorment variables.');
+            throw new Exception('App needs to set KANVAS_SDK_API_KEY environmental variables to Run. Please review your enviorment variables.');
         }
 
         return getenv('KANVAS_SDK_API_KEY');
