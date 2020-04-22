@@ -22,10 +22,9 @@ trait ApiKeyTrait
 {
     /**
      * Validate if KANVAS_SDK_API_KEY is set. If set then return the value.
-     * @param string $sdkApiKey
      * @return string
      */
-    private function validateSdkKey(string $sdkApiKey): string
+    private function validateSdkKey(): string
     {
         if (empty(getenv('KANVAS_SDK_API_KEY'))) {
             throw new InternalServerErrorException('App needs to set KANVAS_SDK_API_KEY environmental variables to Run. Please review your enviorment variables.');
