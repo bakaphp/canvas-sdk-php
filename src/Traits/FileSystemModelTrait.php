@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Kanvas\Sdk\Traits;
 
 use Exception;
-use Kanvas\Sdk\SystemModules;
-use Kanvas\Sdk\FileSystem;
 use Kanvas\Sdk\Apps;
-use Kanvas\Sdk\Users as KanvasUsers;
+use Kanvas\Sdk\FileSystem;
 use Kanvas\Sdk\FileSystemEntities;
-use Phalcon\Di;
+use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\SystemModules;
+use Kanvas\Sdk\Users as KanvasUsers;
+use Phalcon\Di;
 
 /**
  * Trait ResponseTrait.
@@ -37,7 +38,7 @@ trait FileSystemModelTrait
      *
      * @return void
      */
-    protected function associateFileSystem(): bool
+    protected function associateFileSystem() : bool
     {
         if (!empty($this->uploadedFiles) && is_array($this->uploadedFiles)) {
             foreach ($this->uploadedFiles as $file) {
@@ -66,9 +67,10 @@ trait FileSystemModelTrait
      * ];.
      *
      * @param array $files
+     *
      * @return void
      */
-    public function attach(array $files): bool
+    public function attach(array $files) : bool
     {
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appId);
@@ -91,7 +93,6 @@ trait FileSystemModelTrait
             }
 
             if (!is_object($fileSystemEntities)) {
-
                 //If filesystem entity does not exist then create a new one
                 FileSystemEntities::create([
                     'filesystem_id' => $file['file']->id,
@@ -119,9 +120,10 @@ trait FileSystemModelTrait
      * Given this entity define a new path.
      *
      * @param string $path
+     *
      * @return string
      */
-    protected function filesNewAttachedPath(): ?string
+    protected function filesNewAttachedPath() : ?string
     {
         return null;
     }
@@ -131,9 +133,10 @@ trait FileSystemModelTrait
      *
      * @param array data
      * @param array whiteList
+     *
      * @return boolean
      */
-    public function update($data = null, $whiteList = null): bool
+    public function update($data = null, $whiteList = null) : bool
     {
         //associate uploaded files
         if (isset($data['files'])) {
@@ -158,7 +161,7 @@ trait FileSystemModelTrait
      *
      * @return bool
      */
-    public function deleteFiles(): bool
+    public function deleteFiles() : bool
     {
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
@@ -166,11 +169,39 @@ trait FileSystemModelTrait
         if ($files = FileSystemEntities::getAllByEntityId($this->getId(), (int)$appId, $currentCompanyId)) {
             foreach ($files as $file) {
                 FileSystemEntities::update($file->id, [
-                    "is_deleted"=> 1
+                    'is_deleted' => 1
                 ]);
             }
         }
 
         return true;
+    }
+
+    /**
+     * Get User Files.
+     *
+     * @return KanvasObject
+     */
+    public function getFiles() : KanvasObject
+    {
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appsId);
+        return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", 'is_deleted:0']]);
+    }
+
+    /**
+     * Undocumented function.
+     *
+     * @param string $fieldName
+     *
+     * @todo Adapt this function to the sdk
+     *
+     * @return string|null
+     */
+    public function getFileByName(string $fieldName) : ?object
+    {
+        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appsId);
+        return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", "field_name:{$fieldName}", 'is_deleted:0']]);
     }
 }
