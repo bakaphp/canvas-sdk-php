@@ -34,7 +34,7 @@ class SystemModules extends Resource
      */
     public static function getSystemModuleByModelName(string $modelName, int $appsId) : object
     {
-        return current(self::find(['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
+        return current(self::find([], ['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
     }
 
     /**
@@ -47,7 +47,7 @@ class SystemModules extends Resource
      */
     public static function validateOrCreate(string $modelName, int $appsId) : object
     {
-        $systemModule = current(self::find(['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
+        $systemModule = current(self::find([], ['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]));
 
         $className = substr($modelName, strripos($modelName, '\\') + 1);
 
