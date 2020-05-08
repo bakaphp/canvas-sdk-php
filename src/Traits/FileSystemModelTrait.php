@@ -73,7 +73,7 @@ trait FileSystemModelTrait
     public function attach(array $files) : bool
     {
         $appId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appId);
+        $systemModule = SystemModules::validateOrCreate(self::class, (int)$appId);
         $currentCompanyId = KanvasUsers::getSelf()->default_company;
 
         foreach ($files as $file) {
@@ -185,7 +185,7 @@ trait FileSystemModelTrait
     public function getFiles() : KanvasObject
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appsId);
+        $systemModule = SystemModules::validateOrCreate(self::class, (int)$appsId);
         return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", 'is_deleted:0']]);
     }
 
@@ -201,7 +201,7 @@ trait FileSystemModelTrait
     public function getFileByName(string $fieldName) : ?object
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
-        $systemModule = SystemModules::getSystemModuleByModelName(self::class, (int)$appsId);
+        $systemModule = SystemModules::validateOrCreate(self::class, (int)$appsId);
         return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", "field_name:{$fieldName}", 'is_deleted:0']]);
     }
 }
