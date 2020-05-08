@@ -59,7 +59,7 @@ class SystemModules extends Resource
                 'slug' => $classSlug,
                 'model_name' => $modelName,
                 'browse_fields' => '[]',
-                'show' => 0,
+                'show' => 1,
                 'protected' => 0,
                 'created_at' => date('Y-m-d H:m:s'),
                 'is_deleted' => 0

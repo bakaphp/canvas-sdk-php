@@ -182,7 +182,7 @@ trait FileSystemModelTrait
      *
      * @return KanvasObject
      */
-    public function getFiles() : KanvasObject
+    public function getFiles() : array
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $systemModule = SystemModules::validateOrCreate(self::class, (int)$appsId);
@@ -202,6 +202,7 @@ trait FileSystemModelTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $systemModule = SystemModules::validateOrCreate(self::class, (int)$appsId);
-        return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", "field_name:{$fieldName}", 'is_deleted:0']]);
+        $fileSystemEntities = FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", "field_name:{$fieldName}", 'is_deleted:0']]);
+        return is_object($fileSystemEntities) ? $fileSystemEntities : null;
     }
 }
