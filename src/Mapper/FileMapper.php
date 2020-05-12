@@ -6,6 +6,7 @@ namespace Kanvas\Sdk\Mapper;
 
 use AutoMapperPlus\CustomMapper\CustomMapper;
 use Kanvas\Sdk\Dto\Files;
+use Kanvas\Sdk\Filesystem;
 
 // You can either extend the CustomMapper, or just implement the MapperInterface
 // directly.
@@ -34,14 +35,16 @@ class FileMapper extends CustomMapper
      */
     public function mapToObject($fileEntity, $fileDto, array $context = [])
     {
-        $fileDto->id = $fileEntity->getId();
+        //Get filesystem records
+        $file = Filesystem::retrieve($fileEntity->filesystem_id, [], []);
+
+        $fileDto->id = $fileEntity->id;
         $fileDto->filesystem_id = $fileEntity->filesystem_id;
-        $fileDto->name = $fileEntity->file->name;
+        $fileDto->name = $file->name;
         $fileDto->field_name = $fileEntity->field_name;
-        $fileDto->url = $fileEntity->file->url;
-        $fileDto->size = $fileEntity->file->size;
-        $fileDto->file_type = $fileEntity->file->file_type;
-        $fileDto->attributes = $fileEntity->file->getAllSettings();
+        $fileDto->url = $file->url;
+        $fileDto->size = $file->size;
+        $fileDto->file_type = $file->file_type;
 
         return $fileDto;
     }
