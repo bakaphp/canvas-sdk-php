@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Traits;
 
-use AutoMapperPlus\AutoMapper;
-use AutoMapperPlus\Configuration\AutoMapperConfig;
 use Exception;
 use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\Dto\Files;
@@ -33,6 +31,14 @@ use Phalcon\Di;
  */
 trait FileSystemModelTrait
 {
+    /**
+     * Mapper Trait.
+     */
+    use MapperTrait;
+
+    /**
+     * Uploaded Files Array.
+     */
     public $uploadedFiles = [];
 
     /**
@@ -200,11 +206,9 @@ trait FileSystemModelTrait
          *
          * @todo Move this to use it globally
          */
-        $config = new AutoMapperConfig();
-        $config->getOptions()->dontSkipConstructor();
-        $config->registerMapping(KanvasObject::class, Files::class)->useCustomMapper($fileMapper);
+        $config = $this->configureAutoMapper(KanvasObject::class, Files::class, $fileMapper);
 
-        $autoMapper = new AutoMapper($config);
+        $autoMapper = $this->instantiateAutoMapper($config);
 
         return $autoMapper->mapMultiple($attachments, Files::class);
     }
