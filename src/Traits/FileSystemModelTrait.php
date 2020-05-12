@@ -193,7 +193,7 @@ trait FileSystemModelTrait
         $attachments = FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", 'is_deleted:0']]);
 
         //Filemapper
-        $fileMapper = new FileMapper($this->id, $systemModule->id);
+        $fileMapper = new FileMapper((int)$this->id, (int)$systemModule->id);
 
         /**
          * Call mapper service.
@@ -202,7 +202,7 @@ trait FileSystemModelTrait
          */
         $config = new AutoMapperConfig();
         $config->getOptions()->dontSkipConstructor();
-        $config->registerMapping(FileSystemEntities::class, Files::class)->useCustomMapper($fileMapper);
+        $config->registerMapping(KanvasObject::class, Files::class)->useCustomMapper($fileMapper);
 
         $autoMapper = new AutoMapper($config);
 
