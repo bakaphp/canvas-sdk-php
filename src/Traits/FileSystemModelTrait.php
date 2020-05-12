@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Traits;
 
+use AutoMapperPlus\AutoMapper;
+use AutoMapperPlus\Configuration\AutoMapperConfig;
 use Exception;
 use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\Dto\Files;
 use Kanvas\Sdk\FileSystem;
 use Kanvas\Sdk\FileSystemEntities;
 use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\Mapper\FileMapper;
 use Kanvas\Sdk\SystemModules;
 use Kanvas\Sdk\Users as KanvasUsers;
 use Phalcon\Di;
@@ -186,7 +190,23 @@ trait FileSystemModelTrait
     {
         $appsId = Apps::getIdByKey(getenv('GEWAER_APP_ID'));
         $systemModule = SystemModules::validateOrCreate(self::class, (int)$appsId);
-        return FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", 'is_deleted:0']]);
+        $attachments = FileSystemEntities::find(['conditions' => ["entity_id:{$this->id}", "system_modules_id:{$systemModule->id}", 'is_deleted:0']]);
+
+        //Filemapper
+        $fileMapper = new FileMapper($this->id, $systemModule->id);
+
+        /**
+         * Call mapper service.
+         *
+         * @todo Move this to use it globally
+         */
+        $config = new AutoMapperConfig();
+        $config->getOptions()->dontSkipConstructor();
+        $config->registerMapping(FileSystemEntities::class, Files::class)->useCustomMapper($fileMapper);
+
+        $autoMapper = new AutoMapper($config);
+
+        return $autoMapper->mapMultiple($attachments, Files::class);
     }
 
     /**
