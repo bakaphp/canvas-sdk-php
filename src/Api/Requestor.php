@@ -4,8 +4,9 @@ namespace Kanvas\Sdk\Api;
 
 use Exception as GlobalException;
 use Kanvas\Sdk\Exception;
-use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\HttpClient\GuzzleClient;
+use Kanvas\Sdk\Kanvas;
+
 /* use Canvas\Http\Exception\InternalServerErrorException;
 use Canvas\Http\Exception\AuthenticationException;
 use Canvas\Http\Exception\NotFoundException;
@@ -43,16 +44,18 @@ class Requestor
     public function __construct($apiKey = null, $apiBase = null)
     {
         $this->apiKey = $apiKey;
+
         if (!$apiBase) {
             $apiBase = Kanvas::$apiBase;
         }
+
         $this->apiBase = $apiBase;
     }
 
     /**
      * @static
      *
-     * @param Resource|bool|array|mixed $d
+     * @param resource|bool|array|mixed $d
      *
      * @return Resource|array|string|mixed
      */
@@ -150,6 +153,7 @@ class Requestor
 
     /**
      * Sets default headers to be used in requests.
+     *
      * @static
      *
      * @param string $apiKey
@@ -157,16 +161,22 @@ class Requestor
      *
      * @return array
      */
-    private static function _defaultHeaders($apiKey, $clientInfo = null): array
+    private static function _defaultHeaders() : array
     {
-        $defaultHeaders = [
-            'Authorization' => Kanvas::getAuthToken(),
-            'KanvasKey' => $apiKey,
-            'Key' => $apiKey,
-            'Content-Type' => 'application/x-www-form-urlencoded'
-        ];
-
-        return $defaultHeaders;
+        if (empty(Kanvas::getClientId()) && empty(Kanvas::getClientSecretId())) {
+            return [
+                'Authorization' => Kanvas::getAuthToken(),
+                'KanvasKey' => Kanvas::getApiKey(),
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ];
+        } else {
+            return [
+                'Client-Id' => Kanvas::getClientId(),
+                'Client-Secret-Id' => Kanvas::getClientSecretId(),
+                'KanvasKey' => Kanvas::getApiKey(),
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ];
+        }
     }
 
     /**
@@ -179,13 +189,9 @@ class Requestor
      *
      * @return array
      */
-    private function _requestRaw($method, $url, $params, $headers, $query): array
+    private function _requestRaw($method, $url, $params, $headers, $query) : array
     {
-        $apiKey = $this->apiKey;
-        if (!$apiKey) {
-            $apiKey = Kanvas::$apiKey;
-        }
-
+        $apiKey = Kanvas::getApiKey();
         if (!$apiKey) {
             $msg = 'No API key provided.  (HINT: set your API key using '
               . '"Kanvas::setApiKey(<API-KEY>)".  You can generate API keys from '
@@ -193,16 +199,11 @@ class Requestor
             throw new Exception\Authentication($msg);
         }
 
-        if (!Kanvas::getAuthToken() && !strpos($url, 'auth')) {
-            $msg = 'No Auth Token set.  (HINT: set your Auth Token using the auth call';
-            throw new Exception\Authentication($msg);
-        }
-
         $absoluteUrl = $this->apiBase . $url . $query;
 
-        $body = ['form_params' => $params];
+        $body = ['form_params' => $params, 'verify' => false];
 
-        $defaultHeaders = $this->_defaultHeaders($apiKey);
+        $defaultHeaders = $this->_defaultHeaders();
 
         $hasFile = false;
 
@@ -253,6 +254,7 @@ class Requestor
 
     /**
      * Set a HttpClient.
+     *
      * @static
      *
      * @param HttpClient\ClientInterface $client

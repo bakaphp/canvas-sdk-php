@@ -57,6 +57,22 @@ class Kanvas
     }
 
     /**
+     * Setter that sets authentication related variables.
+     *
+     * @param string $clientId
+     * @param string $clientSecretId
+     * @param string $apiKey
+     *
+     * @return void
+     */
+    public static function setAuthKeys(string $clientId, string $clientSecretId, string $apiKey) : void
+    {
+        self::setClientId($clientId);
+        self::setClienSecrettId($clientSecretId);
+        self::setApiKey($apiKey);
+    }
+
+    /**
      * @return string The API key used for requests.
      */
     public static function getApiKey() : string
@@ -67,7 +83,7 @@ class Kanvas
     /**
      * @return string The client_id used for Connect requests.
      */
-    public static function getClientId() : string
+    public static function getClientId() : ?string
     {
         return self::$clientId;
     }
@@ -75,7 +91,7 @@ class Kanvas
     /**
      * @return string The client_secret_id used for Connect requests.
      */
-    public static function getClientSecretId() : string
+    public static function getClientSecretId() : ?string
     {
         return self::$clientSecretId;
     }
