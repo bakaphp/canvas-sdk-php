@@ -48,6 +48,6 @@ abstract class BaseModel
         if (!is_array($params)) {
             return static::getSource()::retrieve(strval($params), [], []);
         }
-        return current(static::getSource()::find(Util::convertParams($params)), []);
+        return current(static::getSource()::find(Util::convertParams($params), []));
     }
 }
