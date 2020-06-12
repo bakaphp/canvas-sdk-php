@@ -5,7 +5,7 @@ namespace Kanvas\Sdk\Traits;
 use Kanvas\Sdk\HttpClient\CurlClient;
 
 /**
- * Trait ResponseTrait.
+ * Trait CrudOperationsTrait.
  *
  * @package Canvas\Traits
  *
@@ -19,11 +19,7 @@ use Kanvas\Sdk\HttpClient\CurlClient;
 trait CrudOperationsTrait
 {
     /**
-     * List Teams.
-     *
-     * Get a list of all the current user teams. You can use the query params to
-     * filter your results. On admin mode, this endpoint will return a list of all
-     * of the project teams. [Learn more about different API modes](/docs/admin).
+     * List records.
      *
      * @param string  $search
      * @param int  $limit
@@ -34,22 +30,18 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public function find(array $requestOptions = []) : array
+    public static function find(array $requestOptions = []) : array
     {
+        $client = self::getClient();
         $params = $requestOptions;
 
-        return $this->client->call(CurlClient::METHOD_GET, $this->resource, [
+        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_ENDPOINT, [
             'content-type' => 'application/json',
         ], $params);
     }
 
     /**
-     * Create Team.
-     *
-     * Create a new team. The user who creates the team will automatically be
-     * assigned as the owner of the team. The team owner can invite new members,
-     * who will be able add new owners and update or delete the team from your
-     * project.
+     * Create record.
      *
      * @param string  $name
      * @param array  $roles
@@ -58,20 +50,18 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public function create(array $resourceFieldsValues) : array
+    public static function create(array $resourceFieldsValues) : array
     {
+        $client = self::getClient();
         $params = $resourceFieldsValues;
 
-        return $this->client->call(CurlClient::METHOD_POST, $this->resource, [
+        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_ENDPOINT, [
             'content-type' => 'application/json',
         ], $params);
     }
 
     /**
-     * Get Team.
-     *
-     * Get team by its unique ID. All team members have read access for this
-     * resource.
+     * Find First by id or specified conditions.
      *
      * @param string  $teamId
      *
@@ -79,23 +69,22 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public function findFirst(int $id = null) : array
+    public static function findFirst(int $id = null) : array
     {
+        $path = self::RESOURCE_ENDPOINT;
         if (!is_null($id)) {
-            $this->resource = $this->resource . '/' . $id;
+            $path = self::RESOURCE_ENDPOINT . '/' . $id;
         }
+        $client = self::getClient();
         $params = [];
 
-        return $this->client->call(CurlClient::METHOD_GET, $this->resource, [
+        return $client->call(CurlClient::METHOD_GET, $path, [
             'content-type' => 'application/json',
         ], $params);
     }
 
     /**
-     * Update Team.
-     *
-     * Update team by its unique ID. Only team owners have write access for this
-     * resource.
+     * Update record.
      *
      * @param string  $teamId
      * @param string  $name
@@ -104,21 +93,19 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public function update(int $id, array $resourceFieldsValues) : array
+    public static function update(int $id, array $resourceFieldsValues) : array
     {
-        $this->resource = $this->resource . '/' . $id;
+        $client = self::getClient();
+        $path = self::RESOURCE_ENDPOINT . '/' . $id;
         $params = $resourceFieldsValues;
 
-        return $this->client->call(CurlClient::METHOD_PUT, $this->resource, [
+        return $client->call(CurlClient::METHOD_PUT, $path, [
             'content-type' => 'application/json',
         ], $params);
     }
 
     /**
-     * Delete Team.
-     *
-     * Delete team by its unique ID. Only team owners have write access for this
-     * resource.
+     * Delete record.
      *
      * @param string  $id
      *
@@ -126,12 +113,13 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public function delete(int $id) : array
+    public static function delete(int $id) : array
     {
-        $this->resource = $this->resource . '/' . $id;
+        $client = self::getClient();
+        $path = self::RESOURCE_ENDPOINT . '/' . $id;
         $params = [];
 
-        return $this->client->call(CurlClient::METHOD_DELETE, $this->resource, [
+        return $client->call(CurlClient::METHOD_DELETE, $path, [
             'content-type' => 'application/json',
         ], $params);
     }

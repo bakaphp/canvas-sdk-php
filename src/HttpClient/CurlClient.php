@@ -16,6 +16,8 @@ class CurlClient
     const METHOD_CONNECT = 'CONNECT';
     const METHOD_TRACE = 'TRACE';
 
+    private static $instance = null;
+
     /**
      * Is Self Signed Certificates Allowed?
      *
@@ -39,11 +41,13 @@ class CurlClient
         'content-type' => '',
     ];
 
-    /**
-     * SDK constructor.
-     */
-    public function __construct()
+    public static function getInstance()
     {
+        if (self::$instance == null) {
+            self::$instance = new CurlClient();
+        }
+
+        return self::$instance;
     }
 
     /**

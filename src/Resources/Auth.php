@@ -12,9 +12,9 @@ class Auth extends Resources
     /**
      * @param Client $client
      */
-    public function __construct(CurlClient $client)
+    public function __construct()
     {
-        $this->client = $client;
+        $this->client = CurlClient::getInstance();
         $this->resource = '/' . 'auth';
     }
 

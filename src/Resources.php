@@ -11,17 +11,8 @@ class Resources
      */
     protected $client;
 
-    /**
-     * @var string
-     */
-    protected $resource;
-
-    /**
-     * @param Client $client
-     */
-    public function __construct(CurlClient $client)
+    public static function getClient()
     {
-        $this->client = $client;
-        $this->resource = '/' . get_class();
+        return CurlClient::getInstance();
     }
 }
