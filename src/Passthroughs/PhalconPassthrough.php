@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Passthroughs;
 
-use Phalcon\Http\Response;
 use GuzzleHttp\Client;
 use Kanvas\Sdk\Kanvas;
+use Kanvas\Sdk\Resources;
+use Phalcon\Http\Response;
 
 /**
  * Trait ResponseTrait.
@@ -29,7 +30,9 @@ trait PhalconPassthrough
 
     /**
      * Construct setup setting.
+     *
      * @todo Fix the Content Type Header issue when sending files. Need to stablish boundaries for multipart/form_data  files
+     *
      * @return void
      */
     public function onConstruct()
@@ -46,7 +49,7 @@ trait PhalconPassthrough
      *
      * @return void
      */
-    public function setApiHeaders($apiHeaders): void
+    public function setApiHeaders($apiHeaders) : void
     {
         $this->apiHeaders = $apiHeaders;
     }
@@ -56,7 +59,7 @@ trait PhalconPassthrough
      *
      * @return array
      */
-    public function getRequestData(string $method, array $data): array
+    public function getRequestData(string $method, array $data) : array
     {
         return [
             'headers' => $this->apiHeaders,
@@ -71,7 +74,7 @@ trait PhalconPassthrough
      *
      * @return \Phalcon\Http\Response
      */
-    public function transporter(): Response
+    public function transporter() : Response
     {
         // Get all router params
         $routeParams = $this->router->getParams();
@@ -79,25 +82,29 @@ trait PhalconPassthrough
         $uri = $this->router->getRewriteUri();
         $method = $this->request->getMethod();
 
-        $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Kanvas::$apiBase;
-        // Get real API URL
-        $apiUrl = $baseUrl . $uri;
+        $response = Resources::getClient()->call($method, $uri, [], $routeParams);
 
-        // Execute the request, providing the URL, the request method and the data.
-        $response = $this->makeRequest($apiUrl, $method, $this->getData());
+        return $this->response->setContent($response);
 
-        //set status code so we can get 404
-        if ($response->getStatusCode()) {
-            $this->response->setStatusCode($response->getStatusCode());
-        }
+        // $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Kanvas::$apiBase;
+        // // Get real API URL
+        // $apiUrl = $baseUrl . $uri;
 
-        if (is_array($response->getHeader('Content-Type'))) {
-            $this->response->setContentType($response->getHeader('Content-Type')[0]);
-        } else {
-            $this->response->setContentType($response->getHeader('Content-Type'));
-        }
+        // // Execute the request, providing the URL, the request method and the data.
+        // $response = $this->makeRequest($apiUrl, $method, $this->getData());
 
-        return $this->response->setContent($response->getBody());
+        // //set status code so we can get 404
+        // if ($response->getStatusCode()) {
+        //     $this->response->setStatusCode($response->getStatusCode());
+        // }
+
+        // if (is_array($response->getHeader('Content-Type'))) {
+        //     $this->response->setContentType($response->getHeader('Content-Type')[0]);
+        // } else {
+        //     $this->response->setContentType($response->getHeader('Content-Type'));
+        // }
+
+        // return $this->response->setContent($response->getBody());
     }
 
     /**
@@ -140,7 +147,7 @@ trait PhalconPassthrough
      *
      * @return array
      */
-    public function getData(): array
+    public function getData() : array
     {
         switch ($this->request->getMethod()) {
             case 'GET':
@@ -178,7 +185,7 @@ trait PhalconPassthrough
      *
      * @return array
      */
-    private function parseFileUpload($request): array
+    private function parseFileUpload($request) : array
     {
         $files = [];
 
@@ -205,9 +212,10 @@ trait PhalconPassthrough
      * @param mixed $id
      *
      * @throws Exception
+     *
      * @return Response
      */
-    public function getById($id): Response
+    public function getById($id) : Response
     {
         return $this->transporter();
     }
