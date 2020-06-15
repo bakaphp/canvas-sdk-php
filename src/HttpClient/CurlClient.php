@@ -53,7 +53,7 @@ class CurlClient
      *
      * @var string
      */
-    protected $endpoint = 'https://apidev.kanvas.dev/v1';
+    protected $endpoint = 'https://apidev.kanvas.dev';
 
     /**
      * Global Headers.
@@ -68,6 +68,11 @@ class CurlClient
      * Variable to identify if endpoint call is auth.
      */
     protected $isAuth = false;
+
+    /**
+     * API Version.
+     */
+    protected $apiVersion = 'v1';
 
     /**
      * Get instance of self.
@@ -301,7 +306,9 @@ class CurlClient
         $this->headers = $this->processCustomHeaders();
         $headers = array_merge($this->headers, $headers);
 
-        $ch = curl_init($this->endpoint . $path . (($method == self::METHOD_GET && !empty($params)) ? '?' . http_build_query($params) : ''));
+        $url = $this->endpoint . '/' . $this->apiVersion . '/' . $path;
+
+        $ch = curl_init($url . (($method == self::METHOD_GET && !empty($params)) ? '?' . http_build_query($params) : ''));
         $responseHeaders = [];
         $responseStatus = -1;
         $responseType = '';

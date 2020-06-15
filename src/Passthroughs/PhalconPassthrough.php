@@ -79,32 +79,16 @@ trait PhalconPassthrough
         // Get all router params
         $routeParams = $this->router->getParams();
 
-        $uri = $this->router->getRewriteUri();
+        $uri = str_replace('/v1/', '', $this->router->getRewriteUri());
         $method = $this->request->getMethod();
+
+        if ($this->request->hasHeader('Authorization')) {
+            Resources::getClient()->setAuthToken($this->request->getHeader('Authorization'));
+        }
 
         $response = Resources::getClient()->call($method, $uri, [], $routeParams);
 
         return $this->response->setContent($response);
-
-        // $baseUrl = !empty(getenv('EXT_API_URL')) ? getenv('EXT_API_URL') : Kanvas::$apiBase;
-        // // Get real API URL
-        // $apiUrl = $baseUrl . $uri;
-
-        // // Execute the request, providing the URL, the request method and the data.
-        // $response = $this->makeRequest($apiUrl, $method, $this->getData());
-
-        // //set status code so we can get 404
-        // if ($response->getStatusCode()) {
-        //     $this->response->setStatusCode($response->getStatusCode());
-        // }
-
-        // if (is_array($response->getHeader('Content-Type'))) {
-        //     $this->response->setContentType($response->getHeader('Content-Type')[0]);
-        // } else {
-        //     $this->response->setContentType($response->getHeader('Content-Type'));
-        // }
-
-        // return $this->response->setContent($response->getBody());
     }
 
     /**
@@ -153,21 +137,20 @@ trait PhalconPassthrough
             case 'GET':
                 $queryParams = $this->request->getQuery();
                 unset($queryParams['_url']);
-                return ['query' => $queryParams];
+                return $queryParams;
                 break;
 
             case 'POST':
                 if (!$this->request->hasFiles()) {
-                    return empty($this->request->getPost()) ? ['json' => json_decode($this->request->getRawBody(), true)] : ['form_params' => $this->request->getPost()];
+                    return empty($this->request->getPost()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPost();
                 } else {
-                    $uploads = $this->parseFileUpload($this->request->getPost());
-                    return ['multipart' => $uploads];
+                    return $this->parseFileUpload($this->request->getPost());
                 }
                 break;
 
             case 'PUT':
                 if (!$uploads) {
-                    return empty($this->request->getPost()) ? ['json' => json_decode($this->request->getRawBody(), true)] : ['form_params' => $this->request->getPut()];
+                    return empty($this->request->getPost()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPut();
                 } else {
                     $this->parseFileUpload($this->request->getPut());
                     return ['multipart' => $uploads];
