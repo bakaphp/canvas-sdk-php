@@ -88,7 +88,7 @@ trait PhalconPassthrough
 
         $response = Resources::getClient()->call($method, $uri, [], $this->getData());
 
-        return $this->response->setContent($response);
+        return $this->response($response);
     }
 
     /**
