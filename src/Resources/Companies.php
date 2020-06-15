@@ -9,7 +9,7 @@ use Kanvas\Sdk\Traits\CrudOperationsTrait;
 
 class Companies extends Resources
 {
-    const RESOURCE_ENDPOINT = 'companies';
+    const RESOURCE_NAME = 'companies';
 
     use CrudOperationsTrait;
 }
