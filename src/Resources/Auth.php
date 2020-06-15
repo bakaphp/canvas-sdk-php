@@ -9,7 +9,7 @@ use Kanvas\Sdk\Resources;
 
 class Auth extends Resources
 {
-    const RESOURCE_ENDPOINT = '/auth';
+    const RESOURCE_NAME = 'auth';
 
     /**
      * List Teams.

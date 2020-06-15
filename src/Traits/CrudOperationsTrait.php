@@ -35,7 +35,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = $requestOptions;
 
-        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_ENDPOINT, [], $params);
+        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_NAME, [], $params);
     }
 
     /**
@@ -53,7 +53,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = $resourceFieldsValues;
 
-        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_ENDPOINT, [], $params);
+        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_NAME, [], $params);
     }
 
     /**
@@ -67,9 +67,9 @@ trait CrudOperationsTrait
      */
     public static function findFirst(int $id = null) : array
     {
-        $path = self::RESOURCE_ENDPOINT;
+        $path = self::RESOURCE_NAME;
         if (!is_null($id)) {
-            $path = self::RESOURCE_ENDPOINT . '/' . $id;
+            $path = self::RESOURCE_NAME . '/' . $id;
         }
         $client = self::getClient();
         $params = [];
@@ -90,7 +90,7 @@ trait CrudOperationsTrait
     public static function update(int $id, array $resourceFieldsValues) : array
     {
         $client = self::getClient();
-        $path = self::RESOURCE_ENDPOINT . '/' . $id;
+        $path = self::RESOURCE_NAME . '/' . $id;
         $params = $resourceFieldsValues;
 
         return $client->call(CurlClient::METHOD_PUT, $path, [], $params);
@@ -108,7 +108,7 @@ trait CrudOperationsTrait
     public static function delete(int $id) : array
     {
         $client = self::getClient();
-        $path = self::RESOURCE_ENDPOINT . '/' . $id;
+        $path = self::RESOURCE_NAME . '/' . $id;
         $params = [];
 
         return $client->call(CurlClient::METHOD_DELETE, $path, [], $params);

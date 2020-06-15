@@ -9,7 +9,7 @@ use Kanvas\Sdk\Traits\CrudOperationsTrait;
 
 class Users extends Resources
 {
-    const RESOURCE_ENDPOINT = '/users';
+    const RESOURCE_NAME = 'users';
 
     use CrudOperationsTrait;
 }
