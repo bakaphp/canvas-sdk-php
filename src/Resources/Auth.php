@@ -9,14 +9,7 @@ use Kanvas\Sdk\Resources;
 
 class Auth extends Resources
 {
-    /**
-     * @param Client $client
-     */
-    public function __construct()
-    {
-        $this->client = CurlClient::getInstance();
-        $this->resource = '/' . 'auth';
-    }
+    const RESOURCE_ENDPOINT = '/auth';
 
     /**
      * List Teams.
@@ -25,25 +18,66 @@ class Auth extends Resources
      * filter your results. On admin mode, this endpoint will return a list of all
      * of the project teams. [Learn more about different API modes](/docs/admin).
      *
-     * @param string  $search
-     * @param int  $limit
-     * @param int  $offset
-     * @param string  $orderType
+     * @param array $requestOptions
      *
      * @throws Exception
      *
      * @return array
      */
-    public function login(array $requestOptions = []) : array
+    public static function login(array $requestOptions = []) : array
     {
         $params = $requestOptions;
 
-        $response = $this->client->call(CurlClient::METHOD_POST, $this->resource, [
-            'content-type' => 'application/json',
-        ], $params);
-
-        $this->client->addHeader('Authorization', $response['token']);
+        $response = self::getClient()->call(CurlClient::METHOD_POST, self::RESOURCE_ENDPOINT, [], $params);
 
         return $response;
+    }
+
+    /**
+     * Sets the API key to be used for requests.
+     *
+     * @param string $apiKey
+     *
+     * @return void
+     */
+    public static function setApiKey(string $apiKey) : void
+    {
+        self::getClient()->setApiKey($apiKey);
+    }
+
+    /**
+     * Sets the client_id to be used for Connect requests.
+     *
+     * @param string $clientId
+     *
+     * @return void
+     */
+    public static function setClientId(string $clientId) : void
+    {
+        self::getClient()->setClientId($clientId);
+    }
+
+    /**
+     * Sets the client_secret_id to be used for Connect requests.
+     *
+     * @param string $clientSecretId
+     *
+     * @return void
+     */
+    public static function setClienSecrettId(string $clientSecretId) : void
+    {
+        self::getClient()->setClienSecrettId($clientSecretId);
+    }
+
+    /**
+     * Sets Authentication Token.
+     *
+     * @param string $authToken
+     *
+     * @return void
+     */
+    public static function setAuthToken(string $authToken) : void
+    {
+        self::getClient()->setAuthToken($authToken);
     }
 }

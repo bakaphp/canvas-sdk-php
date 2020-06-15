@@ -16,6 +16,29 @@ class CurlClient
     const METHOD_CONNECT = 'CONNECT';
     const METHOD_TRACE = 'TRACE';
 
+    /**
+     * @var string The kanvas API key to be used for requests.
+     */
+    public $apiKey = null;
+
+    /**
+     * @var string The kanvas client_id to be used for Connect requests.
+     */
+    public $clientId = null;
+
+    /**
+     * @var string The kanvas client_secret_id to be used for Connect requests.
+     */
+    public $clientSecretId = null;
+
+    /**
+     * @var string Authentication Token
+     */
+    public $authToken = null;
+
+    /**
+     * @var CurlClient instance of self.
+     */
     private static $instance = null;
 
     /**
@@ -38,9 +61,17 @@ class CurlClient
      * @var array
      */
     protected $headers = [
-        'content-type' => '',
+        'Content-Type' => 'application/x-www-form-urlencoded',
     ];
 
+    /**
+     * Variable to identify if endpoint call is auth.
+     */
+    protected $isAuth = false;
+
+    /**
+     * Get instance of self.
+     */
     public static function getInstance()
     {
         if (self::$instance == null) {
@@ -48,6 +79,120 @@ class CurlClient
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Sets custom request header  to be used in authetication.
+     *
+     * @param string $endpoint
+     *
+     * @return array
+     */
+    public function processCustomHeaders() : array
+    {
+        if ($this->isAuth) {
+            return [
+                'KanvasKey' => $this->getApiKey(),
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ];
+        } elseif (is_null($this->getClientId()) && is_null($this->getClientSecretId())) {
+            return [
+                'Authorization' => $this->getAuthToken(),
+                'KanvasKey' => $this->getApiKey(),
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ];
+        } else {
+            return [
+                'Client-Id' => $this->getClientId(),
+                'Client-Secret-Id' => $this->getClientSecretId(),
+                'KanvasKey' => $this->getApiKey(),
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ];
+        }
+    }
+
+    /**
+     * Sets the API key to be used for requests.
+     *
+     * @param string $apiKey
+     *
+     * @return void
+     */
+    public function setApiKey(string $apiKey) : void
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    /**
+     * Sets the client_id to be used for Connect requests.
+     *
+     * @param string $clientId
+     *
+     * @return void
+     */
+    public function setClientId(string $clientId) : void
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * Sets the client_secret_id to be used for Connect requests.
+     *
+     * @param string $clientSecretId
+     *
+     * @return void
+     */
+    public function setClienSecrettId(string $clientSecretId) : void
+    {
+        $this->clientSecretId = $clientSecretId;
+    }
+
+    /**
+     * Sets Authentication Token.
+     *
+     * @param string $authToken
+     *
+     * @return void
+     */
+    public function setAuthToken(string $authToken) : void
+    {
+        $this->authToken = $authToken;
+    }
+
+    /**
+     * @return string The API key used for requests.
+     */
+    public function getApiKey() : ?string
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @return string The client_id used for Connect requests.
+     */
+    public function getClientId() : ?string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @return string The client_secret_id used for Connect requests.
+     */
+    public function getClientSecretId() : ?string
+    {
+        return $this->clientSecretId;
+    }
+
+    /**
+     * Sets Authentication Token.
+     *
+     * @param string $authToken
+     *
+     * @return void
+     */
+    public function getAuthToken() : ?string
+    {
+        return $this->authToken;
     }
 
     /**
@@ -145,16 +290,30 @@ class CurlClient
      */
     public function call($method, $path = '', $headers = [], array $params = [])
     {
+        if (is_null($this->getApiKey())) {
+            throw new Exception('Api Key not set');
+        }
+
+        if ($path == 'auth') {
+            $this->isAuth = 1;
+        }
+
+        $this->headers = $this->processCustomHeaders();
         $headers = array_merge($this->headers, $headers);
+
         $ch = curl_init($this->endpoint . $path . (($method == self::METHOD_GET && !empty($params)) ? '?' . http_build_query($params) : ''));
         $responseHeaders = [];
         $responseStatus = -1;
         $responseType = '';
         $responseBody = '';
 
-        switch ($headers['content-type']) {
+        switch ($headers['Content-Type']) {
             case 'application/json':
                 $query = json_encode($params);
+                break;
+
+            case 'application/x-www-form-urlencoded':
+                $query = http_build_query($params);
                 break;
 
             case 'multipart/form-data':

@@ -35,9 +35,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = $requestOptions;
 
-        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_ENDPOINT, [
-            'content-type' => 'application/json',
-        ], $params);
+        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_ENDPOINT, [], $params);
     }
 
     /**
@@ -55,9 +53,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = $resourceFieldsValues;
 
-        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_ENDPOINT, [
-            'content-type' => 'application/json',
-        ], $params);
+        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_ENDPOINT, [], $params);
     }
 
     /**
@@ -78,9 +74,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = [];
 
-        return $client->call(CurlClient::METHOD_GET, $path, [
-            'content-type' => 'application/json',
-        ], $params);
+        return $client->call(CurlClient::METHOD_GET, $path, [], $params);
     }
 
     /**
@@ -99,9 +93,7 @@ trait CrudOperationsTrait
         $path = self::RESOURCE_ENDPOINT . '/' . $id;
         $params = $resourceFieldsValues;
 
-        return $client->call(CurlClient::METHOD_PUT, $path, [
-            'content-type' => 'application/json',
-        ], $params);
+        return $client->call(CurlClient::METHOD_PUT, $path, [], $params);
     }
 
     /**
@@ -119,8 +111,6 @@ trait CrudOperationsTrait
         $path = self::RESOURCE_ENDPOINT . '/' . $id;
         $params = [];
 
-        return $client->call(CurlClient::METHOD_DELETE, $path, [
-            'content-type' => 'application/json',
-        ], $params);
+        return $client->call(CurlClient::METHOD_DELETE, $path, [], $params);
     }
 }
