@@ -86,7 +86,7 @@ trait PhalconPassthrough
             Resources::getClient()->setAuthToken($this->request->getHeader('Authorization'));
         }
 
-        $response = Resources::getClient()->call($method, $uri, [], $routeParams);
+        $response = Resources::getClient()->call($method, $uri, [], $this->getData());
 
         return $this->response->setContent($response);
     }
