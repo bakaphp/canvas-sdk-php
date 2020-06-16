@@ -3,6 +3,7 @@
 namespace Kanvas\Sdk\Traits;
 
 use Kanvas\Sdk\HttpClient\CurlClient;
+use Kanvas\Sdk\Util\RequestOptions;
 
 /**
  * Trait CrudOperationsTrait.
@@ -32,10 +33,15 @@ trait CrudOperationsTrait
      */
     public static function find(array $requestOptions = []) : array
     {
+        $path = self::RESOURCE_NAME;
         $client = self::getClient();
         $params = $requestOptions;
 
-        return $client->call(CurlClient::METHOD_GET, self::RESOURCE_NAME, [], $params);
+        if (!empty($requestOptions)) {
+            $path = $path . RequestOptions::parse($requestOptions);
+        }
+
+        return $client->call(CurlClient::METHOD_GET, $path, [], $params);
     }
 
     /**
@@ -65,12 +71,17 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public static function findFirst(int $id = null) : array
+    public static function findFirst(int $id = null, $requestOptions = []) : array
     {
         $path = self::RESOURCE_NAME;
         if (!is_null($id)) {
             $path = self::RESOURCE_NAME . '/' . $id;
         }
+
+        if (!empty($requestOptions)) {
+            $path = $path . RequestOptions::parse($requestOptions);
+        }
+
         $client = self::getClient();
         $params = [];
 

@@ -69,7 +69,7 @@ class RequestOptions
      *
      * @return RequestOptions
      */
-    public static function parse($options) : array
+    public static function parse($options) : string
     {
         $query = '?';
         if (array_key_exists('api_key', $options)) {
