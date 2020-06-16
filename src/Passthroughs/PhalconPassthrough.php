@@ -134,4 +134,18 @@ trait PhalconPassthrough
 
         return $files;
     }
+
+    /**
+     * Get the record by its primary key.
+     *
+     * @param mixed $id
+     *
+     * @throws Exception
+     *
+     * @return Response
+     */
+    public function getById($id) : Response
+    {
+        return $this->transporter();
+    }
 }
