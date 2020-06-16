@@ -319,10 +319,6 @@ class CurlClient
                 $query = json_encode($params);
                 break;
 
-            case 'application/x-www-form-urlencoded':
-                $query = http_build_query($params);
-                break;
-
             case 'multipart/form-data':
                 $query = $this->flatten($params);
                 break;

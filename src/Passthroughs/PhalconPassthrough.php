@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Passthroughs;
 
+use CURLFile;
 use GuzzleHttp\Client;
 use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\Resources;
@@ -76,6 +77,7 @@ trait PhalconPassthrough
      */
     public function transporter() : Response
     {
+        $headers = [];
         // Get all router params
         $routeParams = $this->router->getParams();
 
@@ -86,7 +88,11 @@ trait PhalconPassthrough
             Resources::getClient()->setAuthToken($this->request->getHeader('Authorization'));
         }
 
-        $response = Resources::getClient()->call($method, $uri, [], $this->getData());
+        if ($this->request->hasFiles()) {
+            $headers['Content-Type'] = 'multipart/form-data';
+        }
+
+        $response = Resources::getClient()->call($method, $uri, $headers, $this->getData());
 
         return $this->response($response);
     }
@@ -142,18 +148,19 @@ trait PhalconPassthrough
 
             case 'POST':
                 if (!$this->request->hasFiles()) {
-                    return empty($this->request->getPost()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPost();
+                    $data = empty($this->request->getPost()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPost();
+                    return is_null($data) ? [] : $data;
                 } else {
                     return $this->parseFileUpload($this->request->getPost());
                 }
                 break;
 
             case 'PUT':
-                if (!$uploads) {
-                    return empty($this->request->getPost()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPut();
+                if (!$this->request->hasFiles()) {
+                    $data = empty($this->request->getPut()) ? json_decode($this->request->getRawBody(), true) : $this->request->getPut();
+                    return is_null($data) ? [] : $data;
                 } else {
-                    $this->parseFileUpload($this->request->getPut());
-                    return ['multipart' => $uploads];
+                    return $this->parseFileUpload($this->request->getPut());
                 }
 
                 break;
@@ -172,16 +179,11 @@ trait PhalconPassthrough
     {
         $files = [];
 
-        // foreach ($request as $key => $value) {
-        //     $files[$key] = $value;
-        // }
-
         if ($this->request->hasFiles()) {
             foreach ($this->request->getUploadedFiles() as $file) {
+                $cfile = new CURLFile($file->getTempName(), $file->getType(), $file->getName());
                 $files[] = [
-                    'name' => 'file',
-                    'contents' => file_get_contents($file->getTempName()),
-                    'filename' => $file->getName()
+                    'file' => $cfile
                 ];
             }
         }
