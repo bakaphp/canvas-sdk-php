@@ -13,18 +13,9 @@ use Kanvas\Sdk\Traits\CrudOperationsTrait;
 class Companies extends Resources
 {
     const RESOURCE_NAME = 'companies';
+    const CANVAS_PATH = 'Canvas\Models\Companies';
 
     use CrudOperationsTrait;
-
-    /**
-     * Get the default company of the the current user.
-     *
-     * @return Users
-     */
-    public static function getSelf() : array
-    {
-        return self::findFirst(0);
-    }
 
     /**
      * Get the current User's sources.
@@ -33,8 +24,7 @@ class Companies extends Resources
      */
     public static function getUser() : array
     {
-        $user = self::getSelf();
-        return current(Sessions::find(['conditions' => ["users_id:{$user['id']}"]]));
+        return Users::getSelf();
     }
 
     /**
@@ -44,8 +34,8 @@ class Companies extends Resources
      */
     public static function getBranches() : array
     {
-        $user = self::getSelf();
-        return Sessions::find(['conditions' => ["users_id:{$user['id']}"]]);
+        $user = Users::getSelf();
+        return CompaniesBranches::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -55,8 +45,8 @@ class Companies extends Resources
      */
     public static function getDefaultBranch() : array
     {
-        $user = self::getSelf();
-        return UserConfig::find(['conditions' => ["users_id:{$user['id']}"]]);
+        $user = Users::getSelf();
+        return CompaniesBranches::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -64,10 +54,10 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getFields() : array
+    public static function getFields() : array
     {
-        $user = self::getSelf();
-        return UserLinkedSources::find(['conditions' => ["users_id:{$user->id}"]]);
+        $user = Users::getSelf();
+        return CompaniesCustomFields::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -75,10 +65,10 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public function getCustomFields() : array
+    public static function getCustomFields() : array
     {
-        $user = self::getSelf();
-        return Companies::findFirst($user['default_company']);
+        $user = Users::getSelf();
+        return CustomFields::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -86,9 +76,10 @@ class Companies extends Resources
      *
      * @return void
      */
-    public function getUsersAssociatedCompanies() : int
+    public static function getUsersAssociatedCompanies() : array
     {
-        return (int) self::getSelf()->default_company;
+        $user = Users::getSelf();
+        return UsersAssociatedCompanies::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -96,9 +87,10 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public function getUsersAssociatedApps() : Companies
+    public static function getUsersAssociatedApps() : array
     {
-        return $this->getDefaultCompany();
+        $user = Users::getSelf();
+        return UsersAssociatedApps::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -106,16 +98,11 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getUsersAssociatedByApps() : array
+    public static function getUsersAssociatedByApps() : array
     {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        return Subscription::find([
-            'conditions' => [
-                "user_id:{$user->id}",
-                "apps_id:{$appsId}"],
-            'sort' => 'id|desc'
-        ]);
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        return UsersAssociatedApps::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]);
     }
 
     /**
@@ -123,15 +110,10 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getBranch() : array
+    public static function getBranch() : array
     {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        return UsersAssociatedApps::find([
-            'conditions' => [
-                "users_id:{$user->id}",
-                "apps_id:{$appsId}"]
-        ]);
+        $user = Users::getSelf();
+        return current(CompaniesBranches::findFirst(null, ['conditions' => ["id:{$user['default_company_branch']}"]]));
     }
 
     /**
@@ -139,21 +121,11 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getApp() : array
+    public static function getApp()
     {
-        $user = self::getSelf();
-        return UsersAssociatedApps::find(['conditions' => ["users_id:{$user->id}"]]);
-    }
-
-    /**
-     * Get User Webhooks.
-     *
-     * @return array
-     */
-    public function getApps() : array
-    {
-        $user = self::getSelf();
-        return UserWebhooks::find(['conditions' => ["users_id:{$user->id}"]]);
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        return current(UserCompanyApps::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]));
     }
 
     /**
@@ -161,57 +133,10 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public function getFiles() : KanvasObject
+    public static function getCompaniesAssoc() : array
     {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user->id}", "system_modules_id:{$systemModule->id}"]]));
-    }
-
-    /**
-     * Get User Files.
-     *
-     * @return KanvasObject
-     */
-    public function getCompaniesAssoc() : KanvasObject
-    {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user->id}", "system_modules_id:{$systemModule->id}"]]));
-    }
-
-    /**
-     * Get User Photo.
-     *
-     * @return KanvasObject
-     */
-    public function getPhoto() : KanvasObject
-    {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user->id}", "system_modules_id:{$systemModule->id}"]]));
-    }
-
-    /**
-     * Get user's roles.
-     *
-     * @return array
-     */
-    public function getUsers() : array
-    {
-        $rolesArray = [];
-        $user = self::getSelf();
-        // Get all user roles
-        $userRoles = UserRoles::find(['conditions' => ["users_id:{$user->id}"]]);
-        // Get all the roles by id and push them to an array
-        foreach ($userRoles as $userRole) {
-            $rolesArray[] = current(Roles::find(['conditions' => ["id:{$userRole->roles_id}"]]));
-        }
-
-        return $rolesArray;
+        $user = Users::getSelf();
+        return CompaniesAssociations::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 
     /**
@@ -219,17 +144,11 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public function getSubscription() : KanvasObject
+    public static function getSubscription() : array
     {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        $userRole = current(UserRoles::find(['conditions' => ["users_id:{$user->id}", "apps_id:{$appsId}", 'companies_id:' . $this->getCurrentCompany()->id]]));
-
-        if ($userRole  instanceof KanvasObject) {
-            return $userRole;
-        }
-
-        return current(UserRoles::find(['conditions' => ["users_id:{$user->id}", 'apps_id:' . Roles::DEFAULT_ACL_APP_ID, 'companies_id:' . $this->getCurrentCompany()->id]]));
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        return current(Subscription::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]));
     }
 
     /**
@@ -237,11 +156,17 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getSubscriptions() : array
+    public static function getSubscriptions() : array
     {
-        $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        return UserRoles::find(['conditions' => ["users_id:{$user->id}", "apps_id:{$appsId}", 'companies_id:' . $this->getCurrentCompany()->id]]);
+        $user = Users::getSelf();
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        return Subscription::find([
+            'conditions' => [
+                "companies_id:{$user['default_company']}",
+                "apps_id:{$appsId}",
+                'is_deleted:0'],
+            'order' => 'id|desc'
+        ]);
     }
 
     /**
@@ -259,8 +184,9 @@ class Companies extends Resources
      *
      * @return void
      */
-    private function getUserWebhooks() : void
+    public static function getUserWebhooks() : array
     {
-        $this->settingsModel = new UserConfig();
+        $user = Users::getSelf();
+        return UserWebhooks::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
     }
 }
