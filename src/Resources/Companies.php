@@ -53,7 +53,7 @@ class Companies extends Resources
      *
      * @return array
      */
-    public function getDefaultBranch() : array
+    public static function getDefaultBranch() : array
     {
         $user = self::getSelf();
         return UserConfig::find(['conditions' => ["users_id:{$user['id']}"]]);

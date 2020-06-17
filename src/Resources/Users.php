@@ -10,6 +10,7 @@ use Kanvas\Sdk\Traits\CrudOperationsTrait;
 class Users extends Resources
 {
     const RESOURCE_NAME = 'users';
+    const CANVAS_PATH = 'Canvas\Models\Users';
 
     use CrudOperationsTrait;
 
@@ -50,7 +51,7 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getConfig() : array
+    public static function getConfig() : array
     {
         $user = self::getSelf();
         return UserConfig::find(['conditions' => ["users_id:{$user['id']}"]]);
@@ -61,10 +62,10 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getSources() : array
+    public static function getSources() : array
     {
         $user = self::getSelf();
-        return UserLinkedSources::find(['conditions' => ["users_id:{$user->id}"]]);
+        return UserLinkedSources::find(['conditions' => ["users_id:{$user['id']}"]]);
     }
 
     /**
@@ -72,7 +73,7 @@ class Users extends Resources
      *
      * @return KanvasObject
      */
-    public function getDefaultCompany() : array
+    public static function getDefaultCompany() : array
     {
         $user = self::getSelf();
         return Companies::findFirst($user['default_company']);
@@ -83,9 +84,9 @@ class Users extends Resources
      *
      * @return void
      */
-    public function getCompanyId() : int
+    public static function getCompanyId() : int
     {
-        return (int) self::getSelf()->default_company;
+        return (int) self::getSelf()['default_company'];
     }
 
     /**
@@ -93,9 +94,9 @@ class Users extends Resources
      *
      * @return KanvasObject
      */
-    public function getCurrentCompany() : Companies
+    public static function getCurrentCompany() : array
     {
-        return $this->getDefaultCompany();
+        return self::getDefaultCompany();
     }
 
     /**
@@ -103,13 +104,13 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getAllSubscriptions() : array
+    public static function getAllSubscriptions()
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         return Subscription::find([
             'conditions' => [
-                "user_id:{$user->id}",
+                "user_id:{$user['id']}",
                 "apps_id:{$appsId}"],
             'sort' => 'id|desc'
         ]);
@@ -120,13 +121,13 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getCompanies() : array
+    public static function getCompanies() : array
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         return UsersAssociatedApps::find([
             'conditions' => [
-                "users_id:{$user->id}",
+                "users_id:{$user['id']}",
                 "apps_id:{$appsId}"]
         ]);
     }
@@ -139,7 +140,7 @@ class Users extends Resources
     public function getApps() : array
     {
         $user = self::getSelf();
-        return UsersAssociatedApps::find(['conditions' => ["users_id:{$user->id}"]]);
+        return UsersAssociatedApps::find(['conditions' => ["users_id:{$user['id']}"]]);
     }
 
     /**
@@ -147,10 +148,10 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getUserWebhook() : array
+    public static function getUserWebhook() : array
     {
         $user = self::getSelf();
-        return UserWebhooks::find(['conditions' => ["users_id:{$user->id}"]]);
+        return UserWebhooks::find(['conditions' => ["users_id:{$user['id']}"]]);
     }
 
     /**
@@ -158,12 +159,12 @@ class Users extends Resources
      *
      * @return KanvasObject
      */
-    public function getFiles() : KanvasObject
+    public static function getFiles() : array
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user->id}", "system_modules_id:{$systemModule->id}"]]));
+        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user['id']}", "system_modules_id:{$systemModule['id']}"]]));
     }
 
     /**
@@ -171,12 +172,12 @@ class Users extends Resources
      *
      * @return KanvasObject
      */
-    public function getPhoto() : KanvasObject
+    public static function getPhoto() : array
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user->id}", "system_modules_id:{$systemModule->id}"]]));
+        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user['id']}", "system_modules_id:{$systemModule['id']}"]]));
     }
 
     /**
@@ -184,15 +185,15 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getRoles() : array
+    public static function getRoles() : array
     {
         $rolesArray = [];
         $user = self::getSelf();
         // Get all user roles
-        $userRoles = UserRoles::find(['conditions' => ["users_id:{$user->id}"]]);
+        $userRoles = UserRoles::find(['conditions' => ["users_id:{$user['id']}"]]);
         // Get all the roles by id and push them to an array
         foreach ($userRoles as $userRole) {
-            $rolesArray[] = current(Roles::find(['conditions' => ["id:{$userRole->roles_id}"]]));
+            $rolesArray[] = current(Roles::find(['conditions' => ["id:{$userRole['roles_id']}"]]));
         }
 
         return $rolesArray;
@@ -203,17 +204,17 @@ class Users extends Resources
      *
      * @return KanvasObject
      */
-    public function getUserRole() : KanvasObject
+    public static function getUserRole() : array
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        $userRole = current(UserRoles::find(['conditions' => ["users_id:{$user->id}", "apps_id:{$appsId}", 'companies_id:' . $this->getCurrentCompany()->id]]));
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        $userRole = current(UserRoles::find(['conditions' => ["users_id:{$user['id']}", "apps_id:{$appsId}", 'companies_id:' . self::getCurrentCompany()['id']]]));
 
-        if ($userRole  instanceof KanvasObject) {
+        if (!empty($userRole)) {
             return $userRole;
         }
 
-        return current(UserRoles::find(['conditions' => ["users_id:{$user->id}", 'apps_id:' . Roles::DEFAULT_ACL_APP_ID, 'companies_id:' . $this->getCurrentCompany()->id]]));
+        return current(UserRoles::find(['conditions' => ["users_id:{$user['id']}", 'apps_id:' . Roles::DEFAULT_ACL_APP_ID, 'companies_id:' . self::getCurrentCompany()['id']]]));
     }
 
     /**
@@ -221,11 +222,11 @@ class Users extends Resources
      *
      * @return array
      */
-    public function getPermissions() : array
+    public static function getPermissions() : array
     {
         $user = self::getSelf();
-        $appsId = Apps::getIdByKey(Kanvas::getApiKey());
-        return UserRoles::find(['conditions' => ["users_id:{$user->id}", "apps_id:{$appsId}", 'companies_id:' . $this->getCurrentCompany()->id]]);
+        $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
+        return UserRoles::find(['conditions' => ["users_id:{$user['id']}", "apps_id:{$appsId}", 'companies_id:' . self::getCurrentCompany()['id']]]);
     }
 
     /**
@@ -233,19 +234,9 @@ class Users extends Resources
      *
      * @return string
      */
-    public function getSource() : string
+    public static function getSource() : string
     {
         return 'users';
-    }
-
-    /**
-     * Set hashtable settings table, userConfig ;).
-     *
-     * @return void
-     */
-    private function createSettingsModel() : void
-    {
-        $this->settingsModel = new UserConfig();
     }
 
     /**
@@ -253,8 +244,8 @@ class Users extends Resources
      *
      * @return string
      */
-    public function getKey() : int
+    public static function getKey() : int
     {
-        return $this->id;
+        return (int)self::getSelf()['id'];
     }
 }
