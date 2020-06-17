@@ -71,7 +71,7 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public static function findFirst(int $id = null, $requestOptions = []) : array
+    public static function findFirst(int $id = null, $requestOptions = [])
     {
         $path = self::RESOURCE_NAME;
         if (!is_null($id)) {
@@ -85,7 +85,9 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = [];
 
-        return $client->call(CurlClient::METHOD_GET, $path, [], $params);
+        $response = $client->call(CurlClient::METHOD_GET, $path, [], $params);
+
+        return !array_key_exists(0, $response) ? $response : current($response);
     }
 
     /**

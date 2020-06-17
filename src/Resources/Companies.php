@@ -113,7 +113,7 @@ class Companies extends Resources
     public static function getBranch() : array
     {
         $user = Users::getSelf();
-        return current(CompaniesBranches::findFirst(null, ['conditions' => ["id:{$user['default_company_branch']}"]]));
+        return CompaniesBranches::findFirst(null, ['conditions' => ["id:{$user['default_company_branch']}"]]);
     }
 
     /**
@@ -125,7 +125,7 @@ class Companies extends Resources
     {
         $user = Users::getSelf();
         $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
-        return current(UserCompanyApps::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]));
+        return UserCompanyApps::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]);
     }
 
     /**
@@ -148,7 +148,7 @@ class Companies extends Resources
     {
         $user = Users::getSelf();
         $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
-        return current(Subscription::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]));
+        return Subscription::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}", "apps_id:{$appsId}"]]);
     }
 
     /**

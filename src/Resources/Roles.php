@@ -25,7 +25,7 @@ class Roles extends Resources
     public static function getUserRole(int $appId)
     {
         $currentCompanyId = Users::getSelf()['default_company'];
-        return current(self::findFirst(null, ['conditions' => ["companies_id:{$currentCompanyId}", "apps_id:{$appId}", 'is_deleted:0']]));
+        return self::findFirst(null, ['conditions' => ["companies_id:{$currentCompanyId}", "apps_id:{$appId}", 'is_deleted:0']]);
     }
 
     /**
@@ -81,7 +81,7 @@ class Roles extends Resources
     {
         $appsId = Apps::getIdByKey($appKey);
 
-        $role = current(self::find([
+        $role = self::findFirst(null,[
             'conditions' => [
                 "name:{$name}",
                 "apps_id:{$appsId}",
@@ -90,7 +90,7 @@ class Roles extends Resources
             ]]));
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::find([
+            $role = self::findFirst(null,[
                 'conditions' => [
                     "name:{$name}",
                     "apps_id:{$appsId}",
@@ -100,7 +100,7 @@ class Roles extends Resources
         }
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::find([
+            $role = self::findFirst(null,[
                 'conditions' => [
                     "name:{$name}",
                     'apps_id:' . self::DEFAULT_ACL_APP_ID,
@@ -110,7 +110,7 @@ class Roles extends Resources
         }
 
         if (!$role instanceof KanvasObject) {
-            $role = current(self::find([
+            $role = self::findFirst(null,[
                 'conditions' => [
                     "name:{$name}",
                     'apps_id:' . self::DEFAULT_ACL_APP_ID,

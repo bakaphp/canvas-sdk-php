@@ -32,7 +32,7 @@ class Users extends Resources
     public static function getSession() : array
     {
         $user = self::getSelf();
-        return current(Sessions::find(['conditions' => ["users_id:{$user['id']}"]]));
+        return Sessions::findFirst(null, ['conditions' => ["users_id:{$user['id']}"]]);
     }
 
     /**
@@ -164,7 +164,11 @@ class Users extends Resources
         $user = self::getSelf();
         $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user['id']}", "system_modules_id:{$systemModule['id']}"]]));
+        return FileSystemEntities::find([
+            'conditions' => [
+                "entity_id:{$user['id']}",
+                "system_modules_id:{$systemModule['id']}"
+            ]]);
     }
 
     /**
@@ -177,7 +181,13 @@ class Users extends Resources
         $user = self::getSelf();
         $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
         $systemModule = SystemModules::getSystemModuleByModelName(self::CANVAS_PATH, (int)$appsId);
-        return current(FileSystemEntities::find(['conditions' => ["entity_id:{$user['id']}", "system_modules_id:{$systemModule['id']}"]]));
+        return FileSystemEntities::findFirst(null, [
+            'conditions' => [
+                "entity_id:{$user['id']}",
+                "system_modules_id:{$systemModule['id']}"
+            ],
+            'sort' => 'id|desc'
+        ]);
     }
 
     /**
@@ -193,7 +203,7 @@ class Users extends Resources
         $userRoles = UserRoles::find(['conditions' => ["users_id:{$user['id']}"]]);
         // Get all the roles by id and push them to an array
         foreach ($userRoles as $userRole) {
-            $rolesArray[] = current(Roles::find(['conditions' => ["id:{$userRole['roles_id']}"]]));
+            $rolesArray[] = Roles::findFirst(null, ['conditions' => ["id:{$userRole['roles_id']}"]]);
         }
 
         return $rolesArray;
@@ -208,13 +218,13 @@ class Users extends Resources
     {
         $user = self::getSelf();
         $appsId = Apps::getIdByKey(self::getClient()->getApiKey());
-        $userRole = current(UserRoles::find(['conditions' => ["users_id:{$user['id']}", "apps_id:{$appsId}", 'companies_id:' . self::getCurrentCompany()['id']]]));
+        $userRole = UserRoles::findFirst(null, ['conditions' => ["users_id:{$user['id']}", "apps_id:{$appsId}", 'companies_id:' . self::getCurrentCompany()['id']]]);
 
         if (!empty($userRole)) {
             return $userRole;
         }
 
-        return current(UserRoles::find(['conditions' => ["users_id:{$user['id']}", 'apps_id:' . Roles::DEFAULT_ACL_APP_ID, 'companies_id:' . self::getCurrentCompany()['id']]]));
+        return UserRoles::findFirst(null, ['conditions' => ["users_id:{$user['id']}", 'apps_id:' . Roles::DEFAULT_ACL_APP_ID, 'companies_id:' . self::getCurrentCompany()['id']]]);
     }
 
     /**

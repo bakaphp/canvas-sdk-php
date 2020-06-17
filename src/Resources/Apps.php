@@ -25,7 +25,7 @@ class Apps extends Resources
      */
     public static function getIdByKey(string $key)
     {
-        return current(self::findFirst(null, ['conditions' => ["key:{$key}", 'is_deleted:0']]))['id'];
+        return self::findFirst(null, ['conditions' => ["key:{$key}", 'is_deleted:0']])['id'];
     }
 
     /**
@@ -37,7 +37,7 @@ class Apps extends Resources
      */
     public static function findFirstByKey(string $key)
     {
-        return current(self::findFirst(null, ['conditions' => ["key:{$key}", 'is_deleted:0']]));
+        return self::findFirst(null, ['conditions' => ["key:{$key}", 'is_deleted:0']]);
     }
 
     /**
