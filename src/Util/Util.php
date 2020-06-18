@@ -2,34 +2,9 @@
 
 namespace Kanvas\Sdk\Util;
 
-use Kanvas\Sdk\KanvasObject;
-use StdClass;
-
 abstract class Util
 {
     private static $isMbstringAvailable = null;
-
-    /**
-     * Whether the provided array (or other) is a list rather than a dictionary.
-     * A list is defined as an array for which all the keys are consecutive
-     * integers starting at 0. Empty arrays are considered to be lists.
-     *
-     * @param array|mixed $array
-     * @return boolean true if the given object is a list.
-     */
-    public static function isList($array)
-    {
-        if (!is_array($array)) {
-            return false;
-        }
-        if ($array === []) {
-            return true;
-        }
-        if (array_keys($array) !== range(0, count($array) - 1)) {
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Converts a response from the Canvas API to a simple PHP object.
@@ -37,33 +12,30 @@ abstract class Util
      * @param array $response The response from the Canvas API.
      * @param RequestOptions $opts
      * @param string $object
+     *
      * @return object|object[]
      */
-    public static function convertToSimpleObject(array $response, RequestOptions $opts, string $object = null)
+    public static function convertToObject(array $response, string $object = null)
     {
-        $types = [
-            \Kanvas\Sdk\Users::OBJECT_NAME => \Kanvas\Sdk\Users::class,
-            \Kanvas\Sdk\Companies::OBJECT_NAME => \Kanvas\Sdk\Companies::class,
-        ];
-
-        if (self::isList($response)) {
-            $mapped = [];
-            foreach ($response as $i) {
-                array_push($mapped, self::convertToSimpleObject($i, $opts, $object));
+        // check whether the response is a multidimensional array or just an array. Treat each one accordingly.
+        if (!array_key_exists(0, $response)) {
+            $instance = new $object();
+            foreach ($response as $key => $value) {
+                $instance->$key = $value;
             }
-            return $mapped;
-        } elseif (is_array($response)) {
-            if (!is_null($object) && isset($types[$object])) {
-                $class = $types[$object];
-            } else {
-                $class = KanvasObject::class;
-            }
-            return $class::constructFrom($response, $opts);
-        } else {
-            return (object) $response;
+            return $instance;
         }
 
-        //return json_decode(json_encode($response));
+        $objectsArray = [];
+        foreach ($response as $element) {
+            $instance = new $object();
+            foreach ($element as $key => $value) {
+                $instance->$key = $value;
+            }
+            $objectsArray[] = $instance;
+        }
+
+        return $objectsArray;
     }
 
     /**
@@ -72,7 +44,7 @@ abstract class Util
      * @return string|mixed The UTF8-encoded string, or the object passed in if
      *    it wasn't a string.
      */
-    public static function utf8(string $value): ?string
+    public static function utf8(string $value) : ?string
     {
         if (self::$isMbstringAvailable === null) {
             self::$isMbstringAvailable = function_exists('mb_detect_encoding');
@@ -88,9 +60,10 @@ abstract class Util
      * Given a ID return its as a array?
      *
      * @param mixed $id
+     *
      * @return array
      */
-    public static function normalizeId($id): array
+    public static function normalizeId($id) : array
     {
         if (is_array($id)) {
             $params = $id;
@@ -105,21 +78,21 @@ abstract class Util
     /**
      * Returns UNIX timestamp in milliseconds.
      *
-     * @return integer current time in millis
+     * @return int current time in millis
      */
-    public static function currentTimeMillis(): int
+    public static function currentTimeMillis() : int
     {
         return (int) round(microtime(true) * 1000);
     }
 
-
     /**
-     * Convert params from standard phalcon find to SDK standards
+     * Convert params from standard phalcon find to SDK standards.
      *
      * @param array $params
+     *
      * @return array
      */
-    public static function convertParams(array $params): array
+    public static function convertParams(array $params) : array
     {
         $searchBy = [];
         if (isset($params['conditions'])) {
@@ -134,7 +107,7 @@ abstract class Util
                     $conditions[$key] = !is_numeric($bindValue) ? str_replace(' ', '', str_replace('= ?' . $key, ':%' . $bindValue . '%', $value)) : str_replace(' ', '', str_replace('= ?' . $key, ':' . $bindValue, $value));
                 } else {
                     $conditionArray = explode(' ', rtrim($value));
-                    $conditions[$key] = !is_numeric(end($conditionArray)) ? str_replace(' ', '', str_replace('= '. end($conditionArray), ':%' . end($conditionArray) . '%', $value)) : str_replace(' ', '', str_replace('= '. end($conditionArray), ':' . end($conditionArray), $value));
+                    $conditions[$key] = !is_numeric(end($conditionArray)) ? str_replace(' ', '', str_replace('= ' . end($conditionArray), ':%' . end($conditionArray) . '%', $value)) : str_replace(' ', '', str_replace('= ' . end($conditionArray), ':' . end($conditionArray), $value));
                 }
             }
             $searchBy['conditions'] = $conditions;

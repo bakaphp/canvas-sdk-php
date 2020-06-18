@@ -4,6 +4,7 @@ namespace Kanvas\Sdk\Traits;
 
 use Kanvas\Sdk\HttpClient\CurlClient;
 use Kanvas\Sdk\Util\RequestOptions;
+use Kanvas\Sdk\Util\Util;
 
 /**
  * Trait CrudOperationsTrait.
@@ -41,7 +42,7 @@ trait CrudOperationsTrait
             $path = $path . RequestOptions::parse($requestOptions);
         }
 
-        return $client->call(CurlClient::METHOD_GET, $path, [], $params);
+        return Util::convertToObject($client->call(CurlClient::METHOD_GET, $path, [], $params), self::class);
     }
 
     /**
@@ -54,12 +55,12 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public static function create(array $resourceFieldsValues) : array
+    public static function create(array $resourceFieldsValues) : object
     {
         $client = self::getClient();
         $params = $resourceFieldsValues;
 
-        return $client->call(CurlClient::METHOD_POST, self::RESOURCE_NAME, [], $params);
+        return Util::convertToObject($client->call(CurlClient::METHOD_POST, self::RESOURCE_NAME, [], $params), self::class);
     }
 
     /**
@@ -69,7 +70,7 @@ trait CrudOperationsTrait
      *
      * @throws Exception
      *
-     * @return array
+     * @return object
      */
     public static function findFirst(int $id = null, $requestOptions = [])
     {
@@ -85,7 +86,7 @@ trait CrudOperationsTrait
         $client = self::getClient();
         $params = [];
 
-        $response = $client->call(CurlClient::METHOD_GET, $path, [], $params);
+        $response = Util::convertToObject($client->call(CurlClient::METHOD_GET, $path, [], $params), self::class);
 
         return !array_key_exists(0, $response) ? $response : current($response);
     }
@@ -106,7 +107,7 @@ trait CrudOperationsTrait
         $path = self::RESOURCE_NAME . '/' . $id;
         $params = $resourceFieldsValues;
 
-        return $client->call(CurlClient::METHOD_PUT, $path, [], $params);
+        return Util::convertToObject($client->call(CurlClient::METHOD_PUT, $path, [], $params), self::class);
     }
 
     /**

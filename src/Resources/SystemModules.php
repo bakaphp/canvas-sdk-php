@@ -21,7 +21,7 @@ class SystemModules extends Resources
      *
      * @return object
      */
-    public static function getSystemModuleByModelName(string $modelName, int $appsId) : array
+    public static function getSystemModuleByModelName(string $modelName, int $appsId) : object
     {
         return self::findFirst(null, ['conditions' => ["model_name:{$modelName}", "apps_id:{$appsId}"]]);
     }
