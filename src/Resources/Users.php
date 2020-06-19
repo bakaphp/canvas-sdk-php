@@ -240,8 +240,19 @@ class Users extends Resources
      *
      * @return string
      */
-    public static function getId() : int
+    public function getId() : int
     {
         return (int)self::getSelf()->id;
+    }
+
+    /**
+     * What the current company the users is logged in with
+     * in this current session?
+     *
+     * @return integer
+     */
+    public function currentCompanyId() : int
+    {
+        return (int) $this->default_company;
     }
 }
