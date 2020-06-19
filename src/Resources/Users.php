@@ -240,8 +240,8 @@ class Users extends Resources
      *
      * @return string
      */
-    public function getKey() : int
+    public static function getId() : int
     {
-        return (int)$this->id;
+        return (int)self::getSelf()->id;
     }
 }
