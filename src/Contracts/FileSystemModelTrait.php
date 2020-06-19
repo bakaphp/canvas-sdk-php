@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kanvas\Sdk\Traits;
+namespace Kanvas\Sdk\Contracts;
 
 use Exception;
 use Kanvas\Sdk\Apps;

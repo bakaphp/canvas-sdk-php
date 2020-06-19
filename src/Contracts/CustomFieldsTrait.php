@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kanvas\Sdk\Traits;
+namespace Kanvas\Sdk\Contracts;
 
 use Exception;
 use Gewaer\Models\CustomFields as AppCustomFields;
+use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\CustomFields;
 use Kanvas\Sdk\CustomFieldsModules;
-use Kanvas\Sdk\CustomFieldsValues;
 use Kanvas\Sdk\CustomFieldsTypes;
-use Kanvas\Sdk\Apps;
+use Kanvas\Sdk\CustomFieldsValues;
 use Kanvas\Sdk\Kanvas;
 use Kanvas\Sdk\KanvasObject;
 use Kanvas\Sdk\Users;
@@ -60,6 +60,7 @@ trait CustomFieldsTrait
 
     /**
      * Verify if Custom Fields Module exists.
+     *
      * @return mixed
      */
     public function customFieldsModuleExists()
@@ -91,9 +92,11 @@ trait CustomFieldsTrait
 
     /**
      * Create a new custom field.
+     *
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function createCustomField(string $name, int $fieldTypeId, int $customFieldsModuleId)
@@ -110,8 +113,10 @@ trait CustomFieldsTrait
 
     /**
      * Update a new custom field.
+     *
      * @param int $id
      * @param array $fieldsValues
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function updateCustomField(int $id, array $fieldsValues)
@@ -121,9 +126,11 @@ trait CustomFieldsTrait
 
     /**
      * Get a Custom Field by name and custom_fields_module_id.
+     *
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function getCustomField(string $name, int $customFieldsModuleId)
@@ -146,6 +153,7 @@ trait CustomFieldsTrait
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function getAllCompanyCustomFields()
@@ -162,9 +170,11 @@ trait CustomFieldsTrait
 
     /**
      * Get all Custom Fields.
+     *
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function getCustomFields()
@@ -185,9 +195,11 @@ trait CustomFieldsTrait
 
     /**
      * Create a new custom field value.
+     *
      * @param int $customFieldId
      * @param string $label
      * @param mixed $value
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function createCustomFieldValue(string $label, string $value, int $isDefault = 0)
@@ -209,9 +221,11 @@ trait CustomFieldsTrait
 
     /**
      * Get Custom Field Type.
+     *
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function getCustomFieldTypeByName(string $name)
@@ -224,9 +238,11 @@ trait CustomFieldsTrait
 
     /**
      * Get all Custom Fields Types.
+     *
      * @param string $name
      * @param int $fieldTypeId
      * @param int $customFieldsModuleId
+     *
      * @return Kanvas\Sdk\KanvasObject
      */
     public function getAllCustomFieldsTypes()
@@ -236,6 +252,7 @@ trait CustomFieldsTrait
 
     /**
      * Get the custom field module by this model.
+     *
      * @return mixed
      */
     public function getCustomFieldByModel()
@@ -255,9 +272,10 @@ trait CustomFieldsTrait
 
     /**
      * Process Custom Fields.
+     *
      * @return void
      */
-    public function processCustomFields(): void
+    public function processCustomFields() : void
     {
         if (!class_exists('Gewaer\Models\CustomFields')) {
             throw new Exception('Can\'t use Custom Fields without the Model, please run the migration');
@@ -271,7 +289,7 @@ trait CustomFieldsTrait
      *
      * @return void
      */
-    protected function saveCustomFields(): void
+    protected function saveCustomFields() : void
     {
         $customFieldsAvailable = $this->getCustomFields();
 
@@ -321,7 +339,7 @@ trait CustomFieldsTrait
      *
      * @return void
      */
-    public function deleteCustomFields(): bool
+    public function deleteCustomFields() : bool
     {
         $user = Users::getSelf();
 
@@ -341,9 +359,10 @@ trait CustomFieldsTrait
      * Set the custom field to update a custom field module.
      *
      * @param array $fields
+     *
      * @return void
      */
-    public function setCustomFields($fields): void
+    public function setCustomFields($fields) : void
     {
         $this->customFields = $fields;
     }

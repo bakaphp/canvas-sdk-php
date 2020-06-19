@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanvas\Sdk\Traits;
+namespace Kanvas\Sdk\Contracts;
 
 use Kanvas\Sdk\HttpClient\CurlClient;
 use Kanvas\Sdk\Util\RequestOptions;

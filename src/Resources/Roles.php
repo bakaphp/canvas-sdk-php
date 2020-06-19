@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kanvas\Sdk\Resources;
 
 use Kanvas\Sdk\Resources;
-use Kanvas\Sdk\Traits\CrudOperationsTrait;
+use Kanvas\Sdk\Contracts\CrudOperationsTrait;
 
 class Roles extends Resources
 {

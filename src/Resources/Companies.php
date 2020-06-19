@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Resources;
 
+use Kanvas\Sdk\Contracts\CrudOperationsTrait;
 use Kanvas\Sdk\Resources;
-use Kanvas\Sdk\Traits\CrudOperationsTrait;
 
 /**
  * @todo Implement relationship functions using the new http client of the SDK.
@@ -22,7 +22,7 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public static function getUser() : array
+    public function getUser() : object
     {
         return Users::getSelf();
     }
@@ -32,10 +32,9 @@ class Companies extends Resources
      *
      * @return array
      */
-    public static function getBranches() : array
+    public function getBranches() : array
     {
-        $user = Users::getSelf();
-        return CompaniesBranches::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
+        return CompaniesBranches::find(['conditions' => ["companies_id:{$this->getUser()->default_company}"]]);
     }
 
     /**
@@ -43,10 +42,9 @@ class Companies extends Resources
      *
      * @return array
      */
-    public static function getDefaultBranch() : array
+    public function getDefaultBranch() : object
     {
-        $user = Users::getSelf();
-        return CompaniesBranches::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
+        return CompaniesBranches::findFirst(null, ['conditions' => ["companies_id:{$this->getUser()->default_company}"]]);
     }
 
     /**
@@ -54,10 +52,9 @@ class Companies extends Resources
      *
      * @return array
      */
-    public static function getFields() : array
+    public function getFields() : array
     {
-        $user = Users::getSelf();
-        return CompaniesCustomFields::find(['conditions' => ["companies_id:{$user['default_company']}"]]);
+        return CompaniesCustomFields::find(['conditions' => ["companies_id:{$this->getUser()->default_company}"]]);
     }
 
     /**
@@ -65,10 +62,9 @@ class Companies extends Resources
      *
      * @return KanvasObject
      */
-    public static function getCustomFields() : array
+    public function getCustomFields() : array
     {
-        $user = Users::getSelf();
-        return CustomFields::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
+        return CustomFields::find(['conditions' => ["companies_id:{$this->getUser()->default_company}"]]);
     }
 
     /**
@@ -76,10 +72,9 @@ class Companies extends Resources
      *
      * @return void
      */
-    public static function getUsersAssociatedCompanies() : array
+    public function getUsersAssociatedCompanies() : object
     {
-        $user = Users::getSelf();
-        return UsersAssociatedCompanies::findFirst(null, ['conditions' => ["companies_id:{$user['default_company']}"]]);
+        return UsersAssociatedCompanies::findFirst(null, ['conditions' => ["companies_id:{$this->getUser()->default_company}"]]);
     }
 
     /**

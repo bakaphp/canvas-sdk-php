@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Kanvas\Sdk\Traits;
+namespace Kanvas\Sdk\Contracts;
 
 use Exception;
-use Kanvas\Sdk\Roles;
 use Kanvas\Sdk\Apps;
 use Kanvas\Sdk\KanvasObject;
+use Kanvas\Sdk\Roles;
 use Kanvas\Sdk\UserRoles;
 use Phalcon\Di;
-use Canvas\Models\UserRoles as CanvasUserRoles;
 
 /**
  * Trait FractalTrait.
@@ -36,9 +35,10 @@ trait PermissionsTrait
      *  Leads.add || leads.updates || lead.delete
      *
      * @param string $action
+     *
      * @return boolean
      */
-    public function can(string $action): bool
+    public function can(string $action) : bool
     {
         //if we find the . then les
         if (strpos($action, '.') === false) {
@@ -64,9 +64,10 @@ trait PermissionsTrait
      * Example: App.Role.
      *
      * @param string $role
+     *
      * @return boolean
      */
-    public function assignRole(string $role): bool
+    public function assignRole(string $role) : bool
     {
         /**
          * check if we have a dot, that mes it legacy and sending the app name
@@ -104,9 +105,10 @@ trait PermissionsTrait
      * Example: App.Role.
      *
      * @param string $role
+     *
      * @return boolean
      */
-    public function removeRole(string $role): bool
+    public function removeRole(string $role) : bool
     {
         $role = Roles::getByAppName($role, $this->default_company, getenv('GEWAER_APP_ID'));
 
@@ -143,9 +145,10 @@ trait PermissionsTrait
      * Check if the user has this role.
      *
      * @param string $role
+     *
      * @return boolean
      */
-    public function hasRole(string $role): bool
+    public function hasRole(string $role) : bool
     {
         $role = Roles::getByAppName($role, $this->default_company, getenv('GEWAER_APP_ID'));
 

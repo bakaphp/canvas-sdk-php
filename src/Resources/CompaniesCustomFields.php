@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kanvas\Sdk\Resources;
 
+use Kanvas\Sdk\Contracts\CrudOperationsTrait;
 use Kanvas\Sdk\Resources;
-use Kanvas\Sdk\Traits\CrudOperationsTrait;
 
 class CompaniesCustomFields extends Resources
 {

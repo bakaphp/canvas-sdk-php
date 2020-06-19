@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kanvas\Sdk\Traits;
+namespace Kanvas\Sdk\Contracts;
 
 use Exception;
 
@@ -22,9 +22,10 @@ trait ApiKeyTrait
 {
     /**
      * Validate if KANVAS_SDK_API_KEY is set. If set then return the value.
+     *
      * @return string
      */
-    protected function getSdkKey(): string
+    protected function getSdkKey() : string
     {
         if (empty(getenv('KANVAS_SDK_API_KEY'))) {
             throw new Exception('App needs to set KANVAS_SDK_API_KEY environmental variables to Run. Please review your enviorment variables.');
