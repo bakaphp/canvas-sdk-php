@@ -2,7 +2,7 @@
 
 namespace Kanvas\Sdk\Util;
 
-use Exception;
+use stdClass;
 
 abstract class Util
 {
@@ -20,7 +20,11 @@ abstract class Util
     public static function convertToObject(array $response, string $object = null)
     {
         if (array_key_exists('errors', $response)) {
-            throw new Exception(json_encode($response));
+            $instance = new stdClass();
+            foreach ($response as $key => $value) {
+                $instance->$key = $value;
+            }
+            return $instance;
         }
         // check whether the response is a multidimensional array or just an array. Treat each one accordingly.
         if (!array_key_exists(0, $response)) {
