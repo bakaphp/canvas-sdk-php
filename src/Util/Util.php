@@ -2,6 +2,8 @@
 
 namespace Kanvas\Sdk\Util;
 
+use Exception;
+
 abstract class Util
 {
     private static $isMbstringAvailable = null;
@@ -17,6 +19,9 @@ abstract class Util
      */
     public static function convertToObject(array $response, string $object = null)
     {
+        if (array_key_exists('errors', $response)) {
+            throw new Exception(json_encode($response));
+        }
         // check whether the response is a multidimensional array or just an array. Treat each one accordingly.
         if (!array_key_exists(0, $response)) {
             $instance = new $object();
