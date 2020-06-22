@@ -101,7 +101,7 @@ trait CrudOperationsTrait
      *
      * @return array
      */
-    public static function update(int $id, array $resourceFieldsValues) : array
+    public static function update(int $id, array $resourceFieldsValues) : object
     {
         $client = self::getClient();
         $path = self::RESOURCE_NAME . '/' . $id;
