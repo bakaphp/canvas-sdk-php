@@ -21,11 +21,14 @@ $ composer require bakaphp/canvas-sdk-php
 
 ## Usage
 
+Authentication via email and password
+
 ``` php
 use Kanvas\Sdk\Auth;
 use Kanvas\Sdk\Kanvas;
-Kanvas::setApiKey($appApiKey);
-Auth::auth([
+
+Kanvas::setApiKey('api_key');
+Auth::login([
         'email' => 'kanvas@mctekk.com', 
         'password' => 'somethingpassword'
 ]);
@@ -33,15 +36,30 @@ Auth::auth([
 //Call Kanvas Functions
 ```
 
-Set the token on your DI
+Authentication via Authorization token
+
 ``` php
 use Kanvas\Sdk\Auth;
 use Kanvas\Sdk\Kanvas;
-Kanvas::setApiKey($appApiKey);
+Kanvas::setApiKey('api_key');
 Kanvas::setAuthToken($request['token']);
 
 //Call Kanvas Functions
 ```
+
+Authentication using your own Client Id and Client Secret Id
+
+``` php
+use Kanvas\Sdk\Auth;
+use Kanvas\Sdk\Kanvas;
+
+Kanvas::setApiKey('api_key');
+Kanvas::setClientId('client_id');
+Kanvas::setClienSecrettId('client_secret_id');
+
+//Call Kanvas Functions
+```
+
 
 ## Using Resources
 
@@ -69,7 +87,7 @@ Users::create([
 
 ``` php
 
-Users::update('id',[
+Users::update($id,[
     'firstname'=>'testSDK',
     'lastname'=> 'testSDK',
     ]);
@@ -79,19 +97,23 @@ Users::update('id',[
 ### Delete
 
 ``` php
-Users::delete('id');
+Users::delete($id);
 ```
 
 ### List
 
 ``` php
-Users::all([], []);
+Users::find();
 ```
 
-### Retrieve
+### Find by Id
 
 ``` php
-Users::retrieve('id', [], ['relationships'=>['roles']]);
+Users::findFirst($id);
+```
+
+``` php
+Users::findFirst(null,['relationships'=>['roles']]);
 ```
 
 ## Custom queries on CRUD operations
@@ -103,6 +125,33 @@ Currently we only support Phalcon's type of querying database tables. We work wi
 - conditions
 - limit
 - order
+- relationships
+
+### Examples:
+
+``` php
+
+use Kanvas\Sdk\Users;
+
+Users::find([
+    'conditions'=> 'lastname = ?0'
+    'bind'=>['Example']
+    'order'=> 'id|desc',
+    'limit' => 5,
+    'relationships'=>['roles']
+]);
+
+Users::findFirst(null,[
+    'conditions'=> 'email = ?0'
+    'bind'=>['example']
+]);
+
+```
+
+As said before, both models work as a Phalcon model, they work with all the parameters that can be given to them.
+
+
+`Notice`: You must be authenticated to use this models and your API key must also be set.
 
 ## Phalcon Passthrough
 
@@ -185,38 +234,6 @@ $privateRoutes = RouteConfigurator::mergePrivateRoutes($privateRoutes, appPath('
 `mergePrivateRoutes` merges Kanvas private routes with your own private routes. It also takes the path to the custom private routes file defined by you.
 
 Both functions return a merged array.
-
-
-## SDK Models
-
-This SDK also provides search by Kanvas Users and Companies. These two models will make a request to the Kanvas API and work just like a typical Phalcon model which has the `find` and `findFirst` functions.To use them do as follows:
-
-``` php
-
-use Kanvas\Sdk\Users;
-use Kanvas\Sdk\Companies;
-
-Users::find():
-
-Users::findFirst([
-    'conditions'=> 'email = ?0'
-    'bind'=>[example]
-]);
-
-Companies::find();
-
-Companies::findFirst([
-    'conditions'=> 'email = ?0'
-    'bind'=>[example]
-]);
-
-```
-
-As said before, both models work as a Phalcon model, they work with all the parameters that can be given to them.
-
-
-`Notice`: You must be authenticated to use this models and your API key must also be set.
-
 
 ## Change log
 
