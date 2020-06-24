@@ -7,9 +7,6 @@ namespace Kanvas\Sdk\Resources;
 use Kanvas\Sdk\Contracts\CrudOperationsTrait;
 use Kanvas\Sdk\Resources;
 
-/**
- * @todo Implement relationship functions using the new http client of the SDK.
- */
 class Companies extends Resources
 {
     const RESOURCE_NAME = 'companies';
