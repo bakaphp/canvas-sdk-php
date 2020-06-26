@@ -13,7 +13,8 @@
     "require": {
         "php": ">=7.2",
         "guzzlehttp/guzzle": "^6.5",
-        "baka/baka": "^0.5",
+        "baka/http": "^0.5",
+        "baka/router": "^0.1@dev",
         "vlucas/phpdotenv": "^2.4",
         "mark-gerarts/auto-mapper-plus": "2.0.0-alpha1"
     },
